@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<TabPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.timescheduler.MenuController">
+   <tabs>
+      <Tab text="Overview">
+         <content>
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="315.0" prefWidth="601.0">
+                <children>
+                    <Label layoutX="52.0" layoutY="61.0" text="Event Name:" />
+                    <TextField fx:id="eName" layoutX="124.0" layoutY="57.0" />
+                    <Label layoutX="55.0" layoutY="132.0" text="Priority:" />
+                    <Label layoutX="51.0" layoutY="98.0" text="Location:" />
+                    <Label layoutX="49.0" layoutY="162.0" text="Start:" />
+                    <DatePicker fx:id="eStartDate" layoutX="124.0" layoutY="158.0" />
+                    <TextField fx:id="eLocation" layoutX="124.0" layoutY="94.0" />
+                    <ChoiceBox fx:id="ePriority" layoutX="124.0" layoutY="128.0" prefWidth="150.0" />
+                    <Label layoutX="327.0" layoutY="61.0" text="Participants:" />
+                    <Button layoutX="280.0" layoutY="262.0" mnemonicParsing="false" onAction="#createEvent" text="Save" />
+                  <DatePicker fx:id="eEndDate" layoutX="124.0" layoutY="200.0" />
+                  <Label layoutX="52.0" layoutY="204.0" text="End:" />
+                  <TextField fx:id="eStartHour" layoutX="321.0" layoutY="158.0" prefHeight="25.0" prefWidth="28.0" text="08" />
+                  <TextField fx:id="eStartMin" layoutX="360.0" layoutY="158.0" prefHeight="25.0" prefWidth="28.0" text="15" />
+                  <Label layoutX="353.0" layoutY="161.0" text=":" />
+                  <TextField fx:id="eEndHour" layoutX="321.0" layoutY="200.0" prefHeight="25.0" prefWidth="28.0" text="08" />
+                  <TextField fx:id="eEndMin" layoutX="360.0" layoutY="200.0" prefHeight="25.0" prefWidth="28.0" text="15" />
+                  <Label layoutX="353.0" layoutY="203.0" text=":" />
+                  <ListView fx:id="eList" layoutX="408.0" layoutY="61.0" prefHeight="160.0" prefWidth="143.0" />
+                </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+      <Tab text="Untitled Tab">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <ListView fx:id="pList" layoutX="67.0" layoutY="58.0" onMouseClicked="#addNameSelection" prefHeight="200.0" prefWidth="200.0" />
+                  <ListView fx:id="spList" layoutX="326.0" layoutY="58.0" onMouseClicked="#removeNameSelection" prefHeight="200.0" prefWidth="200.0" />
+               </children>
+            </AnchorPane>
+        </content>
+      </Tab>
+   </tabs>
+</TabPane>
