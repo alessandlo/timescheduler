@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DdlMappings">
+    <mapping uuid="209d5e21-0841-4a6e-8de2-55ca9540ed3b" name="Oracle - @db1.fb2.frankfurt-university.de Mapping">
+      <data-sources db="c9aac4c0-5302-4783-9401-698459e547bb" ddl="189975f8-ff8f-4e86-b8f8-0b2fb4cadba4" />
+      <scope>
+        <node kind="schema" qname="S1_STUDENT2_19" />
+      </scope>
+    </mapping>
+  </component>
+  <component name="SqlDataSourceStorage">
+    <option name="dataSources">
+      <list>
+        <State>
+          <option name="id" value="189975f8-ff8f-4e86-b8f8-0b2fb4cadba4" />
+          <option name="name" value="Oracle - @db1.fb2.frankfurt-university.de (DDL)" />
+          <option name="languageId" value="Oracle" />
+          <option name="urls">
+            <array />
+          </option>
+        </State>
+      </list>
+    </option>
+  </component>
+</project>
