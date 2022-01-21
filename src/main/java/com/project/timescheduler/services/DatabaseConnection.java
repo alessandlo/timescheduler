@@ -1,22 +1,27 @@
-package com.project.timescheduler;
+package com.project.timescheduler.services;
 
 import javafx.scene.control.Alert;
 
+import java.sql.ResultSet;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.DriverManager;
+import java.sql.Statement;
 
 public class DatabaseConnection {
 
-    public Connection connection;
+    private Connection connection;
+
+    public static String adminUserName = "admin";
+    public static String adminPassword = "admin";
+
 
     public Connection getConnection(){
         final String databaseUser = "S1_student2_19";
         final String databasePassword = "Zx08DBS";
         final String url = "jdbc:oracle:thin:@db1.fb2.frankfurt-university.de:1521:info01";
 
-
         try{
-            Class.forName("oracle.jdbc.driver.OracleDriver");
             connection = DriverManager.getConnection(url, databaseUser, databasePassword);
         }
         catch (Exception e){
@@ -29,5 +34,21 @@ public class DatabaseConnection {
         }
 
         return connection;
+    }
+
+    public ResultSet query(String sql) throws SQLException {
+        if (connection == null){
+            getConnection();
+        }
+        Statement statement = connection.createStatement();
+        return statement.executeQuery(sql);
+    }
+
+    public void update(String sql) throws SQLException{
+        if (connection == null){
+            getConnection();
+        }
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(sql);
     }
 }

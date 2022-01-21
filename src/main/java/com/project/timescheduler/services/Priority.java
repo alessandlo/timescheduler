@@ -1,4 +1,4 @@
-package com.project.timescheduler;
+package com.project.timescheduler.services;
 
 public enum Priority {
     high,medium,low;

@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="oracle.ojdbc.ojdbc10" type="repository">
+  <library name="oracle.ojdbc.ojdbc101" type="repository">
     <properties maven-id="com.oracle.ojdbc:ojdbc10:19.3.0.0" />
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/com/oracle/ojdbc/ojdbc10/19.3.0.0/ojdbc10-19.3.0.0.jar!/" />

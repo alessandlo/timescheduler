@@ -1,5 +1,7 @@
-package com.project.timescheduler;
+package com.project.timescheduler.controllers;
 
+import com.project.timescheduler.services.Calendar;
+import com.project.timescheduler.Main;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
@@ -7,11 +9,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -19,11 +21,11 @@ import javafx.stage.WindowEvent;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Objects;
 
-public class TimeSchedulerController {
+public class TimeSchedulerController{
 
     private Scene scene;
-    private Parent root;
 
     @FXML
     GridPane calenderGridPane;
@@ -38,7 +40,7 @@ public class TimeSchedulerController {
     Calendar calendar;
 
     @FXML
-    public void initialize() throws IOException, InterruptedException {
+    public void initialize() throws IOException {
         currentDate = LocalDate.now();
 
         ArrayList<Node> list = new ArrayList<>();
@@ -49,7 +51,7 @@ public class TimeSchedulerController {
         initializeCalendar();
     }
 
-    private void initializeCalendar() throws IOException, InterruptedException {
+    private void initializeCalendar() throws IOException {
         calendar.initializeCalendar();
         currentYearLabel.setText(currentDate.toString());
     }
@@ -58,7 +60,7 @@ public class TimeSchedulerController {
     @FXML
     private void mouseClicked(MouseEvent mouseEvent){
         EventTarget target = mouseEvent.getTarget();
-
+        System.out.println(target.getClass());
         if (target.getClass() == VBox.class){
             VBox vBox = (VBox) target;
             Label label = (Label) vBox.getChildren().get(0);
@@ -66,29 +68,26 @@ public class TimeSchedulerController {
         }
         try {
             anchorPaneTimeScheduler.setDisable(true);
-            Parent root = FXMLLoader.load(getClass().getResource("EventMenu.fxml"));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("eventMenu.fxml")));
             Stage menuStage = new Stage();
             scene = new Scene(root);
             menuStage.setScene(scene);
-            menuStage.show();
-            menuStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                @Override
-                public void handle(WindowEvent windowEvent) {
-                    anchorPaneTimeScheduler.setDisable(false);
-                }
+            menuStage.setOnCloseRequest(windowEvent -> {
+                anchorPaneTimeScheduler.setDisable(false);
             });
+            menuStage.showAndWait();
         }catch (Exception e){
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
     @FXML
-    private void loadPreviousMonth() throws IOException {
+    private void loadPreviousMonth() {
         calendar.previousMonth();
     }
 
     @FXML
-    private void loadNextMonth() throws IOException {
+    private void loadNextMonth() {
         calendar.nextMonth();
     }
 }

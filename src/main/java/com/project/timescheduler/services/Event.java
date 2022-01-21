@@ -1,4 +1,4 @@
-package com.project.timescheduler;
+package com.project.timescheduler.services;
 
 import java.time.LocalDate;
 
@@ -27,7 +27,6 @@ public class Event {
     public void setPriority(Priority priority) {
         this.priority = priority;
     }
-
 
     public String getName() {
         return name;

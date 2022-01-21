@@ -1,5 +1,6 @@
-package com.project.timescheduler;
+package com.project.timescheduler.services;
 
+import com.project.timescheduler.Main;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -42,7 +43,7 @@ public class Calendar {
         }
     }
 
-    interface OnMouseClickedListener{
+    public interface OnMouseClickedListener{
         void onMouseClicked(MouseEvent mouseEvent);
     }
 
@@ -55,7 +56,7 @@ public class Calendar {
         this.listener = listener;
     }
 
-    public void initializeCalendar() throws IOException, InterruptedException {
+    public void initializeCalendar() throws IOException {
         int columnCount = calendarGridPane.getColumnCount() - 1;    // - 1, weil man von 0 anfängt
         int rowCount = calendarGridPane.getRowCount() - 1;
 
@@ -64,7 +65,7 @@ public class Calendar {
 
         for (int row = 0; row < rowCount; row++){
             for (int column = 0; column < columnCount; column++) {
-                VBox vBox = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("calendarItem.fxml")));
+                VBox vBox = FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("calendarItem.fxml")));
                 Label label = (Label) vBox.getChildren().get(0);
 
                 if (column == 0 && row > 0){
@@ -123,13 +124,13 @@ public class Calendar {
 
     }
 
-    public void nextMonth() throws IOException {
+    public void nextMonth() {
         currentDate = currentDate.plusMonths(1);
         currentYearLabel.setText(currentDate.toString());
         updateCalendar();
     }
 
-    public void previousMonth() throws IOException {
+    public void previousMonth() {
         currentDate = currentDate.minusMonths(1);
         currentYearLabel.setText(currentDate.toString());
         updateCalendar();

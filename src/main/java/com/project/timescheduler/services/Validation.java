@@ -1,4 +1,4 @@
-package com.project.timescheduler;
+package com.project.timescheduler.services;
 
 import javafx.scene.control.Alert;
 

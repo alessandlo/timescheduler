@@ -1,30 +1,31 @@
-package com.project.timescheduler;
+package com.project.timescheduler.controllers;
 
-import com.project.timescheduler.Event;
-import com.project.timescheduler.Priority;
-import javafx.event.ActionEvent;
+import com.project.timescheduler.services.DatabaseConnection;
+import com.project.timescheduler.services.Event;
+import com.project.timescheduler.services.Priority;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventTarget;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.skin.ListViewSkin;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
-import java.net.URL;
+import java.sql.Array;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.ResourceBundle;
 
-public class MenuController implements Initializable {
+public class EventMenuController {
 
     @FXML
     private TextField eName;
@@ -50,25 +51,26 @@ public class MenuController implements Initializable {
     private TextField eEndMin;
     @FXML
     private ChoiceBox<Priority> ePriority;
+
     private final Priority[] prio = {Priority.high,Priority.medium,Priority.low};
 
     String[] names = {"Mickey Lynn", "test test", "Cebi Stüller"}; //Load names here
 
     int i = -1;
-    LinkedList participantsList = new LinkedList();
+    ArrayList<String> participantsList = new ArrayList<>();
 
-    private ObservableList<String> list = FXCollections.observableArrayList(names);
+    private ObservableList<String> list = FXCollections.observableArrayList(Arrays.asList(names));
 
-    public void initialize(URL arg0, ResourceBundle arg1){
+    @FXML
+    public void initialize(){
         ePriority.getItems().addAll(prio);
         pList.setItems(list);
-        pList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        //pList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     }
+
     @FXML
     private void addNameSelection(MouseEvent mouseEvent){
-        if(pList.getSelectionModel().getSelectedItem() == null){
-            return;
-        }else {
+        if(pList.getSelectionModel().getSelectedItem() != null){
             eList.getItems().add(pList.getSelectionModel().getSelectedItem());
             spList.getItems().add(pList.getSelectionModel().getSelectedItem());
             participantsList.add(pList.getSelectionModel().getSelectedItem());
@@ -76,14 +78,13 @@ public class MenuController implements Initializable {
             pList.getItems().remove(pList.getSelectionModel().getSelectedItem());
         }
     }
+
     @FXML
     private void removeNameSelection(MouseEvent mouseEvent){
-        if(spList.getSelectionModel().getSelectedItem() == null){
-            return;
-        }else {
+        if(spList.getSelectionModel().getSelectedItem() != null){
             pList.getItems().add(spList.getSelectionModel().getSelectedItem());
             for(int x = i; x >= 0; x--){
-                if (spList.getSelectionModel().getSelectedItem() == participantsList.get(x)){
+                if (spList.getSelectionModel().getSelectedItem().equals(participantsList.get(x))){
                     participantsList.remove(x);
                     i--;
                     break;
@@ -120,12 +121,17 @@ public class MenuController implements Initializable {
         System.out.println(endTime);
         //System.out.println(startDate + " " + endDate);
         Priority priority = ePriority.getValue();
-        Event event = new Event(name,location,participants,startDate,priority);
+        Event event = new Event(name, location, participants, startDate, priority);
         event.printEvent();
-        uploadEvent(name, startDate, endDate, startTime, endTime, location, priority);
+
+        try {
+            uploadEvent(name, startDate, endDate, startTime, endTime, location, priority);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
-    public void uploadEvent(String name, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime, String location, Priority priority) {
+    public void uploadEvent(String name, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime, String location, Priority priority)  throws SQLException {
         String startDateTime_temp = "%s %s";
         String startDateTime = String.format(startDateTime_temp, startDate, startTime);
         String endDateTime = String.format(startDateTime_temp, endDate, endTime);
@@ -137,16 +143,8 @@ public class MenuController implements Initializable {
 
         String alter_date_format = "ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH:MI'";
 
-        try {
-            DatabaseConnection databaseConnection = new DatabaseConnection();
-            Connection connection = databaseConnection.getConnection();
-
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(alter_date_format);
-            statement.executeUpdate(sql);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        DatabaseConnection connection = new DatabaseConnection();
+        connection.update(alter_date_format);
+        connection.update(sql);
     }
 }
