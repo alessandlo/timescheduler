@@ -17,7 +17,7 @@ public class DatabaseConnection {
 
 
     public Connection getConnection(){
-        //test comment tom
+
         final String databaseUser = "S1_student2_19";
         final String databasePassword = "Zx08DBS";
         final String url = "jdbc:oracle:thin:@db1.fb2.frankfurt-university.de:1521:info01";
