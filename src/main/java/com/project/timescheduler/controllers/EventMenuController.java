@@ -141,7 +141,7 @@ public class EventMenuController {
         String sql = String.format(sql_temp, name, startDateTime, endDateTime, "test", location, priority);
         System.out.println(sql);
 
-        String alter_date_format = "ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH:MI'";
+        String alter_date_format = "ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI'";
 
         DatabaseConnection connection = new DatabaseConnection();
         connection.update(alter_date_format);
