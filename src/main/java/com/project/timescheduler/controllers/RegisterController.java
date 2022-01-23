@@ -39,6 +39,7 @@ public class RegisterController {
     public void switchToLogin() throws IOException {
         registerPane.getChildren().clear();
         registerPane.getChildren().add(FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("login.fxml"))));
+
     }
 
     public void createAccount() throws SQLException, IOException{

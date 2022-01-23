@@ -15,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -77,6 +78,7 @@ public class TimeSchedulerController{
 
             eventMenuController.initialize(() -> {
                 anchorPaneTimeScheduler.setDisable(false);
+                menuStage.close();
             });
 
             menuStage = new Stage();
@@ -85,7 +87,8 @@ public class TimeSchedulerController{
             menuStage.setOnCloseRequest(windowEvent -> {
                 anchorPaneTimeScheduler.setDisable(false);
             });
-            menuStage.show();
+            menuStage.initModality(Modality.APPLICATION_MODAL);
+            menuStage.showAndWait();
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-public class EventMenuController {
+public class EventMenuController{
     @FXML
     private Button exitButton;
 
@@ -163,6 +163,6 @@ public class EventMenuController {
     }
 
     public void exitMenu(){
-        System.out.println(test_value);
+        listener.onAction();
     }
 }
