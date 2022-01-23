@@ -30,14 +30,6 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        DatabaseConnection connection = new DatabaseConnection();
-
-        try {
-            System.out.println(connection.query("SELECT * FROM sched_user WHERE username='test'").next());
-            System.out.println(connection.query("SELECT * FROM sched_user WHERE username='test_user'").next());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         launch();
     }
 }

@@ -4,12 +4,18 @@ import java.time.LocalDate;
 
 public class Event {
 
+    public static Priority Priority;
     private String name;
     private String location;
     private String participants;
 
     private LocalDate date;
     private Priority priority;
+
+    public enum Priority {
+        high, medium, low;
+    }
+
 
     public Event(String name, String location, String participants, LocalDate date, Priority priority) {
         this.name = name;

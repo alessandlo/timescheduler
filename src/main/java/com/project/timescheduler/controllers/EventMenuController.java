@@ -8,11 +8,13 @@ import javafx.collections.ObservableList;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.skin.ListViewSkin;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.Array;
@@ -26,6 +28,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 public class EventMenuController {
+
+    @FXML
+    private Button exitButton;
 
     @FXML
     private TextField eName;
@@ -55,17 +60,26 @@ public class EventMenuController {
     private final Priority[] prio = {Priority.high,Priority.medium,Priority.low};
 
     String[] names = {"Mickey Lynn", "test test", "Cebi Stüller"}; //Load names here
-
+    private int test_value;
     int i = -1;
     ArrayList<String> participantsList = new ArrayList<>();
 
     private ObservableList<String> list = FXCollections.observableArrayList(Arrays.asList(names));
 
+    public interface onActionListener{
+        void onAction();
+    }
+
+    private onActionListener listener;
+
     @FXML
-    public void initialize(){
+    public void initialize(onActionListener listener){
         ePriority.getItems().addAll(prio);
         pList.setItems(list);
+        this.listener = listener;
+        System.out.println(i);
         //pList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
     }
 
     @FXML
@@ -121,7 +135,7 @@ public class EventMenuController {
         System.out.println(endTime);
         //System.out.println(startDate + " " + endDate);
         Priority priority = ePriority.getValue();
-        Event event = new Event(name, location, participants, startDate, priority);
+        Event event = new Event(name, location, participants, startDate, Event.Priority);
         event.printEvent();
 
         try {
@@ -146,5 +160,10 @@ public class EventMenuController {
         DatabaseConnection connection = new DatabaseConnection();
         connection.update(alter_date_format);
         connection.update(sql);
+
+    }
+
+    public void exitMenu(){
+        System.out.println(test_value);
     }
 }

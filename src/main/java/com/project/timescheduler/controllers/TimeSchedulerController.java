@@ -19,11 +19,14 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.io.IOException;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class TimeSchedulerController{
+
+    public static Stage menuStage = null;
 
     private Scene scene;
 
@@ -34,7 +37,7 @@ public class TimeSchedulerController{
     Label currentYearLabel;
 
     @FXML
-    AnchorPane anchorPaneTimeScheduler;
+    public AnchorPane anchorPaneTimeScheduler;
 
     LocalDate currentDate;
     Calendar calendar;
@@ -68,14 +71,21 @@ public class TimeSchedulerController{
         }
         try {
             anchorPaneTimeScheduler.setDisable(true);
-            Parent root = FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("eventMenu.fxml")));
-            Stage menuStage = new Stage();
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("eventMenu.fxml"));
+            Parent root = loader.load();
+            EventMenuController eventMenuController = loader.getController();
+
+            eventMenuController.initialize(() -> {
+                anchorPaneTimeScheduler.setDisable(false);
+            });
+
+            menuStage = new Stage();
             scene = new Scene(root);
             menuStage.setScene(scene);
             menuStage.setOnCloseRequest(windowEvent -> {
                 anchorPaneTimeScheduler.setDisable(false);
             });
-            menuStage.showAndWait();
+            menuStage.show();
         }catch (Exception e){
             e.printStackTrace();
         }
