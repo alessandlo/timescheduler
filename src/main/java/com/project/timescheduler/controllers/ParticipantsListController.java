@@ -36,6 +36,7 @@ public class ParticipantsListController {
         if(selectedItem != null){
             selectedParticipantsList.getItems().add(selectedItem);
             allParticipantsList.getItems().remove(selectedItem);
+            allParticipantsList.getSelectionModel().clearSelection();
         }
     }
 
@@ -45,6 +46,7 @@ public class ParticipantsListController {
         if(selectedItem != null){
             allParticipantsList.getItems().add(selectedItem);
             selectedParticipantsList.getItems().remove(selectedItem);
+            selectedParticipantsList.getSelectionModel().clearSelection();
         }
     }
 
