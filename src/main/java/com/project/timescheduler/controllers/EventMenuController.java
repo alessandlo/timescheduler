@@ -89,6 +89,7 @@ public class EventMenuController{
             participantsList.add(pList.getSelectionModel().getSelectedItem());
             i++;
             pList.getItems().remove(pList.getSelectionModel().getSelectedItem());
+            pList.getSelectionModel().clearSelection();
         }
     }
 
@@ -105,6 +106,7 @@ public class EventMenuController{
             }
             eList.getItems().remove(spList.getSelectionModel().getSelectedItem());
             spList.getItems().remove(spList.getSelectionModel().getSelectedItem());
+            spList.getSelectionModel().clearSelection();
         }
     }
 
