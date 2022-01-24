@@ -52,4 +52,6 @@ public class DatabaseConnection {
         Statement statement = connection.createStatement();
         statement.executeUpdate(sql);
     }
+
+
 }

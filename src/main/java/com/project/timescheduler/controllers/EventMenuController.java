@@ -1,158 +1,136 @@
 package com.project.timescheduler.controllers;
 
+import com.project.timescheduler.Main;
 import com.project.timescheduler.services.DatabaseConnection;
 import com.project.timescheduler.services.Event;
-import com.project.timescheduler.services.Priority;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.EventTarget;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.skin.ListViewSkin;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.Array;
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.Objects;
 
 public class EventMenuController{
     @FXML
+    private TextField eventName;
+    @FXML
+    private ListView<String> eventParticipantList;
+    @FXML
+    private TextField eventLocation;
+    @FXML
+    private DatePicker eventStartDate;
+    @FXML
+    private DatePicker eventEndDate;
+    @FXML
+    private TextField eventStartHour;
+    @FXML
+    private TextField eventStartMin;
+    @FXML
+    private TextField eventEndHour;
+    @FXML
+    private TextField eventEndMin;
+    @FXML
+    private ChoiceBox<Event.Priority> eventPriority;
+    @FXML
     private Button exitButton;
 
-    @FXML
-    private TextField eName;
-    @FXML
-    private ListView<String> eList;
-    @FXML
-    private ListView<String> pList;
-    @FXML
-    private ListView<String> spList;
-    @FXML
-    private TextField eLocation;
-    @FXML
-    private DatePicker eStartDate;
-    @FXML
-    private DatePicker eEndDate;
-    @FXML
-    private TextField eStartHour;
-    @FXML
-    private TextField eStartMin;
-    @FXML
-    private TextField eEndHour;
-    @FXML
-    private TextField eEndMin;
-    @FXML
-    private ChoiceBox<Priority> ePriority;
+    private Event event;
 
-    private final Priority[] prio = {Priority.high,Priority.medium,Priority.low};
+    private ArrayList<String> participants;
 
-    String[] names = {"Mickey Lynn", "test test", "Cebi Stüller"}; //Load names here
-    private int test_value;
-    int i = -1;
-    ArrayList<String> participantsList = new ArrayList<>();
+    private OnActionListener listener;
 
-    private ObservableList<String> list = FXCollections.observableArrayList(Arrays.asList(names));
-
-    public interface onActionListener{
+    public interface OnActionListener {
         void onAction();
+
     }
 
-    private onActionListener listener;
-
     @FXML
-    public void initialize(onActionListener listener){
-        ePriority.getItems().addAll(prio);
-        pList.setItems(list);
+    public void initialize(OnActionListener listener){
         this.listener = listener;
-        System.out.println(i);
-        //pList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        participants = new ArrayList<>();
+
+        eventPriority.getItems().addAll(Event.Priority.values());
+        eventParticipantList.getItems().add("Manage participants");
 
     }
 
-    @FXML
-    private void addNameSelection(MouseEvent mouseEvent){
-        if(pList.getSelectionModel().getSelectedItem() != null){
-            eList.getItems().add(pList.getSelectionModel().getSelectedItem());
-            spList.getItems().add(pList.getSelectionModel().getSelectedItem());
-            participantsList.add(pList.getSelectionModel().getSelectedItem());
-            i++;
-            pList.getItems().remove(pList.getSelectionModel().getSelectedItem());
-        }
-    }
+    public void manageParticipants(MouseEvent mouseEvent) throws IOException {
+        if(Objects.equals(eventParticipantList.getSelectionModel().getSelectedItem(), "Manage participants")){
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("participantsList.fxml"));
+            Parent root = loader.load();
+            ParticipantsListController controller = loader.getController();
 
-    @FXML
-    private void removeNameSelection(MouseEvent mouseEvent){
-        if(spList.getSelectionModel().getSelectedItem() != null){
-            pList.getItems().add(spList.getSelectionModel().getSelectedItem());
-            for(int x = i; x >= 0; x--){
-                if (spList.getSelectionModel().getSelectedItem().equals(participantsList.get(x))){
-                    participantsList.remove(x);
-                    i--;
-                    break;
+            Stage participantsStage = new Stage();
+
+            controller.initialize((list) -> {
+                eventParticipantList.getItems().clear();
+                eventParticipantList.getItems().add(0, "Manage participants");
+                for (String participant: list) {
+                    eventParticipantList.getItems().add(participant);
                 }
-            }
-            eList.getItems().remove(spList.getSelectionModel().getSelectedItem());
-            spList.getItems().remove(spList.getSelectionModel().getSelectedItem());
+                participantsStage.close();
+            });
+            loader.setController(controller);
+
+            Scene scene = new Scene(root);
+            participantsStage.setScene(scene);
+
+            participantsStage.initModality(Modality.APPLICATION_MODAL);
+            participantsStage.showAndWait();
         }
     }
-
 
     //enter method on save button press
-    public void createEvent() throws IOException{
-
-        String name = eName.getText();
-        String location = eLocation.getText();
-        String participants = "";
-        for(int y = i; y >= 0; y--){
-            participants = participants + participantsList.get(y) + ",";
-        }
-
-        LocalDate startDate = eStartDate.getValue();
-        LocalDate endDate = eEndDate.getValue();
+    public void createEvent(){
         LocalTime startTime = LocalTime.now();
         LocalTime endTime = LocalTime.now();
         try {
-            startTime = LocalTime.of(Integer.parseInt(eStartHour.getText()), Integer.parseInt(eStartMin.getText()));
-            endTime = LocalTime.of(Integer.parseInt(eEndHour.getText()), Integer.parseInt(eEndMin.getText()));
+            startTime = LocalTime.of(Integer.parseInt(eventStartHour.getText()), Integer.parseInt(eventStartMin.getText()));
+            endTime = LocalTime.of(Integer.parseInt(eventEndHour.getText()), Integer.parseInt(eventEndMin.getText()));
 
-        } catch (NumberFormatException nfe) {
-            nfe.printStackTrace();
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
-        System.out.println(startTime);
-        System.out.println(endTime);
-        //System.out.println(startDate + " " + endDate);
-        Priority priority = ePriority.getValue();
-        Event event = new Event(name, location, participants, startDate, Event.Priority);
-        event.printEvent();
+
+        event = new Event(
+                eventName.getText(),
+                eventLocation.getText(),
+                participants,
+                eventStartDate.getValue(),
+                eventEndDate.getValue(),
+                startTime,
+                endTime,
+                eventPriority.getValue()
+        );
 
         try {
-            uploadEvent(name, startDate, endDate, startTime, endTime, location, priority);
+            uploadEvent();
         } catch (SQLException e){
             e.printStackTrace();
         }
     }
 
-    public void uploadEvent(String name, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime, String location, Priority priority)  throws SQLException {
+    public void uploadEvent()  throws SQLException {
         String startDateTime_temp = "%s %s";
-        String startDateTime = String.format(startDateTime_temp, startDate, startTime);
-        String endDateTime = String.format(startDateTime_temp, endDate, endTime);
-        //System.out.println(startDateTime);
+        String startDateTime = String.format(startDateTime_temp, event.getStartDate(), event.getStartTime());
+        String endDateTime = String.format(startDateTime_temp, event.getEndDate(), event.getEndTime());
 
         String sql_temp = "INSERT INTO sched_event (event_name, start_date, end_date, creator_name, location, priority) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')";
-        String sql = String.format(sql_temp, name, startDateTime, endDateTime, "test", location, priority);
-        System.out.println(sql);
+        String sql = String.format(sql_temp, event.getName(), startDateTime, endDateTime, event.getCreator(), event.getLocation(), event.getPriority());
 
         String alter_date_format = "ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI'";
 

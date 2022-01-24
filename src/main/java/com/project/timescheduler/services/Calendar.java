@@ -99,11 +99,11 @@ public class Calendar {
         LocalDate startDate = currentDate.withDayOfMonth(1);
         startDate = startDate.minusDays(WEEK_DAY.valueOf(startDate.getDayOfWeek().toString()).getCode());
 
-        System.out.println("Start Date: " + startDate);
-        System.out.println("Current Date: " + currentDate);
-
+        //System.out.println("Start Date: " + startDate);
+        //System.out.println("Current Date: " + currentDate);
+        System.out.println(calendarGridPane.getChildren());
         for (int i = 0; i < calenderLength; i++) {
-            VBox vBox = (VBox) calendarGridPane.getChildren().get(i + 7 + 1); // +7 wegen der ersten Zeile und +1 wegen Group Element
+            VBox vBox = (VBox) calendarGridPane.getChildren().get(i + 7); // +7 wegen der ersten Zeile
             Label label = (Label) vBox.getChildren().get(0);
 
             if (i % 8 == 0){

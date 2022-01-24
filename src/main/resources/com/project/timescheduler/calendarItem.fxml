@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.geometry.Insets?>
 
-<VBox GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox style="-fx-background-color: white; -fx-background-radius: 18; -fx-background-insets: 0; -fx-effect: dropshadow(three-pass-box, #00000020, 10, 0, 0, 2);" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <Label focusTraversable="false" mouseTransparent="true" text="01">
             <font>
