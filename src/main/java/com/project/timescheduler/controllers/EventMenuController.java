@@ -16,6 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -53,19 +54,25 @@ public class EventMenuController{
 
     private OnActionListener listener;
 
+
     public interface OnActionListener {
         void onAction();
 
     }
 
+    private String currentUser;
+
+    private DatabaseConnection connection;
+
     @FXML
-    public void initialize(OnActionListener listener){
+    public void initialize(OnActionListener listener, String currentUser){
         this.listener = listener;
         participants = new ArrayList<>();
+        this.currentUser = currentUser;
+        connection = new DatabaseConnection();
 
         eventPriority.getItems().addAll(Event.Priority.values());
         eventParticipantList.getItems().add("Manage participants");
-
     }
 
     public void manageParticipants(MouseEvent mouseEvent) throws IOException {
@@ -106,7 +113,12 @@ public class EventMenuController{
             e.printStackTrace();
         }
 
+        participants.addAll(eventParticipantList.getItems());
+        participants.remove(0);
+
         event = new Event(
+                -1,
+                currentUser,
                 eventName.getText(),
                 eventLocation.getText(),
                 participants,
@@ -119,9 +131,18 @@ public class EventMenuController{
 
         try {
             uploadEvent();
+
+            String getEvent_sql = "SELECT EVENT_ID FROM SCHED_EVENT where EVENT_NAME = '%s' AND LOCATION = '%s' AND PRIORITY = '%s'";
+            getEvent_sql = String.format(getEvent_sql, event.getName(), event.getLocation(), event.getPriority());
+            ResultSet rsID = connection.query(getEvent_sql);
+            if(rsID.next()) {
+                event.setEventId(rsID.getInt("Event_ID"));
+            }
+            uploadParticipants(participants);
         } catch (SQLException e){
             e.printStackTrace();
         }
+        listener.onAction();
     }
 
     public void uploadEvent()  throws SQLException {
@@ -130,15 +151,26 @@ public class EventMenuController{
         String endDateTime = String.format(startDateTime_temp, event.getEndDate(), event.getEndTime());
 
         String sql_temp = "INSERT INTO sched_event (event_name, start_date, end_date, creator_name, location, priority) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')";
-        String sql = String.format(sql_temp, event.getName(), startDateTime, endDateTime, event.getCreator(), event.getLocation(), event.getPriority());
+        String sql = String.format(sql_temp, event.getName(), startDateTime, endDateTime, event.getCreatorName(), event.getLocation(), event.getPriority());
 
         String alter_date_format = "ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI'";
 
-        DatabaseConnection connection = new DatabaseConnection();
         connection.update(alter_date_format);
         connection.update(sql);
 
     }
+
+    public void uploadParticipants(ArrayList<String> user) throws SQLException{
+        String sql_user = "INSERT INTO SCHED_PARTICIPATES_IN (USERNAME, EVENT_ID) VALUES ('%s'," + event.getEventId() + ")";
+
+        for (String user_temp : user) {
+            String sql_user_temp = String.format(sql_user,user_temp);
+            System.out.println(sql_user_temp);
+
+            connection.update(sql_user_temp);
+        }
+    }
+
 
     public void exitMenu(){
         listener.onAction();

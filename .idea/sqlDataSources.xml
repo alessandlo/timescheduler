@@ -8,18 +8,4 @@
       </scope>
     </mapping>
   </component>
-  <component name="SqlDataSourceStorage">
-    <option name="dataSources">
-      <list>
-        <State>
-          <option name="id" value="189975f8-ff8f-4e86-b8f8-0b2fb4cadba4" />
-          <option name="name" value="Oracle - @db1.fb2.frankfurt-university.de (DDL)" />
-          <option name="languageId" value="Oracle" />
-          <option name="urls">
-            <array />
-          </option>
-        </State>
-      </list>
-    </option>
-  </component>
 </project>

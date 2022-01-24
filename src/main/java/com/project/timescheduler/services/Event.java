@@ -6,7 +6,8 @@ import java.util.ArrayList;
 
 public class Event {
 
-    private String creator = "test";
+    private String creatorName = "test";
+    private int eventId;
 
     private String name;
     private String location;
@@ -18,14 +19,17 @@ public class Event {
     private LocalTime startTime;
     private LocalTime endTime;
 
-
     private Priority priority;
 
     public enum Priority {
         high, medium, low;
     }
 
-    public Event(String name, String location, ArrayList<String> participants, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime, Priority priority) {
+    public Event(int event_id, String creatorName, String name, String location, ArrayList<String> participants, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime, Priority priority) {
+        this.eventId = event_id;
+        this.creatorName = creatorName;
+
+
         this.name = name;
         this.location = location;
         this.participants = participants;
@@ -35,14 +39,25 @@ public class Event {
 
         this.startTime = startTime;
         this.endTime = endTime;
+
+        this.priority = priority;
     }
 
-    public String getCreator(){
-        return creator;
+    public int getEventId() {
+        return eventId;
     }
 
-    public void setCreator(String creator){
-        this.creator = creator;
+    public void setEventId(int event_id) {
+        this.eventId = event_id;
+    }
+
+
+    public String getCreatorName(){
+        return creatorName;
+    }
+
+    public void setCreatorName(String creator){
+        this.creatorName = creator;
     }
 
     public Priority getPriority() {
@@ -93,8 +108,8 @@ public class Event {
         this.startTime = startTime;
     }
 
-    public LocalDate getEndTime(){
-        return endDate;
+    public LocalTime getEndTime(){
+        return endTime;
     }
 
     public void setEndDate(LocalTime endTime){

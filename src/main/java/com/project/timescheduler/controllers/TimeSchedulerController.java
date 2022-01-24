@@ -2,6 +2,7 @@ package com.project.timescheduler.controllers;
 
 import com.project.timescheduler.services.Calendar;
 import com.project.timescheduler.Main;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
@@ -9,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -31,6 +33,8 @@ public class TimeSchedulerController{
 
     private Scene scene;
 
+    private String currentUser;
+
     @FXML
     GridPane calenderGridPane;
 
@@ -39,6 +43,12 @@ public class TimeSchedulerController{
 
     @FXML
     public AnchorPane anchorPaneTimeScheduler;
+
+    @FXML
+    public Button showListButton;
+
+    @FXML
+    private Label currentUserLabel;
 
     LocalDate currentDate;
     Calendar calendar;
@@ -64,7 +74,6 @@ public class TimeSchedulerController{
     @FXML
     private void mouseClicked(MouseEvent mouseEvent){
         EventTarget target = mouseEvent.getTarget();
-        System.out.println(target.getClass());
         if (target.getClass() == VBox.class){
             VBox vBox = (VBox) target;
             Label label = (Label) vBox.getChildren().get(0);
@@ -79,7 +88,7 @@ public class TimeSchedulerController{
             eventMenuController.initialize(() -> {
                 anchorPaneTimeScheduler.setDisable(false);
                 menuStage.close();
-            });
+            }, currentUser);
 
             menuStage = new Stage();
             scene = new Scene(root);
@@ -103,5 +112,33 @@ public class TimeSchedulerController{
     private void loadNextMonth() {
         calendar.nextMonth();
     }
+
+    @FXML
+    private void switchToList(ActionEvent event)throws IOException{
+
+        anchorPaneTimeScheduler.setDisable(true);
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("EventList.fxml"));
+        Parent root = loader.load();
+
+        EventListController controller = loader.getController();
+        controller.initialize(currentUser);
+
+        Stage listStage = new Stage();
+        scene = new Scene(root);
+        listStage.setScene(scene);
+        listStage.show();
+        listStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                anchorPaneTimeScheduler.setDisable(false);
+            }
+        });
+    }
+
+    public void getCurrentUser(String text){
+        currentUserLabel.setText(text);
+        currentUser = text;
+    }
+
 }
 

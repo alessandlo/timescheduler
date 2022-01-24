@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<TilePane alignment="TOP_CENTER" hgap="30.0" prefHeight="600.0" prefWidth="800.0" vgap="30.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.timescheduler.EventViewerContoller">
+   <children>
+      <Pane prefHeight="120.0" prefWidth="120.0" style="-fx-background-color: white; -fx-background-radius: 24; -fx-background-insets: 0;">
+         <effect>
+            <DropShadow color="#00000080" offsetY="2.0" />
+         </effect>
+      </Pane>
+      <Pane prefHeight="120.0" prefWidth="120.0" style="-fx-background-color: white; -fx-background-radius: 24; -fx-background-insets: 0;">
+         <effect>
+            <DropShadow color="#0000007e" offsetY="2.0" />
+         </effect>
+      </Pane>
+      <Pane prefHeight="120.0" prefWidth="120.0" style="-fx-background-color: white; -fx-background-radius: 24; -fx-background-insets: 0;">
+         <effect>
+            <DropShadow color="#0000007e" offsetY="2.0" />
+         </effect>
+      </Pane>
+      <Pane prefHeight="120.0" prefWidth="120.0" style="-fx-background-color: white; -fx-background-radius: 24; -fx-background-insets: 0;">
+         <effect>
+            <DropShadow color="#0000007e" offsetY="2.0" />
+         </effect>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </Pane>
+      <Pane prefHeight="120.0" prefWidth="120.0" style="-fx-background-color: white; -fx-background-radius: 24; -fx-background-insets: 0;">
+         <effect>
+            <DropShadow color="#0000007e" offsetY="2.0" />
+         </effect>
+      </Pane>
+      <Pane prefHeight="120.0" prefWidth="120.0" style="-fx-background-color: white; -fx-background-radius: 24; -fx-background-insets: 0;">
+         <effect>
+            <DropShadow color="#0000007e" offsetY="2.0" />
+         </effect>
+      </Pane>
+      <Pane prefHeight="120.0" prefWidth="120.0" style="-fx-background-color: #2EE59D; -fx-background-radius: 24; -fx-background-insets: 0;">
+         <effect>
+            <DropShadow color="#0000007e" offsetY="2.0" />
+         </effect>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <children>
+            <Label layoutX="33.0" layoutY="39.0" prefHeight="42.0" prefWidth="55.0" text="Label" textFill="WHITE">
+               <font>
+                  <Font size="22.0" />
+               </font>
+               <effect>
+                  <Glow level="1.0" />
+               </effect>
+            </Label>
+         </children>
+      </Pane>
+      <Pane prefHeight="120.0" prefWidth="120.0" style="-fx-background-color: white; -fx-background-radius: 24; -fx-background-insets: 0;">
+         <effect>
+            <DropShadow color="#0000007f" offsetY="2.0" />
+         </effect>
+      </Pane>
+   </children>
+   <padding>
+      <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+   </padding>
+</TilePane>

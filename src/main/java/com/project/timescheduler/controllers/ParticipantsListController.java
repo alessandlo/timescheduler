@@ -1,10 +1,13 @@
 package com.project.timescheduler.controllers;
 
+import com.project.timescheduler.services.DatabaseConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
+
+import java.sql.ResultSet;
 
 public class ParticipantsListController {
     @FXML
@@ -12,7 +15,6 @@ public class ParticipantsListController {
     @FXML
     private ListView<String> selectedParticipantsList;
 
-    String[] names = {"Mickey Lynn", "test test", "Cebi Stüller"}; //Load names here
 
     public interface OnActionListener{
         void onAction(ObservableList<String> list);
@@ -20,14 +22,31 @@ public class ParticipantsListController {
 
     private OnActionListener listener;
 
-    private ObservableList<String> list;
-
     @FXML
     public void initialize(OnActionListener listener){
         this.listener = listener;
 
-        list = FXCollections.observableArrayList(names);
-        allParticipantsList.setItems(list);
+        try {
+            loadUsers();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void loadUsers(){
+        ObservableList<String> users = FXCollections.observableArrayList();
+        try {
+            String sql = "SELECT username FROM sched_user";
+
+            ResultSet rs = new DatabaseConnection().query(sql);
+            while (rs.next()){
+                users.add(rs.getString("username"));
+            }
+            allParticipantsList.setItems(users);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -36,6 +55,7 @@ public class ParticipantsListController {
         if(selectedItem != null){
             selectedParticipantsList.getItems().add(selectedItem);
             allParticipantsList.getItems().remove(selectedItem);
+            allParticipantsList.getSelectionModel().clearSelection();
         }
     }
 
@@ -45,6 +65,7 @@ public class ParticipantsListController {
         if(selectedItem != null){
             allParticipantsList.getItems().add(selectedItem);
             selectedParticipantsList.getItems().remove(selectedItem);
+            selectedParticipantsList.getSelectionModel().clearSelection();
         }
     }
 

@@ -15,7 +15,7 @@
       <DatePicker fx:id="eventStartDate" layoutX="125.0" layoutY="170.0" />
       <TextField fx:id="eventStartHour" layoutX="321.0" layoutY="170.0" prefHeight="25.0" prefWidth="28.0" text="08" />
       <Label layoutX="353.0" layoutY="174.0" text=":" />
-      <TextField fx:id="eeventStartMin" layoutX="360.0" layoutY="170.0" prefHeight="25.0" prefWidth="28.0" text="15" />
+      <TextField fx:id="eventStartMin" layoutX="360.0" layoutY="170.0" prefHeight="25.0" prefWidth="28.0" text="15" />
       <Label layoutX="50.0" layoutY="214.0" text="End:" />
       <DatePicker fx:id="eventEndDate" layoutX="125.0" layoutY="210.0" />
       <TextField fx:id="eventEndHour" layoutX="321.0" layoutY="210.0" prefHeight="25.0" prefWidth="28.0" text="08" />

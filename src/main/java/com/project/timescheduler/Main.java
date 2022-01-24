@@ -5,7 +5,9 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.ToolBar;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
 import java.io.IOException;
@@ -21,12 +23,12 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         mainStage = stage;
-        stage.setTitle("TimeScheduler");
-        stage.setScene(scene);
-        stage.setMinWidth(400);
-        stage.setMinHeight(300);
-        stage.setOnCloseRequest(windowEvent -> System.exit(0));
-        stage.show();
+        mainStage.setTitle("TimeScheduler");
+        mainStage.setScene(scene);
+        mainStage.setMinWidth(400);
+        mainStage.setMinHeight(300);
+        mainStage.setOnCloseRequest(windowEvent -> System.exit(0));
+        mainStage.show();
     }
 
     public static void main(String[] args) {

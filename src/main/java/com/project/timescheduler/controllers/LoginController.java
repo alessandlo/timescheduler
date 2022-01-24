@@ -4,6 +4,7 @@ import com.project.timescheduler.services.DatabaseConnection;
 import com.project.timescheduler.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 
@@ -44,8 +45,14 @@ public class LoginController {
     }
 
     public void switchToTimescheduler() throws IOException {
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(Main.class.getResource("timescheduler.fxml")));
+        Parent root = loader.load();
+
+        TimeSchedulerController controller = loader.getController();
+        controller.getCurrentUser(usernameFieldLogin.getText());
+
         loginPane.getChildren().clear();
-        loginPane.getChildren().add(FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("timescheduler.fxml"))));
+        loginPane.getChildren().add(root);
         Main.mainStage.setMinWidth(800);
         Main.mainStage.setMinHeight(600);
     }

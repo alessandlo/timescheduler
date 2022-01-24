@@ -16,7 +16,7 @@ public class DatabaseConnection {
     public static String adminPassword = "admin";
 
 
-    public Connection getConnection(){
+    private Connection getConnection(){
 
         final String databaseUser = "S1_student2_19";
         final String databasePassword = "Zx08DBS";

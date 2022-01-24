@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="294.0" prefWidth="540.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.timescheduler.controllers.ParticipantsListController">
+   <children>
+      <ListView fx:id="allParticipantsList" layoutX="35.0" layoutY="30.0" onMouseClicked="#addNameSelection" prefHeight="200.0" prefWidth="200.0" />
+      <ListView fx:id="selectedParticipantsList" layoutX="305.0" layoutY="30.0" onMouseClicked="#removeNameSelection" prefHeight="200.0" prefWidth="200.0" />
+      <Button layoutX="244.0" layoutY="247.0" mnemonicParsing="false" onAction="#submitParticipants" text="Submit" />
+   </children>
+</AnchorPane>
