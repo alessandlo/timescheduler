@@ -2,6 +2,7 @@ package com.project.timescheduler.controllers;
 
 import com.project.timescheduler.Main;
 import com.project.timescheduler.services.DatabaseConnection;
+import com.project.timescheduler.services.Encryption;
 import com.project.timescheduler.services.Validation;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +20,7 @@ public class RegisterController {
     @FXML
     private Label passwordLabel;
     @FXML
-    private TextField usernameFieldRegister, emailFieldRegister;
+    private TextField usernameFieldRegister, firstnameRegister, lastnameRegister, emailFieldRegister;
     @FXML
     private PasswordField passwordFieldRegister;
     @FXML
@@ -55,9 +56,10 @@ public class RegisterController {
 
             if(!connection.query(String.format("SELECT * FROM sched_user WHERE username='%s'",
                     usernameFieldRegister.getText())).next()) {
-
-                String sql = String.format("INSERT INTO sched_user (username, email, password) VALUES ('%s','%s','%s')",
-                        usernameFieldRegister.getText(), emailFieldRegister.getText(), passwordFieldRegister.getText());
+                Encryption encryption = new Encryption();
+                String sql = String.format("INSERT INTO sched_user (username, email, password, firstname, lastname) VALUES ('%s','%s','%s','%s','%s')",
+                        usernameFieldRegister.getText(), emailFieldRegister.getText(), encryption.createHash(passwordFieldRegister.getText()),
+                        firstnameRegister.getText(), lastnameRegister.getText());
 
                 connection.update(sql);
 

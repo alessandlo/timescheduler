@@ -2,6 +2,7 @@ package com.project.timescheduler.controllers;
 
 import com.project.timescheduler.services.DatabaseConnection;
 import com.project.timescheduler.Main;
+import com.project.timescheduler.services.Encryption;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -63,8 +64,9 @@ public class LoginController {
                 passwordFieldLogin.getText().equals(DatabaseConnection.adminPassword)) {
             switchToAdminpanel();
         } else {
+            Encryption encryption = new Encryption();
             String sql = String.format("SELECT * FROM sched_user WHERE username='%s' AND password='%s'",
-                    usernameFieldLogin.getText(), passwordFieldLogin.getText());
+                    usernameFieldLogin.getText(), encryption.createHash(passwordFieldLogin.getText()));
 
             ResultSet resultSet = new DatabaseConnection().query(sql);
 

@@ -1,6 +1,7 @@
 package com.project.timescheduler.controllers;
 
 import com.project.timescheduler.services.DatabaseConnection;
+import com.project.timescheduler.services.Encryption;
 import com.project.timescheduler.services.UserDetails;
 import com.project.timescheduler.services.Validation;
 import javafx.collections.FXCollections;
@@ -17,7 +18,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class AdminController {
-    //testtetsasdfff
+
     @FXML
     private TableView<UserDetails> tableview;
     @FXML
@@ -80,10 +81,12 @@ public class AdminController {
 
         if (validation.emailValidation(emailEdit.getText()) &&
                 validation.passwordValidation(passwordEdit.getText())){
+            Encryption encryption = new Encryption();
+
             String selectedItem = tableview.getSelectionModel().getSelectedItem().getUsername();
 
-            String sql_temp = "UPDATE sched_user SET Email='%s', Password='%s' WHERE Username='%s'";
-            String sql = String.format(sql_temp, emailEdit.getText(), passwordEdit.getText(), selectedItem);
+            String sql_temp = "UPDATE sched_user SET email='%s', password='%s' WHERE username='%s'";
+            String sql = String.format(sql_temp, emailEdit.getText(), encryption.createHash(passwordEdit.getText()), selectedItem);
 
             connection.update(sql);
             loadData();
