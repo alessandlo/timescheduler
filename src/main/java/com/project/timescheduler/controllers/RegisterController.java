@@ -57,9 +57,9 @@ public class RegisterController {
             if(!connection.query(String.format("SELECT * FROM sched_user WHERE username='%s'",
                     usernameFieldRegister.getText())).next()) {
                 Encryption encryption = new Encryption();
-                String sql = String.format("INSERT INTO sched_user (username, email, password, firstname, lastname) VALUES ('%s','%s','%s','%s','%s')",
-                        usernameFieldRegister.getText(), emailFieldRegister.getText(), encryption.createHash(passwordFieldRegister.getText()),
-                        firstnameRegister.getText(), lastnameRegister.getText());
+                String sql = String.format("INSERT INTO sched_user (username, firstname, lastname, email, password) VALUES ('%s','%s','%s','%s','%s')",
+                        usernameFieldRegister.getText(), firstnameRegister.getText(), lastnameRegister.getText(),
+                        emailFieldRegister.getText(), encryption.createHash(passwordFieldRegister.getText()));
 
                 connection.update(sql);
 
