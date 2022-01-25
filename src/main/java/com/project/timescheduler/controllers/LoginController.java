@@ -29,7 +29,7 @@ public class LoginController {
 
     public void initialize() {
         loginButton.disableProperty().bind(
-                usernameFieldLogin.textProperty().isEmpty().and(passwordFieldLogin.textProperty().isEmpty())
+                usernameFieldLogin.textProperty().isEmpty().or(passwordFieldLogin.textProperty().isEmpty())
         );
     }
 

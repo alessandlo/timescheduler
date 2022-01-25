@@ -30,9 +30,11 @@ public class RegisterController {
 
     public void initialize() {
         registerButton.disableProperty().bind(
-                usernameFieldRegister.textProperty().isEmpty().and(
-                        emailFieldRegister.textProperty().isEmpty()).and(
-                                passwordFieldRegister.textProperty().isEmpty()
+                usernameFieldRegister.textProperty().isEmpty().or(
+                        firstnameRegister.textProperty().isEmpty().or(
+                                lastnameRegister.textProperty().isEmpty().or(
+                                        emailFieldRegister.textProperty().isEmpty().or(
+                                                passwordFieldRegister.textProperty().isEmpty())))
                 )
         );
     }
