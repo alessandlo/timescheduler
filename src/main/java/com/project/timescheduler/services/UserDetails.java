@@ -5,11 +5,15 @@ import javafx.beans.property.StringProperty;
 
 public class UserDetails {
     private final StringProperty username;
+    private final StringProperty firstname;
+    private final StringProperty lastname;
     private final StringProperty email;
     private final StringProperty password;
 
-    public UserDetails(String username, String email, String password) {
+    public UserDetails(String username, String firstname, String lastname, String email, String password) {
         this.username = new SimpleStringProperty(username);
+        this.firstname = new SimpleStringProperty(firstname);
+        this.lastname = new SimpleStringProperty(lastname);
         this.email = new SimpleStringProperty(email);
         this.password = new SimpleStringProperty(password);
     }
@@ -24,6 +28,30 @@ public class UserDetails {
 
     public void setUsername(String username) {
         this.username.set(username);
+    }
+
+    public String getFirstname() {
+        return firstname.get();
+    }
+
+    public StringProperty firstnameProperty() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname.set(firstname);
+    }
+
+    public String getLastname() {
+        return lastname.get();
+    }
+
+    public StringProperty lastnameProperty() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname.set(lastname);
     }
 
     public String getEmail() {

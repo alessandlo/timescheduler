@@ -24,6 +24,10 @@ public class AdminController {
     @FXML
     private TableColumn<UserDetails, String> col_username;
     @FXML
+    private TableColumn<UserDetails, String> col_firstname;
+    @FXML
+    private TableColumn<UserDetails, String> col_lastname;
+    @FXML
     private TableColumn<UserDetails, String> col_email;
     @FXML
     private TableColumn<UserDetails, String> col_password;
@@ -37,6 +41,8 @@ public class AdminController {
     @FXML
     void initialize() {
         col_username.setCellValueFactory(new PropertyValueFactory<>("Username"));
+        col_firstname.setCellValueFactory(new PropertyValueFactory<>("Firstname"));
+        col_lastname.setCellValueFactory(new PropertyValueFactory<>("Lastname"));
         col_email.setCellValueFactory(new PropertyValueFactory<>("Email"));
         col_password.setCellValueFactory(new PropertyValueFactory<>("Password"));
 
@@ -58,6 +64,8 @@ public class AdminController {
 
         while (rs.next()){
             UserDetails userDetails = new UserDetails(rs.getString("username"),
+                    rs.getString("firstname"),
+                    rs.getString("lastname"),
                     rs.getString("email"),
                     rs.getString("password")
             );
