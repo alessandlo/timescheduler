@@ -1,15 +1,13 @@
 package com.project.timescheduler.controllers;
 
-import com.project.timescheduler.services.DatabaseConnection;
-import com.project.timescheduler.services.Encryption;
-import com.project.timescheduler.services.UserDetails;
-import com.project.timescheduler.services.Validation;
+import com.project.timescheduler.services.*;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,7 +31,7 @@ public class AdminController {
     @FXML
     private PasswordField passwordEdit;
     @FXML
-    private Label editedLabel;
+    private Label feedback, selectedUser;
     @FXML
     private Button editButton, deleteButton;
 
@@ -41,7 +39,8 @@ public class AdminController {
 
     @FXML
     void initialize() {
-        editButton.disableProperty().bind(Bindings.isEmpty(tableview.getSelectionModel().getSelectedItems()).or(emailEdit.textProperty().isEmpty().and(passwordEdit.textProperty().isEmpty())));
+        editButton.disableProperty().bind(Bindings.isEmpty(tableview.getSelectionModel().getSelectedItems()).or(
+                emailEdit.textProperty().isEmpty().and(passwordEdit.textProperty().isEmpty())));
         deleteButton.disableProperty().bind(Bindings.isEmpty(tableview.getSelectionModel().getSelectedItems()));
 
         col_username.setCellValueFactory(new PropertyValueFactory<>("Username"));
@@ -60,14 +59,24 @@ public class AdminController {
 
     }
 
+    @FXML
+    private void showUser(MouseEvent mouseEvent){
+        try {
+            selectedUser.setText(tableview.getSelectionModel().getSelectedItem().getUsername());
+        }
+        catch (Exception e){
+            selectedUser.setText("No user selected");
+        }
+    }
+
     public void loadData() throws SQLException{
         ObservableList<UserDetails> data = FXCollections.observableArrayList();
-
         String sql = "SELECT * FROM sched_user";
         ResultSet rs = connection.query(sql);
 
         while (rs.next()){
-            UserDetails userDetails = new UserDetails(rs.getString("username"),
+            UserDetails userDetails = new UserDetails(
+                    rs.getString("username"),
                     rs.getString("firstname"),
                     rs.getString("lastname"),
                     rs.getString("email"),
@@ -85,6 +94,9 @@ public class AdminController {
         String sql = String.format(sql_temp, selectedItem);
 
         connection.update(sql);
+
+        feedback.setText("User deleted");
+
         loadData();
     }
 
@@ -92,52 +104,37 @@ public class AdminController {
         Validation validation = new Validation();
         Encryption encryption = new Encryption();
 
-        int i = 0;
+        String selectedItem = tableview.getSelectionModel().getSelectedItem().getUsername();
+        String sql_temp, sql;
 
         if (passwordEdit.getText().isEmpty()) {
             if (validation.emailValidation(emailEdit.getText())){
-                i = 1;
+                sql_temp = "UPDATE sched_user SET email='%s' WHERE username='%s'";
+                sql = String.format(sql_temp, emailEdit.getText(), selectedItem);
+                connection.update(sql);
+                feedback.setText("Email changed");
             }
         }
         else if (emailEdit.getText().isEmpty()){
             if (validation.passwordValidation(passwordEdit.getText())){
-                i = 2;
-            }
-        }
-        else {
-            if (validation.emailValidation(emailEdit.getText()) && validation.passwordValidation(passwordEdit.getText())) {
-                i = 3;
-            }
-        }
-
-        String selectedItem = tableview.getSelectionModel().getSelectedItem().getUsername();
-        String sql_temp, sql;
-
-        switch (i) {
-            case 1 -> {
-                sql_temp = "UPDATE sched_user SET email='%s' WHERE username='%s'";
-                sql = String.format(sql_temp, emailEdit.getText(), selectedItem);
-                connection.update(sql);
-                loadData();
-                editedLabel.setText("Email changed");
-            }
-            case 2 -> {
                 sql_temp = "UPDATE sched_user SET password='%s' WHERE username='%s'";
                 sql = String.format(sql_temp, encryption.createHash(passwordEdit.getText()), selectedItem);
                 connection.update(sql);
-                loadData();
-                editedLabel.setText("Password changed");
+                feedback.setText("Password changed");
             }
-            case 3 -> {
+        }
+        else {
+            if (validation.emailValidation(emailEdit.getText()) &&
+                    validation.passwordValidation(passwordEdit.getText())) {
                 sql_temp = "UPDATE sched_user SET email='%s', password='%s' WHERE username='%s'";
                 sql = String.format(sql_temp, emailEdit.getText(), encryption.createHash(passwordEdit.getText()), selectedItem);
                 connection.update(sql);
-                loadData();
-                editedLabel.setText("Email and Password changed");
+                feedback.setText("Email and Password changed");
             }
         }
-
         emailEdit.clear();
         passwordEdit.clear();
+
+        loadData();
     }
 }
