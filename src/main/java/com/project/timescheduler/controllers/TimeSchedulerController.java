@@ -140,5 +140,25 @@ public class TimeSchedulerController{
         currentUser = text;
     }
 
-}
+    @FXML
+    private void switchToUserSettings(ActionEvent event2)throws IOException{
+
+        anchorPaneTimeScheduler.setDisable(true);
+        FXMLLoader loader2 = new FXMLLoader(Main.class.getResource("userSettings.fxml"));
+        Parent root2 = loader2.load();
+
+        UserSettingsController controller2 = loader2.getController();
+        controller2.initialize(currentUser);
+
+        Stage userSettingStage = new Stage();
+        Scene scene2 = new Scene(root2);
+        userSettingStage.setScene(scene2);
+        userSettingStage.show();
+        userSettingStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent2) {
+                anchorPaneTimeScheduler.setDisable(false);
+            }
+        });
+}}
 
