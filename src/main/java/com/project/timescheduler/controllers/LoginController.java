@@ -51,7 +51,7 @@ public class LoginController {
         Parent root = loader.load();
 
         TimeSchedulerController controller = loader.getController();
-        controller.getCurrentUser(usernameField.getText());
+        controller.initialize(usernameField.getText());
 
         loginPane.getChildren().clear();
         loginPane.getChildren().add(root);

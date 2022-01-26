@@ -2,6 +2,7 @@ package com.project.timescheduler.controllers;
 
 import com.project.timescheduler.services.Calendar;
 import com.project.timescheduler.Main;
+import com.project.timescheduler.services.UserDetails;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
@@ -54,8 +55,9 @@ public class TimeSchedulerController{
     Calendar calendar;
 
     @FXML
-    public void initialize() throws IOException {
+    public void initialize(String currentUser) throws IOException {
         currentDate = LocalDate.now();
+        currentUserLabel.setText(currentUser);
 
         ArrayList<Node> list = new ArrayList<>();
         list.add(calenderGridPane);
@@ -135,13 +137,8 @@ public class TimeSchedulerController{
         });
     }
 
-    public void getCurrentUser(String text){
-        currentUserLabel.setText(text);
-        currentUser = text;
-    }
-
     @FXML
-    private void switchToUserSettings(ActionEvent event2)throws IOException{
+    private void switchToUserSettings(ActionEvent event2)throws IOException {
 
         anchorPaneTimeScheduler.setDisable(true);
         FXMLLoader loader2 = new FXMLLoader(Main.class.getResource("userSettings.fxml"));
@@ -160,5 +157,6 @@ public class TimeSchedulerController{
                 anchorPaneTimeScheduler.setDisable(false);
             }
         });
-}}
+    }
+}
 
