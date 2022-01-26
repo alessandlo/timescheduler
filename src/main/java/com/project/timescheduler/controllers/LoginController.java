@@ -10,10 +10,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Objects;
 
 public class LoginController {
@@ -21,16 +19,20 @@ public class LoginController {
     @FXML
     private Pane loginPane;
     @FXML
-    private TextField usernameFieldLogin;
+    private TextField usernameField;
     @FXML
-    private PasswordField passwordFieldLogin;
+    private PasswordField passwordField;
     @FXML
     private Button loginButton;
+    @FXML
+    private Label userNotExist, passNotExist;
 
     public void initialize() {
         loginButton.disableProperty().bind(
-                usernameFieldLogin.textProperty().isEmpty().or(passwordFieldLogin.textProperty().isEmpty())
+                usernameField.textProperty().isEmpty().or(passwordField.textProperty().isEmpty())
         );
+        userNotExist.visibleProperty().bind(usernameField.textProperty().isEmpty());
+        passNotExist.visibleProperty().bind(passwordField.textProperty().isEmpty());
     }
 
     public void switchToRegister() throws IOException {
@@ -50,7 +52,7 @@ public class LoginController {
         Parent root = loader.load();
 
         TimeSchedulerController controller = loader.getController();
-        controller.getCurrentUser(usernameFieldLogin.getText());
+        controller.getCurrentUser(usernameField.getText());
 
         loginPane.getChildren().clear();
         loginPane.getChildren().add(root);
@@ -59,26 +61,37 @@ public class LoginController {
     }
 
     public void login() throws SQLException, IOException {
+        DatabaseConnection connection = new DatabaseConnection();
 
-        if (usernameFieldLogin.getText().equals(DatabaseConnection.adminUserName) &&
-                passwordFieldLogin.getText().equals(DatabaseConnection.adminPassword)) {
+        String sql_user = String.format("SELECT * FROM sched_user WHERE username='%s'",
+                usernameField.getText());
+        ResultSet checkUser = connection.query(sql_user);
+
+        if (usernameField.getText().equals(DatabaseConnection.adminUserName) &&
+                passwordField.getText().equals(DatabaseConnection.adminPassword)) {
             switchToAdminpanel();
-        } else {
+        }
+        else if (checkUser.next()){
             Encryption encryption = new Encryption();
-            String sql = String.format("SELECT * FROM sched_user WHERE username='%s' AND password='%s'",
-                    usernameFieldLogin.getText(), encryption.createHash(passwordFieldLogin.getText()));
+            String sql_password = String.format("SELECT * FROM sched_user WHERE username='%s' AND password='%s'",
+                    usernameField.getText(), encryption.createHash(passwordField.getText()));
+            ResultSet checkPass = connection.query(sql_password);
 
-            ResultSet resultSet = new DatabaseConnection().query(sql);
-
-            if (resultSet.next()) {
+            if (checkPass.next()) {
                 switchToTimescheduler();
-            } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Information Dialog");
-                alert.setHeaderText("User doesn't exists");
-                alert.setContentText(null);
-                alert.showAndWait();
             }
+            else {
+                passNotExist.setText("Wrong Password");
+                passwordField.clear();
+                passwordField.requestFocus();
+            }
+        }
+        else {
+            passNotExist.setText("");
+            userNotExist.setText("User does not exist");
+            usernameField.clear();
+            passwordField.clear();
+            usernameField.requestFocus();
         }
     }
 }
