@@ -9,5 +9,6 @@ module com.project.timescheduler {
     exports com.project.timescheduler;
     exports com.project.timescheduler.controllers;
     exports com.project.timescheduler.services;
+    exports com.project.timescheduler.helpers;
     opens com.project.timescheduler.services to javafx.fxml;
 }

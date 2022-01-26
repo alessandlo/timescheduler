@@ -1,8 +1,8 @@
 package com.project.timescheduler.services;
 
+import com.project.timescheduler.helpers.DBResults;
 import javafx.scene.control.Alert;
 
-import java.sql.ResultSet;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.DriverManager;
@@ -37,20 +37,33 @@ public class DatabaseConnection {
         return connection;
     }
 
-    public ResultSet query(String sql) throws SQLException {
-        if (connection == null){
+    public DBResults query(String sql) {
+        if (connection == null) {
             getConnection();
         }
-        Statement statement = connection.createStatement();
-        return statement.executeQuery(sql);
+
+        DBResults resultSet = null;
+        try {
+            Statement statement = connection.createStatement();
+            resultSet = new DBResults(statement.executeQuery(sql));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return resultSet;
     }
 
-    public void update(String sql) throws SQLException{
+    public void update(String sql){
         if (connection == null){
             getConnection();
         }
-        Statement statement = connection.createStatement();
-        statement.executeUpdate(sql);
+
+        try{
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
 

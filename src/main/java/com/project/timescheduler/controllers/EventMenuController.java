@@ -1,6 +1,7 @@
 package com.project.timescheduler.controllers;
 
 import com.project.timescheduler.Main;
+import com.project.timescheduler.helpers.DBResults;
 import com.project.timescheduler.services.DatabaseConnection;
 import com.project.timescheduler.services.Event;
 import javafx.fxml.FXML;
@@ -134,9 +135,9 @@ public class EventMenuController{
 
             String getEvent_sql = "SELECT EVENT_ID FROM SCHED_EVENT where EVENT_NAME = '%s' AND LOCATION = '%s' AND PRIORITY = '%s'";
             getEvent_sql = String.format(getEvent_sql, event.getName(), event.getLocation(), event.getPriority());
-            ResultSet rsID = connection.query(getEvent_sql);
+            DBResults rsID = connection.query(getEvent_sql);
             if(rsID.next()) {
-                event.setEventId(rsID.getInt("Event_ID"));
+                event.setEventId(Integer.parseInt(rsID.get("Event_ID")));
             }
             uploadParticipants(participants);
         } catch (SQLException e){

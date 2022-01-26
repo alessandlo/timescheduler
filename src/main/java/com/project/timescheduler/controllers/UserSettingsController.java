@@ -1,5 +1,6 @@
 package com.project.timescheduler.controllers;
 
+import com.project.timescheduler.helpers.DBResults;
 import com.project.timescheduler.services.DatabaseConnection;
 import com.project.timescheduler.services.Encryption;
 import com.project.timescheduler.services.Validation;
@@ -9,7 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserSettingsController {
@@ -34,19 +34,16 @@ public class UserSettingsController {
     public void initialize(String currentUser) {
         connection = new DatabaseConnection();
         activeUser = currentUser;
-        try {
-            loadMail();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        loadMail();
     }
 
-    private void loadMail() throws SQLException {
+    private void loadMail() {
 
             String sql = "SELECT EMAIL FROM SCHED_USER WHERE USERNAME = '" + activeUser + "'";
-            ResultSet rs = connection.query(sql);
+            DBResults rs = connection.query(sql);
             while (rs.next()) {
-                currentMail = rs.getString("EMAIL");
+                currentMail = rs.get("EMAIL");
                 displayMail(currentMail);
             }
         }
@@ -56,7 +53,7 @@ public class UserSettingsController {
     }
 
     @FXML
-    public void editUser(ActionEvent event) throws SQLException {
+    public void editUser(ActionEvent event) {
         if (passwordField.getText().isEmpty() && validation.emailValidation(changedMail.getText())){
             String sql_temp = "UPDATE SCHED_USER SET EMAIL='%s' WHERE USERNAME='%s'";
             String sql = String.format(sql_temp, changedMail.getText(), activeUser);

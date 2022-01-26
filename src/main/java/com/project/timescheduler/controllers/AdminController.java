@@ -1,5 +1,6 @@
 package com.project.timescheduler.controllers;
 
+import com.project.timescheduler.helpers.DBResults;
 import com.project.timescheduler.services.*;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -9,7 +10,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class AdminController {
@@ -51,12 +51,7 @@ public class AdminController {
 
         connection = new DatabaseConnection();
 
-        try {
-            loadData();
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
-
+        loadData();
     }
 
     @FXML
@@ -69,25 +64,25 @@ public class AdminController {
         }
     }
 
-    public void loadData() throws SQLException{
+    public void loadData(){
         ObservableList<UserDetails> data = FXCollections.observableArrayList();
         String sql = "SELECT * FROM sched_user";
-        ResultSet rs = connection.query(sql);
+        DBResults rs = connection.query(sql);
 
         while (rs.next()){
             UserDetails userDetails = new UserDetails(
-                    rs.getString("username"),
-                    rs.getString("firstname"),
-                    rs.getString("lastname"),
-                    rs.getString("email"),
-                    rs.getString("password")
+                    rs.get("username"),
+                    rs.get("firstname"),
+                    rs.get("lastname"),
+                    rs.get("email"),
+                    rs.get("password")
             );
             data.add(userDetails);
         }
         tableview.setItems(data);
     }
 
-    public void deleteUser() throws SQLException{
+    public void deleteUser(){
         String selectedItem = tableview.getSelectionModel().getSelectedItem().getUsername();
 
         String sql_temp = "DELETE FROM sched_user WHERE username='%s'";
@@ -100,7 +95,7 @@ public class AdminController {
         loadData();
     }
 
-    public void editUser() throws SQLException{
+    public void editUser(){
         Validation validation = new Validation();
         Encryption encryption = new Encryption();
 

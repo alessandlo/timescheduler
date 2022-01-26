@@ -1,5 +1,6 @@
 package com.project.timescheduler.controllers;
 
+import com.project.timescheduler.helpers.DBResults;
 import com.project.timescheduler.services.DatabaseConnection;
 import com.project.timescheduler.Main;
 import com.project.timescheduler.services.Encryption;
@@ -10,8 +11,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Objects;
 
 public class LoginController {
@@ -60,12 +59,12 @@ public class LoginController {
         Main.mainStage.setMinHeight(600);
     }
 
-    public void login() throws SQLException, IOException {
+    public void login() throws IOException {
         DatabaseConnection connection = new DatabaseConnection();
 
         String sql_user = String.format("SELECT * FROM sched_user WHERE username='%s'",
                 usernameField.getText());
-        ResultSet checkUser = connection.query(sql_user);
+        DBResults checkUser = connection.query(sql_user);
 
         if (usernameField.getText().equals(DatabaseConnection.adminUserName) &&
                 passwordField.getText().equals(DatabaseConnection.adminPassword)) {
@@ -75,7 +74,7 @@ public class LoginController {
             Encryption encryption = new Encryption();
             String sql_password = String.format("SELECT * FROM sched_user WHERE username='%s' AND password='%s'",
                     usernameField.getText(), encryption.createHash(passwordField.getText()));
-            ResultSet checkPass = connection.query(sql_password);
+            DBResults checkPass = connection.query(sql_password);
 
             if (checkPass.next()) {
                 switchToTimescheduler();

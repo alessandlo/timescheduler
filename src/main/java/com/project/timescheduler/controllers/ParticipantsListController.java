@@ -1,13 +1,12 @@
 package com.project.timescheduler.controllers;
 
+import com.project.timescheduler.helpers.DBResults;
 import com.project.timescheduler.services.DatabaseConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
-
-import java.sql.ResultSet;
 
 public class ParticipantsListController {
     @FXML
@@ -26,27 +25,20 @@ public class ParticipantsListController {
     public void initialize(OnActionListener listener){
         this.listener = listener;
 
-        try {
-            loadUsers();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
+        loadUsers();
     }
 
     public void loadUsers(){
         ObservableList<String> users = FXCollections.observableArrayList();
-        try {
-            String sql = "SELECT username FROM sched_user";
 
-            ResultSet rs = new DatabaseConnection().query(sql);
-            while (rs.next()){
-                users.add(rs.getString("username"));
-            }
-            allParticipantsList.setItems(users);
-        }catch (Exception e){
-            e.printStackTrace();
+        String sql = "SELECT username FROM sched_user";
+
+        DBResults rs = new DatabaseConnection().query(sql);
+        while (rs.next()){
+            users.add(rs.get("username"));
         }
+        allParticipantsList.setItems(users);
+
     }
 
     @FXML

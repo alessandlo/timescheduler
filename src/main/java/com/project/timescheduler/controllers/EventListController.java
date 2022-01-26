@@ -1,19 +1,13 @@
 package com.project.timescheduler.controllers;
 
+import com.project.timescheduler.helpers.DBResults;
 import com.project.timescheduler.services.DatabaseConnection;
 import com.project.timescheduler.services.Event;
 import com.project.timescheduler.services.Participates_In;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.chart.PieChart;
 import javafx.scene.control.ListView;
 
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.LinkedList;
-import java.util.ResourceBundle;
 
 public class EventListController{
 
@@ -41,26 +35,24 @@ public class EventListController{
     }
     public void loadListData(){
         LinkedList<Event> dataList = new LinkedList<>();
-        try {
-            String sql = "SELECT * FROM SCHED_EVENT";
-            ResultSet rs = connection.query(sql);
-            while (rs.next()){
-                Event event = new Event(rs.getInt("EVENT_ID"),
-                        rs.getString("CREATOR_NAME"),
-                        rs.getString("EVENT_NAME"),
-                        rs.getString("LOCATION"),
-                        null,
-                        rs.getDate("START_DATE").toLocalDate(),
-                        rs.getDate("END_DATE").toLocalDate(),
-                        null,
-                        null,
-                        Event.Priority.valueOf(rs.getString("PRIORITY")));
-                dataList.add(event);
-            }
+
+        String sql = "SELECT * FROM SCHED_EVENT";
+        DBResults rs = connection.query(sql);
+        while (rs.next()){
+
+            Event event = new Event(Integer.parseInt(rs.get("EVENT_ID")),
+                    rs.get("CREATOR_NAME"),
+                    rs.get("EVENT_NAME"),
+                    rs.get("LOCATION"),
+                    null,
+                    rs.getDate("START_DATE").toLocalDate(),
+                    rs.getDate("END_DATE").toLocalDate(),
+                    null,
+                    null,
+                    Event.Priority.valueOf(rs.get("PRIORITY")));
+            dataList.add(event);
         }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+
         setHostedEvents(dataList);
         setAttendingEvents(dataList);
     }
@@ -68,17 +60,14 @@ public class EventListController{
         LinkedList<Participates_In> participates_in = new LinkedList<>();
         LinkedList<Number> ids = new LinkedList<>();
 
-        try {
-            String sql = "SELECT * FROM SCHED_PARTICIPATES_IN WHERE USERNAME = '" + activeUser + "'";
-            ResultSet rs = connection.query(sql);
-            while (rs.next()){
-                Participates_In par_in = new Participates_In(rs.getInt("EVENT_ID"),rs.getString("USERNAME"));
-                participates_in.add(par_in);
-            }
+
+        String sql = "SELECT * FROM SCHED_PARTICIPATES_IN WHERE USERNAME = '" + activeUser + "'";
+        DBResults rs = connection.query(sql);
+        while (rs.next()){
+            Participates_In par_in = new Participates_In(Integer.parseInt(rs.get("EVENT_ID")), rs.get("USERNAME"));
+            participates_in.add(par_in);
         }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+
         for (Participates_In p : participates_in) {
             ids.add(p.getEvent_ID());
         }
