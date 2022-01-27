@@ -7,73 +7,119 @@ import java.util.regex.Pattern;
 
 public class Validation {
 
-    public boolean usernameValidation(String usernameFieldRegister){
-        String regex = "^[a-zA-Z0-9._-]{2,32}$";
-
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(usernameFieldRegister);
-
-        if (matcher.find()){
-            return true;
-        }
-        else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Validation error");
-            alert.setHeaderText("Enter right Username");
-            alert.setContentText("The username can only consist of the following characters:\nA-Z\na-z\n0-9\n.\t(Dot)\n_\t(Underscore)\n-\t(Dash)");
-
-            alert.showAndWait();
-
-            return false;
-        }
-    }
-
-    public boolean emailValidation(String emailFieldRegister){
-        String regex = "^(?=.{4,50}$)[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(emailFieldRegister);
-
-        if (matcher.find()){
-            return true;
-        }
-        else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Validation error");
-            alert.setHeaderText(null);
-            alert.setContentText("Enter right E-Mail address");
-
-            alert.showAndWait();
-
-            return false;
-        }
-    }
-
-    public boolean passwordValidation(String passwordFieldRegister){
-        String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=^\\S+$).{8,32}$";
+    public boolean usernameValidation(String username, boolean showAlert){
+        String regex = "^(?=.{2,32}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$";
         /*
-        (?=.*[0-9])       # at least one digit
-        (?=.*[a-z])       # at least one lower case letter
-        (?=.*[A-Z])       # at least one upper case letter
-        (?=.*[@#$%^&+=])  # at least one special character
-        (?=^\S+$)          # no whitespace allowed
-        .{8,32}           # between 8 and 32 characters
+        (?=.{2,32}$)        # between 2 and 32 characters
+        (?![_.])            # _ or . is not allowed as first character
+        (?!.*[_.]{2})       # __, .., _., ._ are not allowed in general
+        [a-zA-Z0-9._]+      # allowed characters
+        (?<![_.])           # _ or . is not allowed as last character
+        .{8,32}             # between 8 and 32 characters (any character)
         */
 
         Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(passwordFieldRegister);
+        Matcher matcher = pattern.matcher(username);
 
         if (matcher.find()){
             return true;
         }
         else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Validation error");
-            alert.setHeaderText("Enter right Password");
-            alert.setContentText("The password can only consist of the following characters:\n- at least one digit\t\t\t\t0-9\n- at least one lower case letter\ta-z\n- at least one upper case letter\tA-Z\n- at least one special character\t@#$%^&+=\n- between 8 and 32 characters");
+            if (showAlert){
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Validation error");
+                alert.setHeaderText("Enter right Username");
+                alert.setContentText("The username can only consist of the following characters:\nLetters\nNumbers\n.\t(Dot)\n_\t(Underscore)");
 
-            alert.showAndWait();
+                alert.showAndWait();
+            }
+            return false;
+        }
+    }
 
+    public boolean nameValidation(String firstname, boolean showAlert){
+        String regex = "^(?=.{2,32}$)[a-zA-ZÖöÜüÄä]+$";
+        /*
+        (?=.{2,32}$)        # between 2 and 32 characters
+        [a-zA-ZÖöÜüÄä]+     # allowed characters
+        */
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(firstname);
+
+        if (matcher.find()){
+            return true;
+        }
+        else {
+            if (showAlert){
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Validation error");
+                alert.setHeaderText("Enter right Name");
+                alert.setContentText("The first-/lastname can only consist of the following characters:\nLetters\nmin. 2 characters");
+
+                alert.showAndWait();
+            }
+            return false;
+        }
+    }
+
+    public boolean emailValidation(String email, boolean showAlert){
+        String regex = "^(?=.{0,128}$)[\\w-]+(?:\\.[\\w-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+        /*
+        (?=.{0,128}$)           # maximal 128 characters
+        [\\w-]+                 # a-zA-Z0-9_- allowed
+        ?:\.[\w-]+)*            # a-zA-Z0-9_-. allowed multiple times
+        @                       # @ (only one time)
+        (?:[a-zA-Z0-9-]+\.)+    # (a-zA-Z0-9- multiple times plus .) multiple times
+        [a-zA-Z]{2,6}           # letters allowed between 2 and 6 times
+        */
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+
+        if (matcher.find()){
+            return true;
+        }
+        else {
+            if (showAlert){
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Validation error");
+                alert.setHeaderText(null);
+                alert.setContentText("Enter right E-Mail address");
+
+                alert.showAndWait();
+            }
+
+            return false;
+        }
+    }
+
+    public boolean passwordValidation(String password, boolean showAlert){
+        String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=^\\S+$).{8,32}$";
+        /*
+        (?=.*[0-9])         # at least one digit
+        (?=.*[a-z])         # at least one lower case letter
+        (?=.*[A-Z])         # at least one upper case letter
+        (?=.*[@#$%^&+=])    # at least one special character
+        (?=^\S+$)           # no whitespace allowed
+        .{8,32}             # between 8 and 32 characters (any character)
+        */
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(password);
+
+        if (matcher.find()){
+            return true;
+        }
+        else {
+            if (showAlert){
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Validation error");
+                alert.setHeaderText("Enter right Password");
+                alert.setContentText("The password can only consist of the following characters:\n- At least one digit\t\t\t\t0-9\n- At least one lower case letter\ta-z\n- At least one upper case letter\tA-Z\n- At least one special character\t@#$%^&+=\n- Between 8 and 32 characters");
+
+                alert.showAndWait();
+            }
             return false;
         }
     }

@@ -18,7 +18,7 @@ public class Main extends Application {
         mainStage = stage;
         mainStage.setTitle("TimeScheduler");
         mainStage.setScene(scene);
-        mainStage.setMinWidth(400);
+        mainStage.setMinWidth(300);
         mainStage.setMinHeight(300);
         mainStage.setOnCloseRequest(windowEvent -> System.exit(0));
         mainStage.show();

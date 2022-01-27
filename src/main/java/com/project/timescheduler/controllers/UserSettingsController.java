@@ -10,8 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-import java.sql.SQLException;
-
 public class UserSettingsController {
 
     @FXML
@@ -19,7 +17,7 @@ public class UserSettingsController {
     @FXML
     Label feedback;
     @FXML
-    TextField changedMail;
+    TextField emailField;
     @FXML
     PasswordField passwordField;
     @FXML
@@ -54,26 +52,36 @@ public class UserSettingsController {
 
     @FXML
     public void editUser(ActionEvent event) {
-        if (passwordField.getText().isEmpty() && validation.emailValidation(changedMail.getText())){
-            String sql_temp = "UPDATE SCHED_USER SET EMAIL='%s' WHERE USERNAME='%s'";
-            String sql = String.format(sql_temp, changedMail.getText(), activeUser);
-            connection.update(sql);
-            loadMail();
-            feedback.setText("E-Mail was changed!");
-        }   else if (changedMail.getText().isEmpty() && validation.passwordValidation(passwordField.getText())
-                && passwordField.getText().equals(confirmPasswordField.getText())){
-            String sql_temp = "UPDATE SCHED_USER SET PASSWORD='%s' WHERE USERNAME='%s'";
-            String sql = String.format(sql_temp, encryption.createHash(passwordField.getText()), activeUser);
-            connection.update(sql);
-            feedback.setText("Password was changed!");
+        if (emailField.getText().isEmpty() && passwordField.getText().isEmpty() && confirmPasswordField.getText().isEmpty()){
+            feedback.setText("Nothing edited");
         }
-        else if (validation.emailValidation(changedMail.getText()) && validation.passwordValidation(passwordField.getText())
-                && passwordField.getText().equals(confirmPasswordField.getText())){
-            String sql_temp = "UPDATE SCHED_USER SET EMAIL='%s', PASSWORD='%s' WHERE USERNAME='%s'";
-            String sql = String.format(sql_temp, changedMail.getText(), encryption.createHash(passwordField.getText()), activeUser);
-            connection.update(sql);
-            loadMail();
-            feedback.setText("E-Mail and Password were changed!");
+        else if (passwordField.getText().isEmpty()) {
+            if (validation.emailValidation(emailField.getText(), true)){
+                String sql_temp = "UPDATE SCHED_USER SET EMAIL='%s' WHERE USERNAME='%s'";
+                String sql = String.format(sql_temp, emailField.getText(), activeUser);
+                connection.update(sql);
+                loadMail();
+                feedback.setText("E-Mail was changed!");
+            }
+        }
+        else if (emailField.getText().isEmpty()){
+            if (validation.passwordValidation(passwordField.getText(), true)) {
+                    String sql_temp = "UPDATE SCHED_USER SET PASSWORD='%s' WHERE USERNAME='%s'";
+                    String sql = String.format(sql_temp, encryption.createHash(passwordField.getText()), activeUser);
+                    connection.update(sql);
+                    feedback.setText("Password was changed!");
+                }
+        }
+        else {
+            if (validation.emailValidation(emailField.getText(), true) &&
+                    validation.passwordValidation(passwordField.getText(), true) &&
+                    passwordField.getText().equals(confirmPasswordField.getText())){
+                String sql_temp = "UPDATE SCHED_USER SET EMAIL='%s', PASSWORD='%s' WHERE USERNAME='%s'";
+                String sql = String.format(sql_temp, emailField.getText(), encryption.createHash(passwordField.getText()), activeUser);
+                connection.update(sql);
+                loadMail();
+                feedback.setText("E-Mail and Password were changed!");
+            }
         }
     }
 }

@@ -16,7 +16,6 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Objects;
 
 public class EventViewerContoller {

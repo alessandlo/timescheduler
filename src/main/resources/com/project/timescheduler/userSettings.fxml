@@ -10,7 +10,7 @@
    <children>
       <Label layoutX="66.0" layoutY="122.0" text="New E-Mail:" />
       <Label layoutX="50.0" layoutY="213.0" text="New Password:" />
-      <TextField fx:id="changedMail" layoutX="151.0" layoutY="118.0" />
+      <TextField fx:id="emailField" layoutX="151.0" layoutY="118.0" />
       <PasswordField fx:id="passwordField" layoutX="151.0" layoutY="209.0" />
       <PasswordField fx:id="confirmPasswordField" layoutX="151.0" layoutY="260.0" />
       <Label layoutX="14.0" layoutY="264.0" text="Confirm new password:" />

@@ -37,6 +37,8 @@ public class LoginController {
     public void switchToRegister() throws IOException {
         loginPane.getChildren().clear();
         loginPane.getChildren().add(FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("register.fxml"))));
+        Main.mainStage.setMinWidth(400);
+        Main.mainStage.setMinHeight(350);
     }
 
     public void switchToAdminpanel() throws IOException {

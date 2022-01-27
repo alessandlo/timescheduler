@@ -10,8 +10,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
-import java.sql.SQLException;
-
 public class AdminController {
 
     @FXML
@@ -103,7 +101,7 @@ public class AdminController {
         String sql_temp, sql;
 
         if (passwordEdit.getText().isEmpty()) {
-            if (validation.emailValidation(emailEdit.getText())){
+            if (validation.emailValidation(emailEdit.getText(), true)){
                 sql_temp = "UPDATE sched_user SET email='%s' WHERE username='%s'";
                 sql = String.format(sql_temp, emailEdit.getText(), selectedItem);
                 connection.update(sql);
@@ -111,7 +109,7 @@ public class AdminController {
             }
         }
         else if (emailEdit.getText().isEmpty()){
-            if (validation.passwordValidation(passwordEdit.getText())){
+            if (validation.passwordValidation(passwordEdit.getText(), true)){
                 sql_temp = "UPDATE sched_user SET password='%s' WHERE username='%s'";
                 sql = String.format(sql_temp, encryption.createHash(passwordEdit.getText()), selectedItem);
                 connection.update(sql);
@@ -119,8 +117,8 @@ public class AdminController {
             }
         }
         else {
-            if (validation.emailValidation(emailEdit.getText()) &&
-                    validation.passwordValidation(passwordEdit.getText())) {
+            if (validation.emailValidation(emailEdit.getText(), true) &&
+                    validation.passwordValidation(passwordEdit.getText(), true)) {
                 sql_temp = "UPDATE sched_user SET email='%s', password='%s' WHERE username='%s'";
                 sql = String.format(sql_temp, emailEdit.getText(), encryption.createHash(passwordEdit.getText()), selectedItem);
                 connection.update(sql);

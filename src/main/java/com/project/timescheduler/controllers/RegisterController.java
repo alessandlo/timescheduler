@@ -4,13 +4,13 @@ import com.project.timescheduler.Main;
 import com.project.timescheduler.services.DatabaseConnection;
 import com.project.timescheduler.services.Encryption;
 import com.project.timescheduler.services.Validation;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Objects;
 
 public class RegisterController {
@@ -18,50 +18,85 @@ public class RegisterController {
     @FXML
     private Pane registerPane;
     @FXML
-    private Label passwordLabel;
+    private Label passwordLabel, checkUser, checkFirstname, checkLastname, checkEmail, checkPassword, userAlreadyExist;
     @FXML
-    private TextField usernameFieldRegister, firstnameRegister, lastnameRegister, emailFieldRegister;
+    private TextField usernameField, firstnameField, lastnameField, emailField;
     @FXML
-    private PasswordField passwordFieldRegister;
+    private PasswordField passwordField;
     @FXML
     private Tooltip passTooltip;
     @FXML
     private Button registerButton;
 
+    Validation validation = new Validation();
+
     public void initialize() {
-        registerButton.disableProperty().bind(
-                usernameFieldRegister.textProperty().isEmpty().or(
-                        firstnameRegister.textProperty().isEmpty().or(
-                                lastnameRegister.textProperty().isEmpty().or(
-                                        emailFieldRegister.textProperty().isEmpty().or(
-                                                passwordFieldRegister.textProperty().isEmpty())))
-                )
+        registerButton.disableProperty().bind(usernameField.textProperty().isEmpty().or(
+                firstnameField.textProperty().isEmpty().or(
+                        lastnameField.textProperty().isEmpty().or(
+                                emailField.textProperty().isEmpty()).or(
+                                    passwordField.textProperty().isEmpty())))
         );
+        checkUser.textProperty().bind(Bindings.createStringBinding(() -> {
+            String check = "✗";
+            if (validation.usernameValidation(usernameField.getText(), false))
+                check = "✓";
+            return check;
+        }, usernameField.textProperty()));
+        checkFirstname.textProperty().bind(Bindings.createStringBinding(() -> {
+            String check = "✗";
+            if (validation.nameValidation(firstnameField.getText(), false))
+                check = "✓";
+            return check;
+        }, firstnameField.textProperty()));
+        checkLastname.textProperty().bind(Bindings.createStringBinding(() -> {
+            String check = "✗";
+            if (validation.nameValidation(lastnameField.getText(), false))
+                check = "✓";
+            return check;
+        }, lastnameField.textProperty()));
+        checkEmail.textProperty().bind(Bindings.createStringBinding(() -> {
+            String check = "✗";
+            if (validation.emailValidation(emailField.getText(), false))
+                check = "✓";
+            return check;
+        }, emailField.textProperty()));
+        checkPassword.textProperty().bind(Bindings.createStringBinding(() -> {
+            String check = "✗";
+            if (validation.passwordValidation(passwordField.getText(), false))
+                check = "✓";
+            return check;
+        }, passwordField.textProperty()));
+
+        userAlreadyExist.visibleProperty().bind(usernameField.textProperty().isEmpty());
     }
 
     public void switchToLogin() throws IOException {
         registerPane.getChildren().clear();
         registerPane.getChildren().add(FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("login.fxml"))));
-
+        Main.mainStage.setMinWidth(300);
+        Main.mainStage.setMinHeight(300);
     }
 
-    public void createAccount() throws SQLException, IOException{
+    public void createAccount() throws IOException{
         passwordLabel.setTooltip(passTooltip);
 
         Validation validation = new Validation();
 
-        if (validation.usernameValidation(usernameFieldRegister.getText()) &&
-                validation.emailValidation(emailFieldRegister.getText()) &&
-                validation.passwordValidation(passwordFieldRegister.getText())) {
+        if (validation.usernameValidation(usernameField.getText(), true) &&
+                validation.nameValidation(firstnameField.getText(), true) &&
+                validation.nameValidation(lastnameField.getText(), true) &&
+                validation.emailValidation(emailField.getText(), true) &&
+                validation.passwordValidation(passwordField.getText(), true)) {
 
             DatabaseConnection connection = new DatabaseConnection();
 
             if(!connection.query(String.format("SELECT * FROM sched_user WHERE username='%s'",
-                    usernameFieldRegister.getText())).next()) {
+                    usernameField.getText())).next()) {
                 Encryption encryption = new Encryption();
                 String sql = String.format("INSERT INTO sched_user (username, firstname, lastname, email, password) VALUES ('%s','%s','%s','%s','%s')",
-                        usernameFieldRegister.getText(), firstnameRegister.getText(), lastnameRegister.getText(),
-                        emailFieldRegister.getText(), encryption.createHash(passwordFieldRegister.getText()));
+                        usernameField.getText(), firstnameField.getText(), lastnameField.getText(),
+                        emailField.getText(), encryption.createHash(passwordField.getText()));
 
                 connection.update(sql);
 
@@ -73,11 +108,9 @@ public class RegisterController {
 
                 switchToLogin();
             }else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Information Dialog");
-                alert.setHeaderText("User already exists");
-                alert.setContentText("Thus username already exists");
-                alert.showAndWait();
+                userAlreadyExist.setText("User already exist");
+                usernameField.clear();
+                usernameField.requestFocus();
             }
         }
     }

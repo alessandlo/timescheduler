@@ -2,9 +2,7 @@ package com.project.timescheduler.controllers;
 
 import com.project.timescheduler.services.Calendar;
 import com.project.timescheduler.Main;
-import com.project.timescheduler.services.UserDetails;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,17 +14,13 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.io.IOException;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class TimeSchedulerController{
 
