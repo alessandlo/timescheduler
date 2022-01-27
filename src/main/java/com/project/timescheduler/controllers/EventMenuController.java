@@ -84,6 +84,9 @@ public class EventMenuController{
 
             Stage participantsStage = new Stage();
 
+            ArrayList<String> participants = new ArrayList<>(eventParticipantList.getItems());
+            participants.remove(0);
+
             controller.initialize((list) -> {
                 eventParticipantList.getItems().clear();
                 eventParticipantList.getItems().add(0, "Manage participants");
@@ -91,7 +94,7 @@ public class EventMenuController{
                     eventParticipantList.getItems().add(participant);
                 }
                 participantsStage.close();
-            });
+            }, participants);
             loader.setController(controller);
 
             Scene scene = new Scene(root);
@@ -130,23 +133,20 @@ public class EventMenuController{
                 eventPriority.getValue()
         );
 
-        try {
-            uploadEvent();
+        uploadEvent();
 
-            String getEvent_sql = "SELECT EVENT_ID FROM SCHED_EVENT where EVENT_NAME = '%s' AND LOCATION = '%s' AND PRIORITY = '%s'";
-            getEvent_sql = String.format(getEvent_sql, event.getName(), event.getLocation(), event.getPriority());
-            DBResults rsID = connection.query(getEvent_sql);
-            if(rsID.next()) {
-                event.setEventId(Integer.parseInt(rsID.get("Event_ID")));
-            }
-            uploadParticipants(participants);
-        } catch (SQLException e){
-            e.printStackTrace();
+        String getEvent_sql = "SELECT EVENT_ID FROM SCHED_EVENT where EVENT_NAME = '%s' AND LOCATION = '%s' AND PRIORITY = '%s'";
+        getEvent_sql = String.format(getEvent_sql, event.getName(), event.getLocation(), event.getPriority());
+        DBResults rsID = connection.query(getEvent_sql);
+        if(rsID.next()) {
+            event.setEventId(Integer.parseInt(rsID.get("Event_ID")));
         }
+        uploadParticipants(participants);
+
         listener.onAction();
     }
 
-    public void uploadEvent()  throws SQLException {
+    public void uploadEvent(){
         String startDateTime_temp = "%s %s";
         String startDateTime = String.format(startDateTime_temp, event.getStartDate(), event.getStartTime());
         String endDateTime = String.format(startDateTime_temp, event.getEndDate(), event.getEndTime());
@@ -161,7 +161,7 @@ public class EventMenuController{
 
     }
 
-    public void uploadParticipants(ArrayList<String> user) throws SQLException{
+    public void uploadParticipants(ArrayList<String> user){
         String sql_user = "INSERT INTO SCHED_PARTICIPATES_IN (USERNAME, EVENT_ID) VALUES ('%s'," + event.getEventId() + ")";
 
         for (String user_temp : user) {

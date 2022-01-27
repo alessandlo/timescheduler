@@ -2,10 +2,13 @@ package com.project.timescheduler.services;
 
 import com.project.timescheduler.Main;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -65,15 +68,17 @@ public class Calendar {
 
         for (int row = 0; row < rowCount; row++){
             for (int column = 0; column < columnCount; column++) {
-                VBox vBox = FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("calendarItem.fxml")));
+                AnchorPane pane = FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("calendarItem.fxml")));
+                VBox vBox = (VBox) pane.getChildren().get(0);
                 Label label = (Label) vBox.getChildren().get(0);
 
                 if (column == 0 && row > 0){
                     label.setText(String.valueOf(startDate.get(WeekFields.ISO.weekOfYear()))); //KW
-                    calendarGridPane.add(vBox, column, row);
+                    vBox.setCursor(Cursor.DEFAULT);
+                    calendarGridPane.add(pane, column, row);
 
                 }else if (column > 0 && row > 0){
-                    vBox.setDisable(startDate.getMonth() != currentDate.getMonth());
+                    pane.setDisable(startDate.getMonth() != currentDate.getMonth());
 
                     label.setText(String.format("%d", startDate.getDayOfMonth()));
 
@@ -82,7 +87,7 @@ public class Calendar {
                     }
 
                     vBox.setOnMouseClicked(listener::onMouseClicked);
-                    calendarGridPane.add(vBox, column, row);
+                    calendarGridPane.add(pane, column, row);
                     startDate = startDate.plusDays(1);
                 }
 
@@ -101,15 +106,15 @@ public class Calendar {
 
         //System.out.println("Start Date: " + startDate);
         //System.out.println("Current Date: " + currentDate);
-        System.out.println(calendarGridPane.getChildren());
         for (int i = 0; i < calenderLength; i++) {
-            VBox vBox = (VBox) calendarGridPane.getChildren().get(i + 7); // +7 wegen der ersten Zeile
+            Pane pane = (Pane) calendarGridPane.getChildren().get(i + 7); // +7 wegen der ersten Zeile
+            VBox vBox = (VBox) pane.getChildren().get(0);
             Label label = (Label) vBox.getChildren().get(0);
 
             if (i % 8 == 0){
                 label.setText(String.valueOf(startDate.get(WeekFields.ISO.weekOfYear()))); //KW
             }else {
-                vBox.setDisable(startDate.getMonth() != currentDate.getMonth());
+                pane.setDisable(startDate.getMonth() != currentDate.getMonth());
                 label.setText(String.format("%d", startDate.getDayOfMonth()));
 
                 if (todaysDate.equals(startDate)){

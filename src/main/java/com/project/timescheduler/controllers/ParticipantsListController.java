@@ -8,6 +8,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 
+import java.util.ArrayList;
+
 public class ParticipantsListController {
     @FXML
     private ListView<String> allParticipantsList;
@@ -21,21 +23,25 @@ public class ParticipantsListController {
 
     private OnActionListener listener;
 
-    @FXML
-    public void initialize(OnActionListener listener){
-        this.listener = listener;
+    private ArrayList<String> participants;
 
+    @FXML
+    public void initialize(OnActionListener listener, ArrayList<String> participants){
+        this.listener = listener;
+        this.participants = participants;
         loadUsers();
     }
 
     public void loadUsers(){
         ObservableList<String> users = FXCollections.observableArrayList();
-
+        selectedParticipantsList.getItems().addAll(participants);
         String sql = "SELECT username FROM sched_user";
 
         DBResults rs = new DatabaseConnection().query(sql);
         while (rs.next()){
-            users.add(rs.get("username"));
+            if (!participants.contains(rs.get("username"))) {
+                users.add(rs.get("username"));
+            }
         }
         allParticipantsList.setItems(users);
 

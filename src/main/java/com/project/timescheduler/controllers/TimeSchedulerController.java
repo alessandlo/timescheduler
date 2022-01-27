@@ -30,7 +30,7 @@ import java.util.Objects;
 
 public class TimeSchedulerController{
 
-    public static Stage menuStage = null;
+    private Stage menuStage;
 
     private Scene scene;
 
@@ -58,6 +58,7 @@ public class TimeSchedulerController{
     public void initialize(String currentUser) throws IOException {
         currentDate = LocalDate.now();
         currentUserLabel.setText(currentUser);
+        this.currentUser = currentUser;
 
         ArrayList<Node> list = new ArrayList<>();
         list.add(calenderGridPane);
@@ -76,13 +77,16 @@ public class TimeSchedulerController{
     @FXML
     private void mouseClicked(MouseEvent mouseEvent){
         EventTarget target = mouseEvent.getTarget();
+
         if (target.getClass() == VBox.class){
             VBox vBox = (VBox) target;
             Label label = (Label) vBox.getChildren().get(0);
             System.out.println(label.getText());
         }
+
         try {
             anchorPaneTimeScheduler.setDisable(true);
+
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("eventMenu.fxml"));
             Parent root = loader.load();
             EventMenuController eventMenuController = loader.getController();
@@ -95,12 +99,10 @@ public class TimeSchedulerController{
             menuStage = new Stage();
             scene = new Scene(root);
             menuStage.setScene(scene);
-            menuStage.setOnCloseRequest(windowEvent -> {
-                anchorPaneTimeScheduler.setDisable(false);
-            });
+            menuStage.setOnCloseRequest(windowEvent -> anchorPaneTimeScheduler.setDisable(false));
             menuStage.initModality(Modality.APPLICATION_MODAL);
             menuStage.showAndWait();
-        }catch (Exception e){
+        }catch (IOException e){
             e.printStackTrace();
         }
     }
@@ -119,44 +121,36 @@ public class TimeSchedulerController{
     private void switchToList(ActionEvent event)throws IOException{
 
         anchorPaneTimeScheduler.setDisable(true);
-        FXMLLoader loader = new FXMLLoader(Main.class.getResource("EventList.fxml"));
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("eventViewer.fxml"));
         Parent root = loader.load();
 
-        EventListController controller = loader.getController();
+        EventViewerContoller controller = loader.getController();
         controller.initialize(currentUser);
 
         Stage listStage = new Stage();
         scene = new Scene(root);
         listStage.setScene(scene);
-        listStage.show();
-        listStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent windowEvent) {
-                anchorPaneTimeScheduler.setDisable(false);
-            }
-        });
+        listStage.initModality(Modality.APPLICATION_MODAL);
+        listStage.setOnCloseRequest(windowEvent -> anchorPaneTimeScheduler.setDisable(false));
+        listStage.showAndWait();
     }
 
     @FXML
-    private void switchToUserSettings(ActionEvent event2)throws IOException {
+    private void switchToUserSettings(ActionEvent event)throws IOException {
 
         anchorPaneTimeScheduler.setDisable(true);
-        FXMLLoader loader2 = new FXMLLoader(Main.class.getResource("userSettings.fxml"));
-        Parent root2 = loader2.load();
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("userSettings.fxml"));
+        Parent root = loader.load();
 
-        UserSettingsController controller2 = loader2.getController();
-        controller2.initialize(currentUser);
+        UserSettingsController controller = loader.getController();
+        controller.initialize(currentUser);
 
         Stage userSettingStage = new Stage();
-        Scene scene2 = new Scene(root2);
+        Scene scene2 = new Scene(root);
         userSettingStage.setScene(scene2);
-        userSettingStage.show();
-        userSettingStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent windowEvent2) {
-                anchorPaneTimeScheduler.setDisable(false);
-            }
-        });
+        userSettingStage.initModality(Modality.APPLICATION_MODAL);
+        userSettingStage.setOnCloseRequest(windowEvent -> anchorPaneTimeScheduler.setDisable(false));
+        userSettingStage.showAndWait();
     }
 }
 
