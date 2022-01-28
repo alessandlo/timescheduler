@@ -30,6 +30,11 @@
     -fx-background-position: 10px;
 }
 
+.calendarUserIcon {
+    -fx-background-image: url('../images/userIcon.png');
+    -fx-background-position: center;
+}
+
 .eventViewerItem {
     -fx-background-color: white;
     -fx-background-radius: 24;
