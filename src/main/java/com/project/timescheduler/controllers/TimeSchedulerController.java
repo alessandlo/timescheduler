@@ -95,6 +95,8 @@ public class TimeSchedulerController{
             menuStage.setScene(scene);
             menuStage.setOnCloseRequest(windowEvent -> anchorPaneTimeScheduler.setDisable(false));
             menuStage.initModality(Modality.APPLICATION_MODAL);
+            menuStage.setMinWidth(560);
+            menuStage.setMinHeight(300);
             menuStage.showAndWait();
         }catch (IOException e){
             e.printStackTrace();
@@ -124,8 +126,10 @@ public class TimeSchedulerController{
         Stage listStage = new Stage();
         scene = new Scene(root);
         listStage.setScene(scene);
-        listStage.initModality(Modality.APPLICATION_MODAL);
         listStage.setOnCloseRequest(windowEvent -> anchorPaneTimeScheduler.setDisable(false));
+        listStage.initModality(Modality.APPLICATION_MODAL);
+        listStage.setMinWidth(180);
+        listStage.setMinHeight(390);
         listStage.showAndWait();
     }
 
@@ -142,8 +146,10 @@ public class TimeSchedulerController{
         Stage userSettingStage = new Stage();
         Scene scene2 = new Scene(root);
         userSettingStage.setScene(scene2);
-        userSettingStage.initModality(Modality.APPLICATION_MODAL);
         userSettingStage.setOnCloseRequest(windowEvent -> anchorPaneTimeScheduler.setDisable(false));
+        userSettingStage.initModality(Modality.APPLICATION_MODAL);
+        userSettingStage.setMinWidth(450);
+        userSettingStage.setMinHeight(500);
         userSettingStage.showAndWait();
     }
 }

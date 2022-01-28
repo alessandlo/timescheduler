@@ -95,7 +95,6 @@ public class EventMenuController{
 
             Scene scene = new Scene(root);
             participantsStage.setScene(scene);
-
             participantsStage.initModality(Modality.APPLICATION_MODAL);
             participantsStage.showAndWait();
         }
