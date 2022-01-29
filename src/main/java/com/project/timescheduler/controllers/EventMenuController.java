@@ -4,6 +4,8 @@ import com.project.timescheduler.Main;
 import com.project.timescheduler.helpers.DBResults;
 import com.project.timescheduler.services.DatabaseConnection;
 import com.project.timescheduler.services.Event;
+import com.project.timescheduler.services.Mail;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,10 +18,16 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Properties;
 
 public class EventMenuController{
     @FXML
@@ -167,7 +175,10 @@ public class EventMenuController{
         }
     }
 
-
+    public void Mail(ActionEvent event)throws Exception{
+        Mail mail = new Mail();
+        mail.sendMail("mickeymlynn@yahoo.de");
+    }
     public void exitMenu(){
         listener.onAction();
     }
