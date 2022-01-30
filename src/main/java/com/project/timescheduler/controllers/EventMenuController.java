@@ -109,7 +109,7 @@ public class EventMenuController{
     }
 
     //enter method on save button press
-    public void createEvent(){
+    public void createEvent() throws Exception {
         LocalTime startTime = LocalTime.now();
         LocalTime endTime = LocalTime.now();
         try {
@@ -146,6 +146,31 @@ public class EventMenuController{
         }
         uploadParticipants(participants);
 
+        Mail mail = new Mail();
+        int l = participants.size();
+        int i = 0;
+         while(i != l) {
+            String user = participants.get(i);
+
+            String user_sql = String.format("SELECT EMAIL FROM SCHED_USER WHERE USERNAME = '%s'", user);
+            DBResults userDetails = connection.query(user_sql);
+            userDetails.next();
+            System.out.println(userDetails.get("EMAIL"));
+            mail.sendMail(
+                    currentUser,
+                    user,
+                    eventName.getText(),
+                    eventLocation.getText(),
+                    participants,
+                    userDetails.get("EMAIL"),
+                    eventStartDate.getValue(),
+                    eventEndDate.getValue(),
+                    startTime,
+                    endTime,
+                    eventPriority.getValue());
+            System.out.println("EMAIL SEND");
+            i++;
+        }
         listener.onAction();
     }
 
@@ -175,9 +200,30 @@ public class EventMenuController{
         }
     }
 
-    public void Mail(ActionEvent event)throws Exception{
-        Mail mail = new Mail();
-        mail.sendMail("mickeymlynn@yahoo.de");
+    public void sendMail(ActionEvent event)throws Exception {
+        participants.addAll(eventParticipantList.getItems());
+        participants.remove(0);
+        /*Mail mail = new Mail();
+        int l = participants.size();
+
+        for (int i = 1; i<=l; i++){
+           String user = participants.get(i);
+
+           String user_sql = String.format("SELECT EMAIL FROM SCHED_USER WHERE USERNAME = '%s'", user);
+           DBResults userDetails = connection.query(user_sql);
+           userDetails.next();
+            System.out.println(userDetails.get("EMAIL"));
+       }*/
+        int l = participants.size();
+        String allParticipants = "";
+        int x = 0;
+        while(x != l){
+            String currentUser = participants.get(x);
+            allParticipants = allParticipants + currentUser + ", ";
+            System.out.println("TEST " + allParticipants);
+            x++;
+        }
+
     }
     public void exitMenu(){
         listener.onAction();
