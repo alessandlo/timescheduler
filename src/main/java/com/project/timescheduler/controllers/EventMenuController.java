@@ -21,6 +21,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -118,59 +119,68 @@ public class EventMenuController{
             e.printStackTrace();
         }
 
-        participants.addAll(eventParticipantList.getItems());
-        participants.remove(0);
+        LocalDateTime startDateTime = eventStartDate.getValue().atTime(startTime);
+        LocalDateTime endDateTime = eventEndDate.getValue().atTime(endTime);
 
-        event = new Event(
-                -1,
-                currentUser,
-                eventName.getText(),
-                eventLocation.getText(),
-                participants,
-                eventStartDate.getValue(),
-                eventEndDate.getValue(),
-                startTime,
-                endTime,
-                eventPriority.getValue()
-        );
+        if(startDateTime.isAfter(LocalDateTime.now()) && endDateTime.isAfter(startDateTime)) {
 
-        uploadEvent();
+            participants.addAll(eventParticipantList.getItems());
+            participants.remove(0);
 
-        String getEvent_sql = "SELECT EVENT_ID FROM SCHED_EVENT where EVENT_NAME = '%s' AND LOCATION = '%s' AND PRIORITY = '%s'";
-        getEvent_sql = String.format(getEvent_sql, event.getName(), event.getLocation(), event.getPriority());
-        DBResults rsID = connection.query(getEvent_sql);
-        if(rsID.next()) {
-            event.setEventId(Integer.parseInt(rsID.get("Event_ID")));
-        }
-        uploadParticipants(participants);
-
-        Mail mail = new Mail();
-        int l = participants.size();
-        int i = 0;
-         while(i != l) {
-            String user = participants.get(i);
-
-            String user_sql = String.format("SELECT EMAIL FROM SCHED_USER WHERE USERNAME = '%s'", user);
-            DBResults userDetails = connection.query(user_sql);
-            userDetails.next();
-            System.out.println(userDetails.get("EMAIL"));
-            mail.sendMail(
+            event = new Event(
+                    -1,
                     currentUser,
-                    user,
                     eventName.getText(),
                     eventLocation.getText(),
                     participants,
-                    userDetails.get("EMAIL"),
                     eventStartDate.getValue(),
                     eventEndDate.getValue(),
                     startTime,
                     endTime,
-                    eventPriority.getValue(),
-                    attachmentPath);
-            System.out.println("EMAIL SEND");
-            i++;
+                    eventPriority.getValue()
+            );
+
+            uploadEvent();
+
+            String getEvent_sql = "SELECT EVENT_ID FROM SCHED_EVENT where EVENT_NAME = '%s' AND LOCATION = '%s' AND PRIORITY = '%s'";
+            getEvent_sql = String.format(getEvent_sql, event.getName(), event.getLocation(), event.getPriority());
+            DBResults rsID = connection.query(getEvent_sql);
+            if (rsID.next()) {
+                event.setEventId(Integer.parseInt(rsID.get("Event_ID")));
+            }
+            uploadParticipants(participants);
+
+            Mail mail = new Mail();
+            int l = participants.size();
+            int i = 0;
+            while (i != l) {
+                String user = participants.get(i);
+
+                String user_sql = String.format("SELECT EMAIL FROM SCHED_USER WHERE USERNAME = '%s'", user);
+                DBResults userDetails = connection.query(user_sql);
+                userDetails.next();
+                System.out.println(userDetails.get("EMAIL"));
+                mail.sendMail(
+                        currentUser,
+                        user,
+                        eventName.getText(),
+                        eventLocation.getText(),
+                        participants,
+                        userDetails.get("EMAIL"),
+                        eventStartDate.getValue(),
+                        eventEndDate.getValue(),
+                        startTime,
+                        endTime,
+                        eventPriority.getValue(),
+                        attachmentPath);
+                System.out.println("EMAIL SEND");
+                i++;
+            }
+            listener.onAction();
         }
-        listener.onAction();
+        else {
+            System.out.println("Enter valid Start and End Times");
+        }
     }
 
     public void uploadEvent(){
