@@ -11,120 +11,103 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPaneTimeScheduler" prefHeight="584.0" prefWidth="889.0" style="-fx-background-color: white;"
-            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.project.timescheduler.controllers.TimeSchedulerController">
-   <Label fx:id="currentYearLabel" layoutX="14.0" layoutY="26.0" text="Current date" AnchorPane.leftAnchor="14.0"
-          AnchorPane.topAnchor="26.0"/>
+<AnchorPane fx:id="anchorPaneTimeScheduler" prefHeight="584.0" prefWidth="889.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.timescheduler.controllers.TimeSchedulerController">
+   <Label fx:id="currentYearLabel" layoutX="14.0" layoutY="26.0" text="Current date" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="26.0" />
    <HBox alignment="CENTER" layoutX="120.0" layoutY="21.0" spacing="10.0" AnchorPane.topAnchor="21.0">
-      <Label text="Logged in as:"/>
+      <Label text="Logged in as:" />
       <Label fx:id="currentUserLabel" text="currentUser">
          <font>
-            <Font name="System Bold" size="13.0"/>
+            <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Button mnemonicParsing="false" onAction="#switchToUserSettings" pickOnBounds="false" prefWidth="50.0"
-              stylesheets="@style/stylesheet.css">
+      <Button mnemonicParsing="false" onAction="#switchToUserSettings" pickOnBounds="false" prefWidth="50.0" stylesheets="@style/stylesheet.css">
          <styleClass>
-            <String fx:value="calendarUserIcon"/>
-            <String fx:value="calendarButton"/>
+            <String fx:value="calendarUserIcon" />
+            <String fx:value="calendarButton" />
          </styleClass>
       </Button>
    </HBox>
-   <Button fx:id="showListButton" layoutX="645.0" layoutY="21.0" mnemonicParsing="false" onAction="#switchToList"
-           text="List all Events" AnchorPane.rightAnchor="153.0" AnchorPane.topAnchor="21.0"/>
-   <Button layoutX="817.0" layoutY="14.0" mnemonicParsing="false" onAction="#loadNextMonth" pickOnBounds="false"
-           prefHeight="40.0" prefWidth="50.0" stylesheets="@style/stylesheet.css" AnchorPane.rightAnchor="22.0"
-           AnchorPane.topAnchor="14.0">
+   <Button mnemonicParsing="false" onAction="#exportPDF" text="Export PDF Test" AnchorPane.rightAnchor="260.0" AnchorPane.topAnchor="21.0" />
+   <Button fx:id="showListButton" layoutX="645.0" layoutY="21.0" mnemonicParsing="false" onAction="#switchToList" text="List all Events" AnchorPane.rightAnchor="153.0" AnchorPane.topAnchor="21.0" />
+   <Button layoutX="817.0" layoutY="14.0" mnemonicParsing="false" onAction="#loadNextMonth" pickOnBounds="false" prefHeight="40.0" prefWidth="50.0" stylesheets="@style/stylesheet.css" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="14.0">
       <styleClass>
-         <String fx:value="calendarButton"/>
-         <String fx:value="calendarNextButton"/>
+         <String fx:value="calendarButton" />
+         <String fx:value="calendarNextButton" />
       </styleClass>
       <opaqueInsets>
-         <Insets/>
+         <Insets />
       </opaqueInsets>
    </Button>
-   <Button layoutX="759.0" layoutY="14.0" mnemonicParsing="false" onAction="#loadPreviousMonth" pickOnBounds="false"
-           prefHeight="40.0" prefWidth="50.0" stylesheets="@style/stylesheet.css" AnchorPane.rightAnchor="80.0"
-           AnchorPane.topAnchor="14.0">
+   <Button layoutX="759.0" layoutY="14.0" mnemonicParsing="false" onAction="#loadPreviousMonth" pickOnBounds="false" prefHeight="40.0" prefWidth="50.0" stylesheets="@style/stylesheet.css" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="14.0">
       <opaqueInsets>
-         <Insets/>
+         <Insets />
       </opaqueInsets>
       <styleClass>
-         <String fx:value="calendarButton"/>
-         <String fx:value="calendarBackButton"/>
+         <String fx:value="calendarButton" />
+         <String fx:value="calendarBackButton" />
       </styleClass>
    </Button>
-   <GridPane fx:id="calenderGridPane" alignment="CENTER" hgap="10.0" prefHeight="467.0" prefWidth="793.0"
-             stylesheets="@style/stylesheet.css" vgap="10.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0"
-             AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0">
+   <GridPane fx:id="calenderGridPane" alignment="CENTER" hgap="10.0" prefHeight="467.0" prefWidth="793.0" stylesheets="@style/stylesheet.css" vgap="10.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0">
       <columnConstraints>
-         <ColumnConstraints hgrow="ALWAYS" maxWidth="100.0" minWidth="20.0" prefWidth="50.0"/>
-         <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="40.0" prefWidth="100.0"/>
-         <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="40.0" prefWidth="100.0"/>
-         <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="40.0" prefWidth="100.0"/>
-         <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="40.0" prefWidth="100.0"/>
-         <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="40.0" prefWidth="100.0"/>
-         <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="40.0" prefWidth="100.0"/>
-         <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="40.0" prefWidth="100.0"/>
-         <ColumnConstraints/>
+         <ColumnConstraints hgrow="ALWAYS" maxWidth="100.0" minWidth="20.0" prefWidth="50.0" />
+         <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="40.0" prefWidth="100.0" />
+         <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="40.0" prefWidth="100.0" />
+         <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="40.0" prefWidth="100.0" />
+         <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="40.0" prefWidth="100.0" />
+         <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="40.0" prefWidth="100.0" />
+         <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="40.0" prefWidth="100.0" />
+         <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="40.0" prefWidth="100.0" />
+         <ColumnConstraints />
       </columnConstraints>
       <rowConstraints>
-         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="25.0" vgrow="ALWAYS"/>
-         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="20.0" prefHeight="50.0" vgrow="ALWAYS"/>
-         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="20.0" prefHeight="50.0" vgrow="ALWAYS"/>
-         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="20.0" prefHeight="50.0" vgrow="ALWAYS"/>
-         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="20.0" prefHeight="50.0" vgrow="ALWAYS"/>
-         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="20.0" prefHeight="50.0" vgrow="ALWAYS"/>
-         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="20.0" prefHeight="50.0" vgrow="ALWAYS"/>
-         <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES"/>
+         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="25.0" vgrow="ALWAYS" />
+         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="20.0" prefHeight="50.0" vgrow="ALWAYS" />
+         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="20.0" prefHeight="50.0" vgrow="ALWAYS" />
+         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="20.0" prefHeight="50.0" vgrow="ALWAYS" />
+         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="20.0" prefHeight="50.0" vgrow="ALWAYS" />
+         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="20.0" prefHeight="50.0" vgrow="ALWAYS" />
+         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="20.0" prefHeight="50.0" vgrow="ALWAYS" />
+         <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
       </rowConstraints>
       <padding>
-         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
       </padding>
       <opaqueInsets>
-         <Insets/>
+         <Insets />
       </opaqueInsets>
-      <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Montag"
-             GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+      <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Montag" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
          <font>
-            <Font size="18.0"/>
+            <Font size="18.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Dienstag"
-             GridPane.columnIndex="2">
+      <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Dienstag" GridPane.columnIndex="2">
          <font>
-            <Font size="18.0"/>
+            <Font size="18.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Mittwoch"
-             GridPane.columnIndex="3">
+      <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Mittwoch" GridPane.columnIndex="3">
          <font>
-            <Font size="18.0"/>
+            <Font size="18.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-             text="Donnerstag" GridPane.columnIndex="4">
+      <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Donnerstag" GridPane.columnIndex="4">
          <font>
-            <Font size="18.0"/>
+            <Font size="18.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Freitag"
-             GridPane.columnIndex="5">
+      <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Freitag" GridPane.columnIndex="5">
          <font>
-            <Font size="18.0"/>
+            <Font size="18.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Samstag"
-             GridPane.columnIndex="6">
+      <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Samstag" GridPane.columnIndex="6">
          <font>
-            <Font size="18.0"/>
+            <Font size="18.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Sonntag"
-             GridPane.columnIndex="7">
+      <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Sonntag" GridPane.columnIndex="7">
          <font>
-            <Font size="18.0"/>
+            <Font size="18.0" />
          </font>
       </Label>
    </GridPane>

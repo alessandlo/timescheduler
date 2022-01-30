@@ -2,6 +2,7 @@ package com.project.timescheduler.controllers;
 
 import com.project.timescheduler.services.Calendar;
 import com.project.timescheduler.Main;
+import com.project.timescheduler.services.PdfExport;
 import javafx.event.ActionEvent;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
@@ -15,9 +16,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -47,6 +50,8 @@ public class TimeSchedulerController{
 
     LocalDate currentDate;
     Calendar calendar;
+
+    PdfExport pdfExport = new PdfExport();
 
     @FXML
     public void initialize(String currentUser) throws IOException {
@@ -151,6 +156,18 @@ public class TimeSchedulerController{
         userSettingStage.setMinWidth(450);
         userSettingStage.setMinHeight(500);
         userSettingStage.showAndWait();
+    }
+
+    public void exportPDF(ActionEvent event) throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        File file = fileChooser.showSaveDialog(menuStage);
+        String path = file.getAbsolutePath();
+        if (file!= null){
+            pdfExport.createFile(path);
+        }
     }
 }
 

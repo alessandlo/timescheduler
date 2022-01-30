@@ -2,8 +2,8 @@ module com.project.timescheduler {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
-    requires ojdbc10;
     requires java.mail;
+    requires org.apache.pdfbox;
 
     opens com.project.timescheduler to javafx.fxml;
     opens com.project.timescheduler.controllers to javafx.fxml;
