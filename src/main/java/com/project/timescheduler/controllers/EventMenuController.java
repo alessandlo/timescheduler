@@ -15,19 +15,15 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Properties;
 
 public class EventMenuController{
     @FXML
@@ -66,6 +62,8 @@ public class EventMenuController{
     }
 
     private String currentUser;
+
+    private String attachmentPath;
 
     private DatabaseConnection connection;
 
@@ -167,7 +165,8 @@ public class EventMenuController{
                     eventEndDate.getValue(),
                     startTime,
                     endTime,
-                    eventPriority.getValue());
+                    eventPriority.getValue(),
+                    attachmentPath);
             System.out.println("EMAIL SEND");
             i++;
         }
@@ -225,6 +224,13 @@ public class EventMenuController{
         }
 
     }
+
+    public void attachment(ActionEvent e){
+        FileChooser chooser = new FileChooser();
+        File file = chooser.showOpenDialog(null);
+        attachmentPath = file.getAbsolutePath();
+    }
+
     public void exitMenu(){
         listener.onAction();
     }
