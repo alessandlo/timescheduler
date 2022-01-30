@@ -24,7 +24,7 @@ public class Mail {
                                     LocalTime startTime,
                                     LocalTime endTime,
                                     Event.Priority priority,
-                                    String attachment)throws Exception{
+                                    String attachmentPath)throws Exception{
         System.out.println("Mail is being send to " + recipient);
 
         Properties properties = new Properties();
@@ -52,12 +52,12 @@ public class Mail {
                 String currentUser = participants.get(x);
                 allParticipants = allParticipants + currentUser + ", ";
                 x++;
-        }
+        } allParticipants = allParticipants.substring(0, allParticipants.length() -2);
 
         MimeMultipart multipart = new MimeMultipart();
 
-        //MimeBodyPart attachment = new MimeBodyPart();
-        //attachment.attachFile(new File("C:\\Users\\micke\\Desktop\\Test.txt"));
+        MimeBodyPart attachment = new MimeBodyPart();
+        attachment.attachFile(new File(attachmentPath));
 
         MimeBodyPart messagePart = new MimeBodyPart();
         messagePart.setContent("<h3>Hello </h3>" + user + "<h3>You were included to the event: </h3>" + name + "<p>"
@@ -69,7 +69,7 @@ public class Mail {
                                 + "<h3>End: </h3>" + endDate + " - " + endTime + "<p>","text/html");
 
         multipart.addBodyPart(messagePart);
-        //multipart.addBodyPart(attachment);
+        multipart.addBodyPart(attachment);
 
         message.setContent(multipart);
 
