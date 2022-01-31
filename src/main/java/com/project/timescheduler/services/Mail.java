@@ -57,7 +57,7 @@ public class Mail {
         MimeMultipart multipart = new MimeMultipart();
 
         MimeBodyPart messagePart = new MimeBodyPart();
-        messagePart.setContent("<h3>Hello </h3>" + user + "<h3>You were included to the event: </h3>" + name + "<p>"
+        messagePart.setContent("<h3>Hello </h3>" + user + "<h3> You were included to the event: </h3>" + name + "<p>"
                                 + "<h3>Creator: </h3>" + creatorName + "<p>"
                                 + "<h3>Location: </h3>" + location + "<p>"
                                 + "<h3>Participants: </h3>" + allParticipants + "<p>"
