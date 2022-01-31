@@ -7,12 +7,16 @@ import com.project.timescheduler.services.Event;
 import com.project.timescheduler.services.Participates_In;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -76,24 +80,24 @@ public class EventViewerContoller {
         }
         for (Event e : events) {
             if (!e.getCreatorName().equals(currentUser) && ids.contains(e.getEventId()))
-                loadEventViewerItem(tilePaneAttended, e.getName());
+                loadEventViewerItem(tilePaneAttended, e.getName(),e);
         }
     }
     public void setHostedEvents(ArrayList<Event>events){
         for (Event e : events) {
             if(e.getCreatorName().equals(currentUser))
-                loadEventViewerItem(tilePaneHosted, e.getName());
-                System.out.println("host");
+                loadEventViewerItem(tilePaneHosted, e.getName(), e);
         }
     }
 
-    private void loadEventViewerItem(Pane rootPane, String eventName){
+    private void loadEventViewerItem(Pane rootPane, String eventName, Event ev){
         try {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(Main.class.getResource("eventViewerItem.fxml")));
             AnchorPane anchorPane = loader.load();
             rootPane.getChildren().add(anchorPane);
 
             VBox vBox = (VBox) anchorPane.getChildren().get(0);
+            vBox.setUserData(ev);
             Label label = (Label) vBox.getChildren().get(0);
             label.setText(eventName);
             vBox.setOnMouseClicked(this::onEventClicked);
@@ -104,6 +108,20 @@ public class EventViewerContoller {
 
     @FXML
     private void onEventClicked(MouseEvent mouseEvent){
-        System.out.println(mouseEvent.getTarget());
+        VBox vBox = (VBox) mouseEvent.getTarget();
+        try {
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(Main.class.getResource("EventInformation.fxml")));
+            Parent root = loader.load();
+
+            EventInformationController controller = loader.getController();
+            controller.initialize((Event) vBox.getUserData(),currentUser);
+
+            Stage eventStage = new Stage();
+            eventStage.setScene(new Scene(root));
+            eventStage.initModality(Modality.APPLICATION_MODAL);
+            eventStage.showAndWait();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
