@@ -36,12 +36,12 @@
       <Label text="Location:" GridPane.rowIndex="1" />
       <TextField fx:id="eventLocation" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <Label text="Start:" GridPane.rowIndex="2" />
-      <DatePicker fx:id="eventStartDate" onMouseClicked="#resetBorderColorSD" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <DatePicker fx:id="eventStartDate" onMouseClicked="#resetBorderColor" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <TextField fx:id="eventStartHour" maxWidth="33.0" text="08" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
       <Label text=":" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
       <TextField fx:id="eventStartMin" maxWidth="33.0" text="15" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
       <Label text="End:" GridPane.rowIndex="3" />
-      <DatePicker fx:id="eventEndDate" onMouseClicked="#resetBorderColorED" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <DatePicker fx:id="eventEndDate" onMouseClicked="#resetBorderColor" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       <TextField fx:id="eventEndHour" maxWidth="33.0" text="08" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
       <Label text=":" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
       <TextField fx:id="eventEndMin" maxWidth="33.0" text="15" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />

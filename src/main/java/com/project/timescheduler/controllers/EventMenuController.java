@@ -15,6 +15,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -79,14 +80,10 @@ public class EventMenuController{
         eventParticipantList.getItems().add("Manage participants");
     }
 
-    public void resetBorderColorSD() {
+    public void resetBorderColor(MouseEvent mouseEvent) {
         System.out.println("reset border color");
-        eventStartDate.setStyle("-fx-border-color: transparent");
-    }
-
-    public void resetBorderColorED() {
-        System.out.println("reset border color");
-        eventEndDate.setStyle("-fx-border-color: transparent");
+        DatePicker datePicker = (DatePicker)((StackPane)mouseEvent.getTarget()).getParent();
+        datePicker.setStyle("-fx-border-color: transparent");
     }
 
     public void manageParticipants(MouseEvent mouseEvent) throws IOException {
