@@ -79,6 +79,16 @@ public class EventMenuController{
         eventParticipantList.getItems().add("Manage participants");
     }
 
+    public void resetBorderColorSD() {
+        System.out.println("reset border color");
+        eventStartDate.setStyle("-fx-border-color: transparent");
+    }
+
+    public void resetBorderColorED() {
+        System.out.println("reset border color");
+        eventEndDate.setStyle("-fx-border-color: transparent");
+    }
+
     public void manageParticipants(MouseEvent mouseEvent) throws IOException {
         if(Objects.equals(eventParticipantList.getSelectionModel().getSelectedItem(), "Manage participants")){
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("participantsList.fxml"));
