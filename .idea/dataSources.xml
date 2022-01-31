@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="@db1.fb2.frankfurt-university.de" uuid="70e9ebb0-e0d2-4305-9c86-cda2190ec3bd">
+    <data-source source="LOCAL" name="@db1.fb2.frankfurt-university.de" uuid="76534b0d-fcac-41cc-ba27-ecd5c6e24b3c">
       <driver-ref>oracle.19</driver-ref>
       <synchronize>true</synchronize>
       <auto-commit>false</auto-commit>

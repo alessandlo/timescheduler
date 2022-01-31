@@ -64,7 +64,7 @@ public class EventMenuController{
 
     private String currentUser;
 
-    private String attachmentPath;
+    private String attachmentPath = "null";
 
     private DatabaseConnection connection;
 
@@ -259,6 +259,7 @@ public class EventMenuController{
         FileChooser chooser = new FileChooser();
         File file = chooser.showOpenDialog(null);
         attachmentPath = file.getAbsolutePath();
+        System.out.println(attachmentPath);
     }
 
     public void exitMenu(){

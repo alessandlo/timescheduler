@@ -56,9 +56,6 @@ public class Mail {
 
         MimeMultipart multipart = new MimeMultipart();
 
-        MimeBodyPart attachment = new MimeBodyPart();
-        attachment.attachFile(new File(attachmentPath));
-
         MimeBodyPart messagePart = new MimeBodyPart();
         messagePart.setContent("<h3>Hello </h3>" + user + "<h3>You were included to the event: </h3>" + name + "<p>"
                                 + "<h3>Creator: </h3>" + creatorName + "<p>"
@@ -69,7 +66,12 @@ public class Mail {
                                 + "<h3>End: </h3>" + endDate + " - " + endTime + "<p>","text/html");
 
         multipart.addBodyPart(messagePart);
-        multipart.addBodyPart(attachment);
+
+        if (attachmentPath != "null"){
+                MimeBodyPart attachment = new MimeBodyPart();
+                attachment.attachFile(new File(attachmentPath));
+                multipart.addBodyPart(attachment);
+        }
 
         message.setContent(multipart);
 
