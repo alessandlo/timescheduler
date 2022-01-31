@@ -180,6 +180,16 @@ public class EventMenuController{
         }
         else {
             System.out.println("Enter valid Start and End Times");
+            if(startDateTime.getYear() == LocalDateTime.now().getYear() && startDateTime.getMonth() == LocalDateTime.now().getMonth() && startDateTime.getDayOfMonth() == LocalDateTime.now().getDayOfMonth()) {
+                eventStartHour.setStyle("-fx-border-color: red");
+                eventStartMin.setStyle("-fx-border-color: red");
+                eventEndHour.setStyle("-fx-border-color: red");
+                eventEndMin.setStyle("-fx-border-color: red");
+            }
+            else {
+                eventStartDate.setStyle("-fx-border-color: red");
+                eventEndDate.setStyle("-fx-border-color: red");
+            }
         }
     }
 

@@ -25,7 +25,7 @@ public class Mail {
                                     LocalTime endTime,
                                     Event.Priority priority,
                                     String attachmentPath)throws Exception{
-        System.out.println("Mail is being send to " + recipient);
+        System.out.println("Mail is being sent to " + recipient);
 
         Properties properties = new Properties();
 
@@ -77,7 +77,7 @@ public class Mail {
         message.setRecipient(Message.RecipientType.TO, address);
 
         Transport.send(message);
-        System.out.println("Mail has been send.");
+        System.out.println("Mail has been sent.");
         //multipart.addBodyPart(attachement);
     }
 }
