@@ -51,7 +51,6 @@
       <ListView fx:id="eventParticipantList" onMouseClicked="#manageParticipants" prefHeight="190.0" prefWidth="140.0" GridPane.columnIndex="3" GridPane.rowSpan="5" />
       <Button fx:id="exitButton" cancelButton="true" mnemonicParsing="false" onAction="#exitMenu" text="Exit" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="5" />
       <Button defaultButton="true" mnemonicParsing="false" onAction="#createEvent" text="Save" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
-      <Button mnemonicParsing="false" onAction="#sendMail" text="Test" GridPane.columnIndex="2" GridPane.rowIndex="5" />
       <Button mnemonicParsing="false" onAction="#attachment" text="Attachment" GridPane.columnIndex="3" GridPane.rowIndex="5" />
    </GridPane>
 </StackPane>

@@ -49,6 +49,7 @@ public class UserSettingsController {
         );
     }
 
+    /** Receiving and loading information of logged-in user from database. **/
     private void loadData() {
         String sql_details = String.format("SELECT * FROM SCHED_USER WHERE USERNAME = '%s'", activeUser);
         DBResults userDetails = connection.query(sql_details);
@@ -76,7 +77,8 @@ public class UserSettingsController {
         setLabels(email, firstname, lastname, hosted, attended);
     }
 
-    private  void setLabels(String email, String firstname, String lastname, int hosted, int attended){
+    /** Setting the loaded up for display. **/
+    private void setLabels(String email, String firstname, String lastname, int hosted, int attended){
         usernameLabel.setText("Username: " + activeUser);
         emailLabel.setText("Email: " + email);
         firstnameLabel.setText("Firstname: " + firstname);
@@ -85,8 +87,10 @@ public class UserSettingsController {
         attendingLabel.setText("Attending Events: " + attended);
     }
 
+    /** Edit-function for changing logged-in user's password or/and E-Mail. **/
     @FXML
     public void editUser(ActionEvent event) {
+        // Check if user only wants to change his E-Mail.
         if (passwordField.getText().isEmpty()) {
             if (validation.emailValidation(emailField.getText(), true)){
                 String sql_temp = "UPDATE SCHED_USER SET EMAIL='%s' WHERE USERNAME='%s'";
@@ -96,6 +100,7 @@ public class UserSettingsController {
                 feedback.setText("E-Mail was changed!");
             }
         }
+        // Check if user only wants to change his password.
         else if (emailField.getText().isEmpty()){
             if (validation.passwordValidation(passwordField.getText(), true)) {
                     String sql_temp = "UPDATE SCHED_USER SET PASSWORD='%s' WHERE USERNAME='%s'";
@@ -104,6 +109,7 @@ public class UserSettingsController {
                     feedback.setText("Password was changed!");
                 }
         }
+        // Neither password-field nor mail-field is empty, thus assume that the user wants to change both
         else {
             if (validation.emailValidation(emailField.getText(), true) &&
                     validation.passwordValidation(passwordField.getText(), true) &&

@@ -63,9 +63,9 @@ public class EventMenuController{
 
     }
 
-    private String currentUser;
+    private String currentUser; //Current User
 
-    private String attachmentPath = "null";
+    private String attachmentPath = "null"; //Default value in case of not selecting an attachment
 
     private DatabaseConnection connection;
 
@@ -225,33 +225,7 @@ public class EventMenuController{
             connection.update(sql_user_temp);
         }
     }
-
-    public void sendMail(ActionEvent event)throws Exception {
-        participants.addAll(eventParticipantList.getItems());
-        participants.remove(0);
-        /*Mail mail = new Mail();
-        int l = participants.size();
-
-        for (int i = 1; i<=l; i++){
-           String user = participants.get(i);
-
-           String user_sql = String.format("SELECT EMAIL FROM SCHED_USER WHERE USERNAME = '%s'", user);
-           DBResults userDetails = connection.query(user_sql);
-           userDetails.next();
-            System.out.println(userDetails.get("EMAIL"));
-       }*/
-        int l = participants.size();
-        String allParticipants = "";
-        int x = 0;
-        while(x != l){
-            String currentUser = participants.get(x);
-            allParticipants = allParticipants + currentUser + ", ";
-            System.out.println("TEST " + allParticipants);
-            x++;
-        }
-
-    }
-
+    /** Attachment input and getting the path. **/
     public void attachment(ActionEvent e){
         FileChooser chooser = new FileChooser();
         File file = chooser.showOpenDialog(null);

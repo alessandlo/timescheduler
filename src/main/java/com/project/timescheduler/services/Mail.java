@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 public class Mail {
-
+        /** The function will receive every necessary info regarding an event, before creating and sending a mail. **/
         public static void sendMail(String creatorName,
                                     String user,
                                     String name,
@@ -25,8 +25,11 @@ public class Mail {
                                     LocalTime endTime,
                                     Event.Priority priority,
                                     String attachmentPath)throws Exception{
+
         System.out.println("Mail is being sent to " + recipient);
 
+        /** Creating and inserting data into properties, as well as creating a session,
+         *     in order to set up the account where our E-Mails will be sent from. **/
         Properties properties = new Properties();
 
         properties.put("mail.smtp.auth", true);
@@ -42,9 +45,11 @@ public class Mail {
             }
         });
 
+        /** The following shows how we create the messages such as the subject and actual content. **/
         Message message = new MimeMessage(session);
         message.setSubject("New Event Invitation from " + creatorName);
 
+        /** This is for the String/Text that shows all the participants. **/
         int l = participants.size();
         int x = 0;
         String allParticipants = "";
@@ -54,8 +59,11 @@ public class Mail {
                 x++;
         } allParticipants = allParticipants.substring(0, allParticipants.length() -2);
 
+        /** Since we need to be able to send attachments in our E-Mails and not only text,
+         * we need a MimeMultipart in order to include various types of content. **/
         MimeMultipart multipart = new MimeMultipart();
 
+        /** HTML-Message, including all the information/parameters this function was given at the start. **/
         MimeBodyPart messagePart = new MimeBodyPart();
         messagePart.setContent("<h3>Hello </h3>" + user + "<h3> You were included to the event: </h3>" + name + "<p>"
                                 + "<h3>Creator: </h3>" + creatorName + "<p>"
@@ -65,21 +73,21 @@ public class Mail {
                                 + "<h3>Start: </h3>" + startDate + " - " + startTime + "<p>"
                                 + "<h3>End: </h3>" + endDate + " - " + endTime + "<p>","text/html");
 
-        multipart.addBodyPart(messagePart);
+        multipart.addBodyPart(messagePart);     //Adding message to a part
 
+        /** This is for the optional option of having an attachment. **/
         if (attachmentPath != "null"){
                 MimeBodyPart attachment = new MimeBodyPart();
                 attachment.attachFile(new File(attachmentPath));
-                multipart.addBodyPart(attachment);
+                multipart.addBodyPart(attachment);      //Adding attachment to a part
         }
 
-        message.setContent(multipart);
+        message.setContent(multipart);  //Merging every part together
 
+        /** Setting up the recipient and sending the mail to the "recipient" (an E-Mail address as String). **/
         Address address = new InternetAddress(recipient);
         message.setRecipient(Message.RecipientType.TO, address);
-
         Transport.send(message);
         System.out.println("Mail has been sent.");
-        //multipart.addBodyPart(attachement);
     }
 }
