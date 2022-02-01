@@ -3,6 +3,7 @@ package com.project.timescheduler.helpers;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.ArrayList;
 
 public class DBResults {
@@ -45,6 +46,15 @@ public class DBResults {
     public Date getDate(String s) {
         try {
             return resultSet.getDate(s);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Time getTime(String s) {
+        try {
+            return resultSet.getTime(s);
         } catch (SQLException e) {
             e.printStackTrace();
         }

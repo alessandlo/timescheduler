@@ -27,7 +27,6 @@
          </styleClass>
       </Button>
    </HBox>
-   <Button mnemonicParsing="false" onAction="#exportPDF" text="Export PDF Test" AnchorPane.rightAnchor="260.0" AnchorPane.topAnchor="21.0" />
    <Button fx:id="showListButton" layoutX="645.0" layoutY="21.0" mnemonicParsing="false" onAction="#switchToList" text="List all Events" AnchorPane.rightAnchor="153.0" AnchorPane.topAnchor="21.0" />
    <Button layoutX="817.0" layoutY="14.0" mnemonicParsing="false" onAction="#loadNextMonth" pickOnBounds="false" prefHeight="40.0" prefWidth="50.0" stylesheets="@style/stylesheet.css" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="14.0">
       <styleClass>

@@ -2,7 +2,6 @@ package com.project.timescheduler.services;
 
 import com.project.timescheduler.Main;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -47,7 +46,8 @@ public class Calendar {
     }
 
     public interface OnMouseClickedListener{
-        void onMouseClicked(MouseEvent mouseEvent);
+        void onDayClicked(MouseEvent mouseEvent);
+        void onWeekClicked(MouseEvent mouseEvent);
     }
 
     public Calendar(ArrayList<Node> nodeArrayList, OnMouseClickedListener listener, LocalDate currentDate){
@@ -74,7 +74,7 @@ public class Calendar {
 
                 if (column == 0 && row > 0){
                     label.setText(String.valueOf(startDate.get(WeekFields.ISO.weekOfYear()))); //KW
-                    vBox.setCursor(Cursor.DEFAULT);
+                    vBox.setOnMouseClicked(listener::onWeekClicked);
                     calendarGridPane.add(pane, column, row);
 
                 }else if (column > 0 && row > 0){
@@ -86,7 +86,7 @@ public class Calendar {
                         label.setTextFill(Color.RED);
                     }
 
-                    vBox.setOnMouseClicked(listener::onMouseClicked);
+                    vBox.setOnMouseClicked(listener::onDayClicked);
                     calendarGridPane.add(pane, column, row);
                     startDate = startDate.plusDays(1);
                 }

@@ -22,36 +22,30 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 
 public class TimeSchedulerController{
 
     private Stage menuStage;
-
     private Scene scene;
-
     private String currentUser;
 
     @FXML
     GridPane calenderGridPane;
-
     @FXML
     Label currentYearLabel;
-
     @FXML
     public AnchorPane anchorPaneTimeScheduler;
-
     @FXML
     public Button showListButton;
-
     @FXML
     private Label currentUserLabel;
 
     LocalDate currentDate;
     Calendar calendar;
-
-    PdfExport pdfExport = new PdfExport();
 
     @FXML
     public void initialize(String currentUser) throws IOException {
@@ -63,7 +57,17 @@ public class TimeSchedulerController{
         list.add(calenderGridPane);
         list.add(currentYearLabel);
 
-        calendar = new Calendar(list, this::mouseClicked, currentDate);
+        calendar = new Calendar(list, new Calendar.OnMouseClickedListener() {
+            @Override
+            public void onDayClicked(MouseEvent mouseEvent) {
+                mouseDayClicked(mouseEvent);
+            }
+
+            @Override
+            public void onWeekClicked(MouseEvent mouseEvent) {
+                mouseWeekClicked(mouseEvent);
+            }
+        }, currentDate);
         initializeCalendar();
     }
 
@@ -72,9 +76,8 @@ public class TimeSchedulerController{
         currentYearLabel.setText(currentDate.toString());
     }
 
-
     @FXML
-    private void mouseClicked(MouseEvent mouseEvent){
+    private void mouseDayClicked(MouseEvent mouseEvent){
         EventTarget target = mouseEvent.getTarget();
 
         if (target.getClass() == VBox.class){
@@ -109,6 +112,25 @@ public class TimeSchedulerController{
     }
 
     @FXML
+    private void mouseWeekClicked(MouseEvent mouseEvent){
+        int year = Integer.parseInt(String.format("%.4s", currentYearLabel.getText()));
+        EventTarget target = mouseEvent.getTarget();
+        VBox vBox = (VBox) target;
+        Label label = (Label) vBox.getChildren().get(0);
+        int calendarWeek = Integer.parseInt(label.getText());
+
+        LocalDate firstDay = LocalDate.now()
+                .with(WeekFields.ISO.weekBasedYear(), year) // year
+                .with(WeekFields.ISO.weekOfWeekBasedYear(), calendarWeek) // week of year
+                .with(WeekFields.ISO.dayOfWeek(), DayOfWeek.MONDAY.getValue()); // day of week
+
+        LocalDate lastDay = firstDay.plusDays(6);
+        //System.out.println(firstDay);
+        //System.out.println(lastDay);
+        exportPDF(firstDay, lastDay);
+    }
+
+    @FXML
     private void loadPreviousMonth() {
         calendar.previousMonth();
     }
@@ -133,14 +155,13 @@ public class TimeSchedulerController{
         listStage.setScene(scene);
         listStage.setOnCloseRequest(windowEvent -> anchorPaneTimeScheduler.setDisable(false));
         listStage.initModality(Modality.APPLICATION_MODAL);
-        listStage.setMinWidth(180);
-        listStage.setMinHeight(390);
+        listStage.setMinWidth(600);
+        listStage.setMinHeight(480);
         listStage.showAndWait();
     }
 
     @FXML
     private void switchToUserSettings(ActionEvent event)throws IOException {
-
         anchorPaneTimeScheduler.setDisable(true);
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("userSettings.fxml"));
         Parent root = loader.load();
@@ -158,15 +179,21 @@ public class TimeSchedulerController{
         userSettingStage.showAndWait();
     }
 
-    public void exportPDF(ActionEvent event) throws IOException {
+    public void exportPDF(LocalDate firstDay, LocalDate lastDay)  {
         FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf");
+        PdfExport pdfExport = new PdfExport();
+
+        fileChooser.setInitialFileName("Weekly_" + firstDay + "_to_" + lastDay);
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF file (*.pdf)", "*.pdf");
         fileChooser.getExtensionFilters().add(extFilter);
 
-        File file = fileChooser.showSaveDialog(menuStage);
-        String path = file.getAbsolutePath();
-        if (file!= null){
-            pdfExport.createFile(path);
+        File file = fileChooser.showSaveDialog(Main.mainStage);
+        try {
+            String path = file.getAbsolutePath();
+            pdfExport.initialize(path, firstDay, lastDay, currentUser);
+        }
+        catch (Exception e){
+            System.out.println("canceled");
         }
     }
 }

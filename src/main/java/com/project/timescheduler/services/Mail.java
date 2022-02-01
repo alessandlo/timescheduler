@@ -36,7 +36,7 @@ public class Mail {
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", 587);
         properties.put("mail.smtp.starttls.enable", true);
-        properties.put("mail.transport.protocl", "smtp");
+        properties.put("mail.transport.protocol", "smtp");
 
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override

@@ -1,44 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.TilePane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: white;"
-      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.project.timescheduler.controllers.EventViewerContoller">
-   <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
-      <TilePane fx:id="tilePaneHosted" alignment="TOP_CENTER" hgap="35.0" layoutX="248.0" layoutY="35.0"
-                prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" vgap="35.0"
-                AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                AnchorPane.topAnchor="0.0">
-         <padding>
-            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0"/>
-         </padding>
-      </TilePane>
-      <Label text="Hosted Events" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
-         <font>
-            <Font size="18.0"/>
-         </font>
-      </Label>
-   </AnchorPane>
-   <Separator prefWidth="200.0"/>
-   <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
-      <TilePane fx:id="tilePaneAttended" alignment="TOP_CENTER" hgap="35.0" prefHeight="200.0" prefWidth="200.0"
-                style="-fx-background-color: white;" vgap="35.0" AnchorPane.bottomAnchor="0.0"
-                AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <padding>
-            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0"/>
-         </padding>
-      </TilePane>
-      <Label text="Attending Events" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
-         <font>
-            <Font size="18.0"/>
-         </font>
-      </Label>
-   </AnchorPane>
+<VBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.timescheduler.controllers.EventViewerContoller">
+   <children>
+      <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+         <children>
+            <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+               <content>
+                  <TilePane fx:id="tilePaneHosted" alignment="TOP_CENTER" hgap="35.0" style="-fx-background-color: white;" vgap="35.0">
+                     <padding>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                     </padding>
+                  </TilePane>
+               </content>
+            </ScrollPane>
+            <Label text="Hosted Events" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <Separator prefWidth="200.0" />
+      <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+         <children>
+            <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+               <content>
+                  <TilePane fx:id="tilePaneAttended" alignment="TOP_CENTER" hgap="35.0" style="-fx-background-color: white;" vgap="35.0">
+                     <padding>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                     </padding>
+                  </TilePane>
+               </content>
+            </ScrollPane>
+            <Label text="Attending Events" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </children>
 </VBox>
