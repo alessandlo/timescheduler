@@ -3,6 +3,7 @@ package com.project.timescheduler.controllers;
 import com.project.timescheduler.services.Calendar;
 import com.project.timescheduler.Main;
 import com.project.timescheduler.services.PdfExport;
+import com.project.timescheduler.services.User;
 import javafx.event.ActionEvent;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
@@ -31,10 +32,10 @@ public class TimeSchedulerController{
 
     private Stage menuStage;
     private Scene scene;
-    private String currentUser;
+    private static User currentUser;
 
     @FXML
-    GridPane calenderGridPane;
+    GridPane calendarGridPane;
     @FXML
     Label currentYearLabel;
     @FXML
@@ -48,13 +49,13 @@ public class TimeSchedulerController{
     Calendar calendar;
 
     @FXML
-    public void initialize(String currentUser) throws IOException {
+    public void initialize(User currentUser) throws IOException {
         currentDate = LocalDate.now();
-        currentUserLabel.setText(currentUser);
-        this.currentUser = currentUser;
+        currentUserLabel.setText(currentUser.getUsername());
+        TimeSchedulerController.currentUser = currentUser;
 
         ArrayList<Node> list = new ArrayList<>();
-        list.add(calenderGridPane);
+        list.add(calendarGridPane);
         list.add(currentYearLabel);
 
         calendar = new Calendar(list, new Calendar.OnMouseClickedListener() {
@@ -67,7 +68,7 @@ public class TimeSchedulerController{
             public void onWeekClicked(MouseEvent mouseEvent) {
                 mouseWeekClicked(mouseEvent);
             }
-        }, currentDate);
+        }, currentDate, currentUser.getUsername());
         initializeCalendar();
     }
 
@@ -96,7 +97,7 @@ public class TimeSchedulerController{
             eventMenuController.initialize(() -> {
                 anchorPaneTimeScheduler.setDisable(false);
                 menuStage.close();
-            }, currentUser);
+            }, currentUser.getUsername());
 
             menuStage = new Stage();
             scene = new Scene(root);
@@ -147,13 +148,19 @@ public class TimeSchedulerController{
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("eventViewer.fxml"));
         Parent root = loader.load();
 
+        //DatabaseConnection connection = new DatabaseConnection();
+
         EventViewerContoller controller = loader.getController();
-        controller.initialize(currentUser);
+        controller.initialize(currentUser.getUsername());
 
         Stage listStage = new Stage();
         scene = new Scene(root);
         listStage.setScene(scene);
-        listStage.setOnCloseRequest(windowEvent -> anchorPaneTimeScheduler.setDisable(false));
+        listStage.setOnCloseRequest(windowEvent -> {
+            anchorPaneTimeScheduler.setDisable(false);
+            //connection.close();
+            System.out.println("Conn closed");
+        });
         listStage.initModality(Modality.APPLICATION_MODAL);
         listStage.setMinWidth(600);
         listStage.setMinHeight(480);
@@ -167,7 +174,7 @@ public class TimeSchedulerController{
         Parent root = loader.load();
 
         UserSettingsController controller = loader.getController();
-        controller.initialize(currentUser);
+        controller.initialize(currentUser.getUsername());
 
         Stage userSettingStage = new Stage();
         Scene scene2 = new Scene(root);
@@ -177,6 +184,11 @@ public class TimeSchedulerController{
         userSettingStage.setMinWidth(450);
         userSettingStage.setMinHeight(500);
         userSettingStage.showAndWait();
+    }
+
+    @FXML
+    private void switchView(ActionEvent actionEvent){
+        calendar.switchView();
     }
 
     public void exportPDF(LocalDate firstDay, LocalDate lastDay)  {
@@ -190,11 +202,15 @@ public class TimeSchedulerController{
         File file = fileChooser.showSaveDialog(Main.mainStage);
         try {
             String path = file.getAbsolutePath();
-            pdfExport.initialize(path, firstDay, lastDay, currentUser);
+            pdfExport.initialize(path, firstDay, lastDay, currentUser.getUsername());
         }
         catch (Exception e){
             System.out.println("canceled");
         }
+    }
+
+    public static User getCurrentUser(){
+        return TimeSchedulerController.currentUser;
     }
 }
 

@@ -4,6 +4,7 @@ import com.project.timescheduler.helpers.DBResults;
 import com.project.timescheduler.services.DatabaseConnection;
 import com.project.timescheduler.Main;
 import com.project.timescheduler.services.Encryption;
+import com.project.timescheduler.services.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -52,8 +53,10 @@ public class LoginController {
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(Main.class.getResource("timescheduler.fxml")));
         Parent root = loader.load();
 
+        User currentUser = new User(usernameField.getText());
+
         TimeSchedulerController controller = loader.getController();
-        controller.initialize(usernameField.getText());
+        controller.initialize(currentUser);
 
         loginPane.getChildren().clear();
         loginPane.getChildren().add(root);
@@ -62,7 +65,7 @@ public class LoginController {
     }
 
     public void login() throws IOException {
-        DatabaseConnection connection = new DatabaseConnection();
+        DatabaseConnection connection = Main.connection;
 
         String sql_user = String.format("SELECT * FROM sched_user WHERE username='%s'",
                 usernameField.getText());
@@ -74,13 +77,8 @@ public class LoginController {
         }
         else if (checkUser.next()){
             Encryption encryption = new Encryption();
-            String sql_password = String.format("SELECT * FROM sched_user WHERE username='%s' AND password='%s'",
-                    usernameField.getText(), encryption.createHash(passwordField.getText()));
-            DBResults checkPass = connection.query(sql_password);
-
-            if (checkPass.next()) {
+            if(checkUser.get("PASSWORD").equals(encryption.createHash(passwordField.getText())))
                 switchToTimescheduler();
-            }
             else {
                 passNotExist.setText("Wrong Password");
                 passwordField.clear();

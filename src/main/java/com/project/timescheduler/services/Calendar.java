@@ -1,7 +1,10 @@
 package com.project.timescheduler.services;
 
 import com.project.timescheduler.Main;
+import com.project.timescheduler.controllers.TimeSchedulerController;
+import com.project.timescheduler.helpers.DBResults;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -12,6 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
@@ -24,6 +28,8 @@ public class Calendar {
     private final OnMouseClickedListener listener;
     private final LocalDate todaysDate;
     private LocalDate currentDate;
+    private String calendarItemStyle;
+    private final String currentUser;
 
     private enum WEEK_DAY{
         MONDAY      (0),
@@ -50,10 +56,12 @@ public class Calendar {
         void onWeekClicked(MouseEvent mouseEvent);
     }
 
-    public Calendar(ArrayList<Node> nodeArrayList, OnMouseClickedListener listener, LocalDate currentDate){
+    public Calendar(ArrayList<Node> nodeArrayList, OnMouseClickedListener listener, LocalDate currentDate, String currentUser){
         this.calendarGridPane = (GridPane) nodeArrayList.get(0);
         this.currentYearLabel = (Label) nodeArrayList.get(1);
 
+        calendarItemStyle = "calendarItemView1";
+        this.currentUser = currentUser;
         this.currentDate = currentDate;
         this.todaysDate = currentDate;
         this.listener = listener;
@@ -66,19 +74,25 @@ public class Calendar {
         LocalDate startDate = currentDate.withDayOfMonth(1);
         startDate = startDate.minusDays(WEEK_DAY.valueOf(startDate.getDayOfWeek().toString()).getCode());
 
+        User temp_user = TimeSchedulerController.getCurrentUser().copy();
+        ArrayList<Event> events = temp_user.getAllEvents(currentDate.withDayOfMonth(1),
+                currentDate.withDayOfMonth(currentDate.lengthOfMonth()));
+
         for (int row = 0; row < rowCount; row++){
             for (int column = 0; column < columnCount; column++) {
-                AnchorPane pane = FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("calendarItem.fxml")));
-                VBox vBox = (VBox) pane.getChildren().get(0);
+                AnchorPane anchorPane = FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("calendarItem.fxml")));
+                VBox vBox = (VBox) anchorPane.getChildren().get(0);
                 Label label = (Label) vBox.getChildren().get(0);
+
+                anchorPane.getStyleClass().add(calendarItemStyle);
 
                 if (column == 0 && row > 0){
                     label.setText(String.valueOf(startDate.get(WeekFields.ISO.weekOfYear()))); //KW
                     vBox.setOnMouseClicked(listener::onWeekClicked);
-                    calendarGridPane.add(pane, column, row);
+                    calendarGridPane.add(anchorPane, column, row);
 
                 }else if (column > 0 && row > 0){
-                    pane.setDisable(startDate.getMonth() != currentDate.getMonth());
+                    anchorPane.setDisable(startDate.getMonth() != currentDate.getMonth());
 
                     label.setText(String.format("%d", startDate.getDayOfMonth()));
 
@@ -86,8 +100,17 @@ public class Calendar {
                         label.setTextFill(Color.RED);
                     }
 
+                    for (Event e: events) {
+                        if (e.getStartDate().equals(startDate)){
+                            AnchorPane eventPane = FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("calendarItemEvent.fxml")));
+                            eventPane.setPadding(new Insets(0, 4, 0, 4));
+                            vBox.getChildren().add(eventPane);
+                            break;
+                        }
+                    }
+
                     vBox.setOnMouseClicked(listener::onDayClicked);
-                    calendarGridPane.add(pane, column, row);
+                    calendarGridPane.add(anchorPane, column, row);
                     startDate = startDate.plusDays(1);
                 }
 
@@ -95,7 +118,7 @@ public class Calendar {
         }
     }
 
-    public void updateCalendar(){
+    public void updateCalendar() {
         int columnCount = calendarGridPane.getColumnCount() - 1;    // - 1, weil man von 0 anfängt
         int rowCount = calendarGridPane.getRowCount() - 1;
 
@@ -104,17 +127,22 @@ public class Calendar {
         LocalDate startDate = currentDate.withDayOfMonth(1);
         startDate = startDate.minusDays(WEEK_DAY.valueOf(startDate.getDayOfWeek().toString()).getCode());
 
-        //System.out.println("Start Date: " + startDate);
-        //System.out.println("Current Date: " + currentDate);
+        User temp_user = TimeSchedulerController.getCurrentUser().copy();
+        ArrayList<Event> events = temp_user.getAllEvents(currentDate.withDayOfMonth(1),
+                currentDate.withDayOfMonth(currentDate.lengthOfMonth()));
+
         for (int i = 0; i < calenderLength; i++) {
-            Pane pane = (Pane) calendarGridPane.getChildren().get(i + 7); // +7 wegen der ersten Zeile
-            VBox vBox = (VBox) pane.getChildren().get(0);
+            AnchorPane anchorPane = (AnchorPane) calendarGridPane.getChildren().get(i + 7); // +7 wegen der ersten Zeile
+            VBox vBox = (VBox) anchorPane.getChildren().get(0);
             Label label = (Label) vBox.getChildren().get(0);
+
+            anchorPane.getStyleClass().clear();
+            anchorPane.getStyleClass().add(calendarItemStyle);
 
             if (i % 8 == 0){
                 label.setText(String.valueOf(startDate.get(WeekFields.ISO.weekOfYear()))); //KW
             }else {
-                pane.setDisable(startDate.getMonth() != currentDate.getMonth());
+                anchorPane.setDisable(startDate.getMonth() != currentDate.getMonth());
                 label.setText(String.format("%d", startDate.getDayOfMonth()));
 
                 if (todaysDate.equals(startDate)){
@@ -123,9 +151,39 @@ public class Calendar {
                     label.setTextFill(Color.BLACK);
                 }
 
+                for (Event e: events) {
+                    if (e.getStartDate().equals(startDate)){
+                        try {
+                            if (vBox.getChildren().size() > 1) {
+                                vBox.getChildren().remove(1);
+                            }
+                            AnchorPane eventPane = FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("calendarItemEvent.fxml")));
+                            eventPane.setPadding(new Insets(0, 4, 0, 4));
+                            vBox.getChildren().add(eventPane);
+                        }catch (IOException f){
+                            f.printStackTrace();
+                        }
+                        break;
+                    }
+                }
+
                 startDate = startDate.plusDays(1);
             }
         }
+
+    }
+
+    public void switchView(){
+        if (calendarGridPane.getHgap() == 10){
+            calendarGridPane.setHgap(0);
+            calendarGridPane.setVgap(0);
+            calendarItemStyle = "calendarItemView2";
+        }else {
+            calendarGridPane.setHgap(10);
+            calendarGridPane.setVgap(10);
+            calendarItemStyle = "calendarItemView1";
+        }
+        updateCalendar();
 
     }
 
@@ -140,5 +198,4 @@ public class Calendar {
         currentYearLabel.setText(currentDate.toString());
         updateCalendar();
     }
-
 }

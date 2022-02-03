@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Event {
 
-    private String creatorName = "test";
+    private String creatorName;
     private int eventId;
 
     private String name;
@@ -51,7 +51,6 @@ public class Event {
         this.eventId = event_id;
     }
 
-
     public String getCreatorName(){
         return creatorName;
     }
@@ -82,6 +81,11 @@ public class Event {
 
     public ArrayList<String> getParticipants() {
         return participants;
+    }
+
+    public void setParticipants(ArrayList<String> participants){
+        this.participants.clear();
+        this.participants.addAll(participants);
     }
 
     public LocalDate getStartDate(){
@@ -115,5 +119,7 @@ public class Event {
     public void setEndDate(LocalTime endTime){
         this.endTime = endTime;
     }
+
+
 
 }

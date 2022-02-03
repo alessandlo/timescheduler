@@ -1,5 +1,6 @@
 package com.project.timescheduler.controllers;
 
+import com.project.timescheduler.Main;
 import com.project.timescheduler.helpers.DBResults;
 import com.project.timescheduler.services.DatabaseConnection;
 import javafx.collections.FXCollections;
@@ -37,7 +38,7 @@ public class ParticipantsListController {
         selectedParticipantsList.getItems().addAll(participants);
         String sql = "SELECT username FROM sched_user";
 
-        DBResults rs = new DatabaseConnection().query(sql);
+        DBResults rs = Main.connection.query(sql);
         while (rs.next()){
             if (!participants.contains(rs.get("username"))) {
                 users.add(rs.get("username"));

@@ -1,5 +1,6 @@
 package com.project.timescheduler.services;
 
+import com.project.timescheduler.Main;
 import com.project.timescheduler.helpers.DBResults;
 import javafx.scene.control.Alert;
 
@@ -16,7 +17,7 @@ public class DatabaseConnection {
     public static String adminPassword = "admin";
 
 
-    private Connection getConnection(){
+    public Connection getConnection(){
 
         final String databaseUser = "S1_student2_19";
         final String databasePassword = "Zx08DBS";
@@ -25,13 +26,19 @@ public class DatabaseConnection {
         try{
             connection = DriverManager.getConnection(url, databaseUser, databasePassword);
         }
-        catch (Exception e){
+        catch (SQLException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Database error");
             alert.setHeaderText("No Connection");
             alert.setContentText("False Database credentials or Database offline");
 
             alert.showAndWait();
+            Main.connection = new DatabaseConnection();
+            try{
+                this.connection.close();
+            }catch (SQLException f){
+                f.printStackTrace();
+            }
         }
 
         return connection;
@@ -66,5 +73,11 @@ public class DatabaseConnection {
         }
     }
 
-
+    public void close(){
+        try {
+            connection.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 }
