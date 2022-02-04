@@ -13,17 +13,17 @@ import javafx.scene.input.MouseEvent;
 public class AdminController {
 
     @FXML
-    private TableView<UserDetails> tableview;
+    private TableView<User> tableview;
     @FXML
-    private TableColumn<UserDetails, String> col_username;
+    private TableColumn<User, String> col_username;
     @FXML
-    private TableColumn<UserDetails, String> col_firstname;
+    private TableColumn<User, String> col_firstname;
     @FXML
-    private TableColumn<UserDetails, String> col_lastname;
+    private TableColumn<User, String> col_lastname;
     @FXML
-    private TableColumn<UserDetails, String> col_email;
+    private TableColumn<User, String> col_email;
     @FXML
-    private TableColumn<UserDetails, String> col_password;
+    private TableColumn<User, String> col_password;
     @FXML
     private TextField emailEdit;
     @FXML
@@ -63,12 +63,12 @@ public class AdminController {
     }
 
     public void loadData(){
-        ObservableList<UserDetails> data = FXCollections.observableArrayList();
+        ObservableList<User> data = FXCollections.observableArrayList();
         String sql = "SELECT * FROM sched_user";
         DBResults rs = connection.query(sql);
 
         while (rs.next()){
-            UserDetails userDetails = new UserDetails(
+            User userDetails = new User(
                     rs.get("username"),
                     rs.get("firstname"),
                     rs.get("lastname"),
