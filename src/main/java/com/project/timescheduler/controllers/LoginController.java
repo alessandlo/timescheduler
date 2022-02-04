@@ -27,7 +27,8 @@ public class LoginController {
     @FXML
     private Label userNotExist, passNotExist;
 
-    public void initialize() {
+    @FXML
+    private void initialize() {
         loginButton.disableProperty().bind(
                 usernameField.textProperty().isEmpty().or(passwordField.textProperty().isEmpty())
         );
@@ -35,21 +36,24 @@ public class LoginController {
         passNotExist.visibleProperty().bind(passwordField.textProperty().isEmpty());
     }
 
-    public void switchToRegister() throws IOException {
+    @FXML
+    private void switchToRegister() throws IOException {
         loginPane.getChildren().clear();
         loginPane.getChildren().add(FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("register.fxml"))));
         Main.mainStage.setMinWidth(400);
         Main.mainStage.setMinHeight(350);
     }
 
-    public void switchToAdminpanel() throws IOException {
+    @FXML
+    private void switchToAdminpanel() throws IOException {
         loginPane.getChildren().clear();
         loginPane.getChildren().add(FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("adminview.fxml"))));
         Main.mainStage.setMinWidth(800);
         Main.mainStage.setMinHeight(600);
     }
 
-    public void switchToTimescheduler() throws IOException {
+    @FXML
+    private void switchToTimescheduler() throws IOException {
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(Main.class.getResource("timescheduler.fxml")));
         Parent root = loader.load();
 
@@ -64,7 +68,8 @@ public class LoginController {
         Main.mainStage.setMinHeight(600);
     }
 
-    public void login() throws IOException {
+    @FXML
+    private void login() throws IOException {
         DatabaseConnection connection = Main.connection;
 
         String sql_user = String.format("SELECT * FROM sched_user WHERE username='%s'",

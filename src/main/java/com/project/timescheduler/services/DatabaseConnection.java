@@ -17,8 +17,7 @@ public class DatabaseConnection {
     public static String adminPassword = "admin";
 
 
-    public Connection getConnection(){
-
+    public Connection getConnection() {
         final String databaseUser = "S1_student2_19";
         final String databasePassword = "Zx08DBS";
         final String url = "jdbc:oracle:thin:@db1.fb2.frankfurt-university.de:1521:info01";
@@ -40,7 +39,6 @@ public class DatabaseConnection {
                 f.printStackTrace();
             }
         }
-
         return connection;
     }
 

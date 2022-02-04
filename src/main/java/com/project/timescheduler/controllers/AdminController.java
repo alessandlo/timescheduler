@@ -36,7 +36,7 @@ public class AdminController {
     private DatabaseConnection connection;
 
     @FXML
-    void initialize() {
+    private void initialize() {
         editButton.disableProperty().bind(Bindings.isEmpty(tableview.getSelectionModel().getSelectedItems()).or(
                 emailEdit.textProperty().isEmpty().and(passwordEdit.textProperty().isEmpty())));
         deleteButton.disableProperty().bind(Bindings.isEmpty(tableview.getSelectionModel().getSelectedItems()));
@@ -52,17 +52,7 @@ public class AdminController {
         loadData();
     }
 
-    @FXML
-    private void showUser(MouseEvent mouseEvent){
-        try {
-            selectedUser.setText(tableview.getSelectionModel().getSelectedItem().getUsername());
-        }
-        catch (Exception e){
-            selectedUser.setText("No user selected");
-        }
-    }
-
-    public void loadData(){
+    private void loadData(){
         ObservableList<User> data = FXCollections.observableArrayList();
         String sql = "SELECT * FROM sched_user";
         DBResults rs = connection.query(sql);
@@ -80,7 +70,18 @@ public class AdminController {
         tableview.setItems(data);
     }
 
-    public void deleteUser(){
+    @FXML
+    private void showUser(MouseEvent mouseEvent){
+        try {
+            selectedUser.setText(tableview.getSelectionModel().getSelectedItem().getUsername());
+        }
+        catch (Exception e){
+            selectedUser.setText("No user selected");
+        }
+    }
+
+    @FXML
+    private void deleteUser(){
         String selectedItem = tableview.getSelectionModel().getSelectedItem().getUsername();
 
         String sql_temp = "DELETE FROM sched_user WHERE username='%s'";
@@ -93,7 +94,8 @@ public class AdminController {
         loadData();
     }
 
-    public void editUser(){
+    @FXML
+    private void editUser(){
         Validation validation = new Validation();
         Encryption encryption = new Encryption();
 

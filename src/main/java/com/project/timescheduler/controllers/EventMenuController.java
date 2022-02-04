@@ -48,8 +48,6 @@ public class EventMenuController{
     private TextField eventEndMin;
     @FXML
     private ChoiceBox<Event.Priority> eventPriority;
-    @FXML
-    private Button exitButton;
 
     private Event event;
 
@@ -57,24 +55,21 @@ public class EventMenuController{
 
     private OnActionListener listener;
 
-
     public interface OnActionListener {
         void onAction();
-
     }
 
     private String currentUser; //Current User
 
     private String attachmentPath = "null"; //Default value in case of not selecting an attachment
 
-    private DatabaseConnection connection;
+    DatabaseConnection connection = Main.connection;
 
     @FXML
     public void initialize(OnActionListener listener, String currentUser){
         this.listener = listener;
         participants = new ArrayList<>();
         this.currentUser = currentUser;
-        connection = new DatabaseConnection();
 
         eventPriority.getItems().addAll(Event.Priority.values());
         eventParticipantList.getItems().add("Manage participants");
@@ -212,7 +207,6 @@ public class EventMenuController{
 
         connection.update(alter_date_format);
         connection.update(sql);
-
     }
 
     public void uploadParticipants(ArrayList<String> user){
@@ -233,7 +227,8 @@ public class EventMenuController{
         System.out.println(attachmentPath);
     }
 
-    public void exitMenu(){
+    @FXML
+    private void exitMenu(){
         listener.onAction();
     }
 }

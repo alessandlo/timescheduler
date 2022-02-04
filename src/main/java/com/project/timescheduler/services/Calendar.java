@@ -2,7 +2,6 @@ package com.project.timescheduler.services;
 
 import com.project.timescheduler.Main;
 import com.project.timescheduler.controllers.TimeSchedulerController;
-import com.project.timescheduler.helpers.DBResults;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -10,12 +9,10 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;

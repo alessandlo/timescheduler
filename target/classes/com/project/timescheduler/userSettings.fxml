@@ -11,64 +11,55 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="com.project.timescheduler.controllers.UserSettingsController">
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.timescheduler.controllers.UserSettingsController">
    <GridPane hgap="15.0" maxHeight="500.0" maxWidth="450.0" vgap="15.0" StackPane.alignment="CENTER">
       <columnConstraints>
-         <ColumnConstraints hgrow="SOMETIMES"/>
-         <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0"/>
-         <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0"/>
-         <ColumnConstraints hgrow="SOMETIMES"/>
+         <ColumnConstraints hgrow="SOMETIMES" />
+         <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" />
+         <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" />
+         <ColumnConstraints hgrow="SOMETIMES" />
       </columnConstraints>
       <rowConstraints>
-         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-         <RowConstraints vgrow="SOMETIMES"/>
-         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-         <RowConstraints vgrow="SOMETIMES"/>
-         <RowConstraints vgrow="SOMETIMES"/>
-         <RowConstraints vgrow="SOMETIMES"/>
-         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         <RowConstraints vgrow="SOMETIMES" />
+         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         <RowConstraints vgrow="SOMETIMES" />
+         <RowConstraints vgrow="SOMETIMES" />
+         <RowConstraints vgrow="SOMETIMES" />
+         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       </rowConstraints>
       <padding>
-         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
       </padding>
       <Label text="Account Details" GridPane.columnSpan="2147483647">
          <font>
-            <Font size="24.0"/>
+            <Font size="24.0" />
          </font>
       </Label>
-      <Label fx:id="usernameLabel" text="Username:" GridPane.rowIndex="1"/>
-      <Label fx:id="emailLabel" layoutX="30.0" layoutY="82.0" text="Email:" GridPane.columnIndex="1"
-             GridPane.columnSpan="2147483647" GridPane.rowIndex="1"/>
-      <Label fx:id="firstnameLabel" layoutX="30.0" layoutY="127.0" text="Firstname:" GridPane.rowIndex="2"/>
-      <Label fx:id="lastnameLabel" layoutX="30.0" layoutY="127.0" text="Lastname:" GridPane.rowIndex="3"/>
-      <Label fx:id="hostedLabel" layoutX="30.0" layoutY="127.0" text="Hosted Events:" GridPane.columnIndex="1"
-             GridPane.rowIndex="2"/>
-      <Label fx:id="attendingLabel" layoutX="291.0" layoutY="127.0" text="Attending Events:" GridPane.columnIndex="1"
-             GridPane.rowIndex="3"/>
+      <Label fx:id="usernameLabel" text="Username:" GridPane.rowIndex="1" />
+      <Label fx:id="emailLabel" layoutX="30.0" layoutY="82.0" text="Email:" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" />
+      <Label fx:id="firstnameLabel" layoutX="30.0" layoutY="127.0" text="Firstname:" GridPane.rowIndex="2" />
+      <Label fx:id="lastnameLabel" layoutX="30.0" layoutY="127.0" text="Lastname:" GridPane.rowIndex="3" />
+      <Label fx:id="hostedLabel" layoutX="30.0" layoutY="127.0" text="Hosted Events:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Label fx:id="attendingLabel" layoutX="291.0" layoutY="127.0" text="Attending Events:" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       <Label layoutX="30.0" layoutY="31.0" text="change credentials" GridPane.rowIndex="4">
          <font>
-            <Font size="17.0"/>
+            <Font size="17.0" />
          </font>
       </Label>
-      <Label text="New E-Mail:" GridPane.rowIndex="5"/>
-      <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="5"/>
-      <Label text="or / and" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER"
-             GridPane.rowIndex="6"/>
-      <Label text="New Password:" GridPane.rowIndex="7"/>
-      <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="7"/>
-      <Label text="Confirm new password:" GridPane.rowIndex="8"/>
-      <PasswordField fx:id="confirmPasswordField" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                     GridPane.rowIndex="8"/>
-      <Button cancelButton="true" mnemonicParsing="false" text="Cancel" GridPane.columnIndex="1"
-              GridPane.halignment="CENTER" GridPane.rowIndex="9"/>
-      <Button fx:id="confirmButton" defaultButton="true" mnemonicParsing="false" onAction="#editUser" text="Confirm"
-              GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="9"/>
-      <Label fx:id="feedback" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER"
-             GridPane.rowIndex="10"/>
+      <Label text="New E-Mail:" GridPane.rowIndex="5" />
+      <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="5" />
+      <Label text="or / and" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
+      <Label text="New Password:" GridPane.rowIndex="7" />
+      <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="7" />
+      <Label text="Confirm new password:" GridPane.rowIndex="8" />
+      <PasswordField fx:id="confirmPasswordField" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="8" />
+      <Button cancelButton="true" mnemonicParsing="false" onAction="#exitDetails" text="Exit" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="9" />
+      <Button fx:id="confirmButton" defaultButton="true" mnemonicParsing="false" onAction="#editUser" text="Confirm" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="9" />
+      <Label fx:id="feedback" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="10" />
    </GridPane>
 </StackPane>

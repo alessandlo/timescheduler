@@ -3,7 +3,6 @@ package com.project.timescheduler.services;
 import be.quodlibet.boxable.BaseTable;
 import be.quodlibet.boxable.datatable.DataTable;
 import com.project.timescheduler.controllers.TimeSchedulerController;
-import javafx.fxml.FXML;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -21,19 +20,13 @@ import java.util.List;
 public class PdfExport {
     private String filePath;
 
-    @FXML
     public void initialize(String path, LocalDate firstDay, LocalDate lastDay) throws IOException {
         filePath = path;
-        loadAllEvents(firstDay, lastDay);
-        //loadData(firstDay, lastDay, currentUser);
-    }
-
-    public void loadAllEvents(LocalDate firstDay, LocalDate lastDay) throws IOException {
         ArrayList<Event> dataList = new ArrayList<>(TimeSchedulerController.getCurrentUser().getAllEvents(firstDay, lastDay));
         createFile(dataList, firstDay, lastDay);
     }
 
-    public void createFile(ArrayList<Event> dataList, LocalDate firstDay, LocalDate lastDay) throws IOException {
+    private void createFile(ArrayList<Event> dataList, LocalDate firstDay, LocalDate lastDay) throws IOException {
         PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
         PDDocument document = new PDDocument();
 

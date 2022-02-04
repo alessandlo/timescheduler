@@ -29,8 +29,10 @@ public class RegisterController {
     private Button registerButton;
 
     Validation validation = new Validation();
+    String check = null;
 
-    public void initialize() {
+    @FXML
+    private void initialize() {
         registerButton.disableProperty().bind(usernameField.textProperty().isEmpty().or(
                 firstnameField.textProperty().isEmpty().or(
                         lastnameField.textProperty().isEmpty().or(
@@ -38,31 +40,31 @@ public class RegisterController {
                                     passwordField.textProperty().isEmpty())))
         );
         checkUser.textProperty().bind(Bindings.createStringBinding(() -> {
-            String check = "✗";
+            check = "✗";
             if (validation.usernameValidation(usernameField.getText(), false))
                 check = "✓";
             return check;
         }, usernameField.textProperty()));
         checkFirstname.textProperty().bind(Bindings.createStringBinding(() -> {
-            String check = "✗";
+            check = "✗";
             if (validation.nameValidation(firstnameField.getText(), false))
                 check = "✓";
             return check;
         }, firstnameField.textProperty()));
         checkLastname.textProperty().bind(Bindings.createStringBinding(() -> {
-            String check = "✗";
+            check = "✗";
             if (validation.nameValidation(lastnameField.getText(), false))
                 check = "✓";
             return check;
         }, lastnameField.textProperty()));
         checkEmail.textProperty().bind(Bindings.createStringBinding(() -> {
-            String check = "✗";
+            check = "✗";
             if (validation.emailValidation(emailField.getText(), false))
                 check = "✓";
             return check;
         }, emailField.textProperty()));
         checkPassword.textProperty().bind(Bindings.createStringBinding(() -> {
-            String check = "✗";
+            check = "✗";
             if (validation.passwordValidation(passwordField.getText(), false))
                 check = "✓";
             return check;
@@ -71,14 +73,16 @@ public class RegisterController {
         userAlreadyExist.visibleProperty().bind(usernameField.textProperty().isEmpty());
     }
 
-    public void switchToLogin() throws IOException {
+    @FXML
+    private void switchToLogin() throws IOException {
         registerPane.getChildren().clear();
         registerPane.getChildren().add(FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("login.fxml"))));
         Main.mainStage.setMinWidth(300);
         Main.mainStage.setMinHeight(300);
     }
 
-    public void createAccount() throws IOException{
+    @FXML
+    private void createAccount() throws IOException{
         passwordLabel.setTooltip(passTooltip);
 
         Validation validation = new Validation();

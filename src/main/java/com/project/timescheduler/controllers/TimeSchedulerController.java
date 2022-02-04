@@ -31,6 +31,7 @@ import java.util.ArrayList;
 public class TimeSchedulerController{
 
     private Stage menuStage;
+    private Stage userSettingStage;
     private Scene scene;
     private static User currentUser;
 
@@ -126,8 +127,6 @@ public class TimeSchedulerController{
                 .with(WeekFields.ISO.dayOfWeek(), DayOfWeek.MONDAY.getValue()); // day of week
 
         LocalDate lastDay = firstDay.plusDays(6);
-        //System.out.println(firstDay);
-        //System.out.println(lastDay);
         exportPDF(firstDay, lastDay);
     }
 
@@ -142,13 +141,11 @@ public class TimeSchedulerController{
     }
 
     @FXML
-    private void switchToList(ActionEvent event)throws IOException{
+    private void switchToEventView(ActionEvent event)throws IOException{
 
         anchorPaneTimeScheduler.setDisable(true);
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("eventViewer.fxml"));
         Parent root = loader.load();
-
-        //DatabaseConnection connection = new DatabaseConnection();
 
         EventViewerContoller controller = loader.getController();
         controller.initialize(currentUser.getUsername());
@@ -158,8 +155,6 @@ public class TimeSchedulerController{
         listStage.setScene(scene);
         listStage.setOnCloseRequest(windowEvent -> {
             anchorPaneTimeScheduler.setDisable(false);
-            //connection.close();
-            System.out.println("Conn closed");
         });
         listStage.initModality(Modality.APPLICATION_MODAL);
         listStage.setMinWidth(600);
@@ -168,22 +163,31 @@ public class TimeSchedulerController{
     }
 
     @FXML
-    private void switchToUserSettings(ActionEvent event)throws IOException {
-        anchorPaneTimeScheduler.setDisable(true);
-        FXMLLoader loader = new FXMLLoader(Main.class.getResource("userSettings.fxml"));
-        Parent root = loader.load();
+    private void switchToUserSettings(ActionEvent event){
+        try {
+            anchorPaneTimeScheduler.setDisable(true);
 
-        UserSettingsController controller = loader.getController();
-        controller.initialize(currentUser.getUsername());
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("userSettings.fxml"));
+            Parent root = loader.load();
+            UserSettingsController userSettingsController = loader.getController();
 
-        Stage userSettingStage = new Stage();
-        Scene scene2 = new Scene(root);
-        userSettingStage.setScene(scene2);
-        userSettingStage.setOnCloseRequest(windowEvent -> anchorPaneTimeScheduler.setDisable(false));
-        userSettingStage.initModality(Modality.APPLICATION_MODAL);
-        userSettingStage.setMinWidth(450);
-        userSettingStage.setMinHeight(500);
-        userSettingStage.showAndWait();
+            userSettingsController.initialize(() -> {
+                anchorPaneTimeScheduler.setDisable(false);
+                userSettingStage.close();
+            }, currentUser.getUsername());
+
+            userSettingStage = new Stage();
+            scene = new Scene(root);
+            userSettingStage.setScene(scene);
+            userSettingStage.setOnCloseRequest(windowEvent -> anchorPaneTimeScheduler.setDisable(false));
+            userSettingStage.initModality(Modality.APPLICATION_MODAL);
+            userSettingStage.setMinWidth(450);
+            userSettingStage.setMinHeight(500);
+            userSettingStage.showAndWait();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @FXML

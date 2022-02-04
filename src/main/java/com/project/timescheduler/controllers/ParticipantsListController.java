@@ -2,7 +2,6 @@ package com.project.timescheduler.controllers;
 
 import com.project.timescheduler.Main;
 import com.project.timescheduler.helpers.DBResults;
-import com.project.timescheduler.services.DatabaseConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

@@ -1,5 +1,6 @@
 package com.project.timescheduler.controllers;
 
+import com.project.timescheduler.Main;
 import com.project.timescheduler.helpers.DBResults;
 import com.project.timescheduler.services.DatabaseConnection;
 import com.project.timescheduler.services.Encryption;
@@ -26,32 +27,38 @@ public class UserSettingsController {
     @FXML
     Button confirmButton;
 
-    private String activeUser;
+    private String currentUser;
     private String email;
     private String firstname;
     private String lastname;
     private int hosted;
     private int attended;
-    private DatabaseConnection connection;
+    DatabaseConnection connection = Main.connection;
     Validation validation = new Validation();
     Encryption encryption = new Encryption();
 
-    @FXML
-    public void initialize(String currentUser) {
-        connection = new DatabaseConnection();
-        activeUser = currentUser;
+    private OnActionListener listener;
 
-        loadData();
+    public interface OnActionListener {
+        void onAction();
+    }
+
+    @FXML
+    public void initialize(OnActionListener listener, String currentUser) {
+        this.listener = listener;
+        this.currentUser = currentUser;
 
         confirmButton.disableProperty().bind(emailField.textProperty().isEmpty().and(
                 passwordField.textProperty().isEmpty().or(
                         confirmPasswordField.textProperty().isEmpty()))
         );
+
+        loadData();
     }
 
     /** Receiving and loading information of logged-in user from database. **/
     private void loadData() {
-        String sql_details = String.format("SELECT * FROM SCHED_USER WHERE USERNAME = '%s'", activeUser);
+        String sql_details = String.format("SELECT * FROM SCHED_USER WHERE USERNAME = '%s'", currentUser);
         DBResults userDetails = connection.query(sql_details);
 
         while (userDetails.next()) {
@@ -60,14 +67,14 @@ public class UserSettingsController {
             lastname = userDetails.get("lastname");
         }
 
-        String sql_hosted = String.format("SELECT COUNT(*) AS count FROM SCHED_EVENT WHERE CREATOR_NAME='%s'", activeUser);
+        String sql_hosted = String.format("SELECT COUNT(*) AS count FROM SCHED_EVENT WHERE CREATOR_NAME='%s'", currentUser);
         DBResults hostedNumber = connection.query(sql_hosted);
 
         while (hostedNumber.next()) {
             hosted = Integer.parseInt(hostedNumber.get("count"));
         }
 
-        String sql_attend = String.format("SELECT COUNT(USERNAME) AS count FROM SCHED_PARTICIPATES_IN WHERE USERNAME='%s'", activeUser);
+        String sql_attend = String.format("SELECT COUNT(USERNAME) AS count FROM SCHED_PARTICIPATES_IN WHERE USERNAME='%s'", currentUser);
         DBResults attendNumber = connection.query(sql_attend);
 
         while (attendNumber.next()) {
@@ -79,7 +86,7 @@ public class UserSettingsController {
 
     /** Setting the loaded up for display. **/
     private void setLabels(String email, String firstname, String lastname, int hosted, int attended){
-        usernameLabel.setText("Username: " + activeUser);
+        usernameLabel.setText("Username: " + currentUser);
         emailLabel.setText("Email: " + email);
         firstnameLabel.setText("Firstname: " + firstname);
         lastnameLabel.setText("Lastname: " + lastname);
@@ -94,7 +101,7 @@ public class UserSettingsController {
         if (passwordField.getText().isEmpty()) {
             if (validation.emailValidation(emailField.getText(), true)){
                 String sql_temp = "UPDATE SCHED_USER SET EMAIL='%s' WHERE USERNAME='%s'";
-                String sql = String.format(sql_temp, emailField.getText(), activeUser);
+                String sql = String.format(sql_temp, emailField.getText(), currentUser);
                 connection.update(sql);
                 loadData();
                 feedback.setText("E-Mail was changed!");
@@ -104,7 +111,7 @@ public class UserSettingsController {
         else if (emailField.getText().isEmpty()){
             if (validation.passwordValidation(passwordField.getText(), true)) {
                     String sql_temp = "UPDATE SCHED_USER SET PASSWORD='%s' WHERE USERNAME='%s'";
-                    String sql = String.format(sql_temp, encryption.createHash(passwordField.getText()), activeUser);
+                    String sql = String.format(sql_temp, encryption.createHash(passwordField.getText()), currentUser);
                     connection.update(sql);
                     feedback.setText("Password was changed!");
                 }
@@ -115,11 +122,16 @@ public class UserSettingsController {
                     validation.passwordValidation(passwordField.getText(), true) &&
                     passwordField.getText().equals(confirmPasswordField.getText())){
                 String sql_temp = "UPDATE SCHED_USER SET EMAIL='%s', PASSWORD='%s' WHERE USERNAME='%s'";
-                String sql = String.format(sql_temp, emailField.getText(), encryption.createHash(passwordField.getText()), activeUser);
+                String sql = String.format(sql_temp, emailField.getText(), encryption.createHash(passwordField.getText()), currentUser);
                 connection.update(sql);
                 loadData();
                 feedback.setText("E-Mail and Password were changed!");
             }
         }
+    }
+
+    @FXML
+    private void exitDetails(){
+        listener.onAction();
     }
 }
