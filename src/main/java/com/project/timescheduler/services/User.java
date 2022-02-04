@@ -6,7 +6,6 @@ import com.project.timescheduler.helpers.DBResults;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class User {
@@ -156,7 +155,6 @@ public class User {
 
             }
         }
-
     }
 
     public ArrayList<Event> getAllEvents(LocalDate... localDate){

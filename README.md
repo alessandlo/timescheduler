@@ -2,7 +2,7 @@
 
 Java project for the subject Object-oriented Programming in Java of FRA-UAS
 
-## Contributers
+## Contributors
 
 - Mickey Lynn
 - Justus Melzer

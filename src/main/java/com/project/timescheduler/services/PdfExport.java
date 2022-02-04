@@ -2,7 +2,8 @@ package com.project.timescheduler.services;
 
 import be.quodlibet.boxable.BaseTable;
 import be.quodlibet.boxable.datatable.DataTable;
-import com.project.timescheduler.helpers.DBResults;
+import com.project.timescheduler.controllers.TimeSchedulerController;
+import javafx.fxml.FXML;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -18,52 +19,21 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PdfExport {
-    private DatabaseConnection connection;
     private String filePath;
 
-
-    public void initialize(String path, LocalDate firstDay, LocalDate lastDay, String currentUser) throws IOException {
-        connection = new DatabaseConnection();
+    @FXML
+    public void initialize(String path, LocalDate firstDay, LocalDate lastDay) throws IOException {
         filePath = path;
-        System.out.println(firstDay);
-        loadData(firstDay, lastDay, currentUser);
+        loadAllEvents(firstDay, lastDay);
+        //loadData(firstDay, lastDay, currentUser);
     }
 
-    private void loadData(LocalDate firstDay, LocalDate lastDay, String currentUser) throws IOException {
-        String alter_date_format = "ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI'";
-        connection.update(alter_date_format);
-        String sql = String.format("SELECT PI.EVENT_ID, CREATOR_NAME, EVENT_NAME, START_DATE, END_DATE, LOCATION, PRIORITY FROM SCHED_EVENT JOIN SCHED_PARTICIPATES_IN PI on SCHED_EVENT.EVENT_ID = PI.EVENT_ID WHERE START_DATE BETWEEN '%s 00:00' and '%s 23:59' AND PI.USERNAME='%s'", firstDay, lastDay, currentUser);
-        DBResults rs = connection.query(sql);
-
-        ArrayList<Event> dataList = new ArrayList<>();
-
-        while (rs.next()){
-            Event event = new Event(Integer.parseInt(rs.get("EVENT_ID")),
-                    rs.get("CREATOR_NAME"),
-                    rs.get("EVENT_NAME"),
-                    rs.get("LOCATION"),
-                    getParticipants(Integer.parseInt(rs.get("EVENT_ID"))),
-                    rs.getDate("START_DATE").toLocalDate(),
-                    rs.getDate("END_DATE").toLocalDate(),
-                    rs.getTime("START_DATE").toLocalTime(),
-                    rs.getTime("END_DATE").toLocalTime(),
-                    Event.Priority.valueOf(rs.get("PRIORITY")));
-            dataList.add(event);
-        }
-        createFile(dataList);
+    public void loadAllEvents(LocalDate firstDay, LocalDate lastDay) throws IOException {
+        ArrayList<Event> dataList = new ArrayList<>(TimeSchedulerController.getCurrentUser().getAllEvents(firstDay, lastDay));
+        createFile(dataList, firstDay, lastDay);
     }
 
-    public ArrayList<String> getParticipants(int eventID){
-        ArrayList<String> participants = new ArrayList<>();
-        String sql = String.format("SELECT Username FROM SCHED_EVENT JOIN SCHED_PARTICIPATES_IN PI on SCHED_EVENT.EVENT_ID = PI.EVENT_ID WHERE PI.EVENT_ID=%s", eventID);
-        DBResults rs = connection.query(sql);
-        while (rs.next()){
-            participants.add(rs.get("USERNAME"));
-        }
-        return participants;
-    }
-
-    public void createFile(ArrayList<Event> dataList) throws IOException {
+    public void createFile(ArrayList<Event> dataList, LocalDate firstDay, LocalDate lastDay) throws IOException {
         PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
         PDDocument document = new PDDocument();
 
@@ -71,16 +41,16 @@ public class PdfExport {
         contentStream.beginText();
         contentStream.setFont(PDType1Font.HELVETICA_BOLD, 22);
         contentStream.newLineAtOffset(50, 530);
-        contentStream.showText("Weekly Schedule");
+        contentStream.showText("Weekly Schedule: " + firstDay + " to " + lastDay);
         contentStream.endText();
         contentStream.close();
         document.addPage(page);
 
         // margin
         float margin = 50;
-        // starting y position is whole page height subtracted by top and bottom margin
+        // starting y position is whole page height (subtracted by top and bottom margin)
         float yStartNewPage = page.getMediaBox().getHeight() - (2 * margin);
-        // we want table across whole page width (subtracted by left and right margin ofcourse)
+        // table across whole page width (subtracted by left and right margin)
         float tableWidth = page.getMediaBox().getWidth() - (2 * margin);
         float yStart = yStartNewPage;
         float bottomMargin = 70;

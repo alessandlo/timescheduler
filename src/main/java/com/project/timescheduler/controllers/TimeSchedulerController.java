@@ -202,7 +202,7 @@ public class TimeSchedulerController{
         File file = fileChooser.showSaveDialog(Main.mainStage);
         try {
             String path = file.getAbsolutePath();
-            pdfExport.initialize(path, firstDay, lastDay, currentUser.getUsername());
+            pdfExport.initialize(path, firstDay, lastDay);
         }
         catch (Exception e){
             System.out.println("canceled");
