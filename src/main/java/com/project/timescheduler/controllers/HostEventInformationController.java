@@ -4,10 +4,7 @@ import com.project.timescheduler.Main;
 import com.project.timescheduler.services.Event;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.time.LocalDateTime;
@@ -17,7 +14,9 @@ import java.time.LocalTime;
 public class HostEventInformationController{
 
     @FXML
-    private TextField tfEventName;
+    private Label tfEventName;
+    @FXML
+    private Label tfCreatorName;
     @FXML
     private DatePicker tfStartDate;
     @FXML
@@ -35,6 +34,10 @@ public class HostEventInformationController{
     @FXML
     private ChoiceBox<Event.Priority> cbPriority;
     @FXML
+    private ListView<String> allParticipantsList;
+    @FXML
+    private ListView<String> selectedParticipantsList;
+    @FXML
     private Button bSave;
 
     private String currentUser;
@@ -49,6 +52,7 @@ public class HostEventInformationController{
     }
     public void loadData(){
         tfEventName.setText(event.getName());
+        tfCreatorName.setText(event.getCreatorName() + " (You)");
         tfStartDate.setValue(event.getStartDate());
         tfEndDate.setValue(event.getEndDate());
         tfStartHour.setText(String.valueOf(event.getStartTime().getHour()));
@@ -73,7 +77,7 @@ public class HostEventInformationController{
         Event updatedEvent = new Event(
                 event.getEventId(),
                 event.getCreatorName(),
-                tfEventName.getText(),
+                event.getName(),
                 tfLocation.getText(),
                 null,
                 tfStartDate.getValue(),
