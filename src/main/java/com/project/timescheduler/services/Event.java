@@ -19,13 +19,15 @@ public class Event {
     private LocalTime startTime;
     private LocalTime endTime;
 
+    private long reminder;
+
     private Priority priority;
 
     public enum Priority {
         high, medium, low;
     }
 
-    public Event(int event_id, String creatorName, String name, String location, ArrayList<String> participants, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime, Priority priority) {
+    public Event(int event_id, String creatorName, String name, String location, ArrayList<String> participants, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime, Priority priority, long reminder) {
         this.eventId = event_id;
         this.creatorName = creatorName;
 
@@ -41,6 +43,7 @@ public class Event {
         this.endTime = endTime;
 
         this.priority = priority;
+        this.reminder = reminder;
     }
 
     public int getEventId() {
@@ -118,6 +121,14 @@ public class Event {
 
     public void setEndDate(LocalTime endTime){
         this.endTime = endTime;
+    }
+
+    public long getReminder() {
+        return reminder;
+    }
+
+    public void setReminder(long reminder) {
+        this.reminder = reminder;
     }
 
 

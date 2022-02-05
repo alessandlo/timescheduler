@@ -84,8 +84,9 @@ public class HostEventInformationController{
                 tfEndDate.getValue(),
                 startTime,
                 endTime,
-                cbPriority.getValue()
-                );
+                cbPriority.getValue(),
+                200
+                ); //reminder nur platzhalter, später ändern!!!
 
         String startDateTime_temp = "%s %s";
         String startDateTime = String.format(startDateTime_temp, updatedEvent.getStartDate(), updatedEvent.getStartTime());

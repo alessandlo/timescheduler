@@ -142,7 +142,8 @@ public class User {
                         rs.getDate("END_DATE").toLocalDate(),
                         rs.getTime("START_DATE").toLocalTime(),
                         rs.getTime("END_DATE").toLocalTime(),
-                        Event.Priority.valueOf(rs.get("PRIORITY")));
+                        Event.Priority.valueOf(rs.get("PRIORITY")),
+                        100); //Platzhalter muss noch geändert werden!!!
             }
             Objects.requireNonNull(participantsList).add(username);
         }

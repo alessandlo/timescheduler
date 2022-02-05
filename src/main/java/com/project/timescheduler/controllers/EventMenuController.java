@@ -53,6 +53,8 @@ public class EventMenuController{
     private TextField eventEndMin;
     @FXML
     private ChoiceBox<Event.Priority> eventPriority;
+    @FXML
+    private ChoiceBox<String> eventReminder;
 
     private Event event;
 
@@ -78,6 +80,7 @@ public class EventMenuController{
 
         eventPriority.getItems().addAll(Event.Priority.values());
         eventParticipantList.getItems().add("Manage participants");
+        eventReminder.getItems().addAll("1 week", "3 days", "1 hour", "10 minutes");
     }
 
     public void ButtonBorderColorReset() {
@@ -172,6 +175,30 @@ public class EventMenuController{
         }
     }
 
+    public long retrieveReminder() {
+        String reminder = eventReminder.getValue();
+        long remindertime = -1;
+
+        switch (reminder) {
+            case "1 week":
+                remindertime = 7 * 24 * 60 * 60 * 1000;
+                break;
+            case "3 days":
+                remindertime = 3 * 24 * 60 * 60 * 1000;
+                break;
+            case "1 hour":
+                remindertime = 60 * 60 * 1000;
+                break;
+            case "10 minutes":
+                remindertime = 10 * 60 * 1000;
+                break;
+            default:
+                remindertime = -1;
+                break;
+        }
+        return remindertime;
+    }
+
     public void manageParticipants(MouseEvent mouseEvent) throws IOException {
         if(Objects.equals(eventParticipantList.getSelectionModel().getSelectedItem(), "Manage participants")){
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("participantsList.fxml"));
@@ -231,7 +258,8 @@ public class EventMenuController{
                     eventEndDate.getValue(),
                     startTime,
                     endTime,
-                    eventPriority.getValue()
+                    eventPriority.getValue(),
+                    retrieveReminder()
             );
 
             uploadEvent();
@@ -287,8 +315,8 @@ public class EventMenuController{
         String startDateTime = String.format(startDateTime_temp, event.getStartDate(), event.getStartTime());
         String endDateTime = String.format(startDateTime_temp, event.getEndDate(), event.getEndTime());
 
-        String sql_temp = "INSERT INTO sched_event (event_name, start_date, end_date, creator_name, location, priority) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')";
-        String sql = String.format(sql_temp, event.getName(), startDateTime, endDateTime, event.getCreatorName(), event.getLocation(), event.getPriority());
+        String sql_temp = "INSERT INTO sched_event (event_name, start_date, end_date, creator_name, location, priority, reminder) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')";
+        String sql = String.format(sql_temp, event.getName(), startDateTime, endDateTime, event.getCreatorName(), event.getLocation(), event.getPriority(), Long.toString(event.getReminder()));
 
         String alter_date_format = "ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI'";
         System.out.println(startDateTime + " " + endDateTime);
