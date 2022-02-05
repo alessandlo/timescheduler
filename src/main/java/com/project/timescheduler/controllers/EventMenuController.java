@@ -291,7 +291,7 @@ public class EventMenuController{
         String sql = String.format(sql_temp, event.getName(), startDateTime, endDateTime, event.getCreatorName(), event.getLocation(), event.getPriority());
 
         String alter_date_format = "ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI'";
-
+        System.out.println(startDateTime + " " + endDateTime);
         connection.update(alter_date_format);
         connection.update(sql);
     }

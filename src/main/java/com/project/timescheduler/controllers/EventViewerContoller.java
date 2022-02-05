@@ -65,19 +65,37 @@ public class EventViewerContoller {
     @FXML
     private void onEventClicked(MouseEvent mouseEvent){
         VBox vBox = (VBox) mouseEvent.getTarget();
-        try {
-            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(Main.class.getResource("EventInformation.fxml")));
-            Parent root = loader.load();
+        Event activeEvent = (Event) vBox.getUserData();
+        if (activeEvent.getCreatorName().equals(currentUser)){
+            try {
+                FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(Main.class.getResource("HostEventInformation.fxml")));
+                Parent root = loader.load();
 
-            EventInformationController controller = loader.getController();
-            controller.initialize((Event) vBox.getUserData(),currentUser);
+                HostEventInformationController controller = loader.getController();
+                controller.initialize(activeEvent, currentUser);
 
-            Stage eventStage = new Stage();
-            eventStage.setScene(new Scene(root));
-            eventStage.initModality(Modality.APPLICATION_MODAL);
-            eventStage.showAndWait();
-        }catch (Exception e){
-            e.printStackTrace();
+                Stage eventStage = new Stage();
+                eventStage.setScene(new Scene(root));
+                eventStage.initModality(Modality.APPLICATION_MODAL);
+                eventStage.showAndWait();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else {
+            try {
+                FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(Main.class.getResource("EventInformation.fxml")));
+                Parent root = loader.load();
+
+                EventInformationController controller = loader.getController();
+                controller.initialize(activeEvent, currentUser);
+
+                Stage eventStage = new Stage();
+                eventStage.setScene(new Scene(root));
+                eventStage.initModality(Modality.APPLICATION_MODAL);
+                eventStage.showAndWait();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

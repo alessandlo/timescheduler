@@ -29,14 +29,6 @@ public class EventInformationController{
         loadData();
     }
     public void loadData(){
-        /*
-        System.out.println(event.getName());
-        System.out.println(event.getStartDate().toString());
-        System.out.println(event.getEndDate().toString());
-        System.out.println(event.getCreatorName());
-        System.out.println(event.getLocation());
-        System.out.println(event.getPriority().toString());
-         */
 
         lEventName.setText(event.getName());
         lStartDate.setText(event.getStartDate().toString());
@@ -46,4 +38,5 @@ public class EventInformationController{
         lPriority.setText(event.getPriority().toString());
 
     }
+
 }
