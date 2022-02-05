@@ -8,20 +8,25 @@ import com.project.timescheduler.services.Mail;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -75,10 +80,96 @@ public class EventMenuController{
         eventParticipantList.getItems().add("Manage participants");
     }
 
+    public void ButtonBorderColorReset() {
+        //resets all Date and time field border colors to transparent
+        eventStartDate.setStyle("-fx-border-color: transparent");
+        eventStartHour.setStyle("-fx-border-color: transparent");
+        eventStartMin.setStyle("-fx-border-color: transparent");
+        eventEndDate.setStyle("-fx-border-color: transparent");
+        eventEndHour.setStyle("-fx-border-color: transparent");
+        eventEndMin.setStyle("-fx-border-color: transparent");
+    }
+
+    public void setBorderColor(int res, DatePicker datePicker, TextField hour, TextField min, String color) {
+        //sets a group of Date and Time fields to red depending on the value of res
+        switch (res) {
+            case -1:
+                break;
+            case 1:
+                datePicker.setStyle("-fx-border-color: " + color);
+                break;
+            case 2:
+                hour.setStyle("-fx-border-color: " + color);
+                break;
+            case 3:
+                min.setStyle("-fx-border-color: " + color);
+                break;
+            default:
+                System.out.println("something went wrong in switch startDate - EventMenuController");
+                break;
+        }
+    }
+
     public void resetBorderColor(MouseEvent mouseEvent) {
+        //resets the bordercolor of Datepickers to transparent when they are clicked on
         System.out.println("reset border color");
+
         DatePicker datePicker = (DatePicker)((StackPane)mouseEvent.getTarget()).getParent();
         datePicker.setStyle("-fx-border-color: transparent");
+    }
+
+    public void resetBorderColorT(MouseEvent mouseEvent) {
+        //resets the bordercolor of TextFields to transparent when they are clicked on
+        TextField textField = new TextField();
+        if(mouseEvent.getTarget() instanceof Pane) {
+            System.out.println("Pane");
+            System.out.println(mouseEvent.getTarget());
+
+            System.out.println("Parent of Pane:");
+            System.out.println(((Pane)mouseEvent.getTarget()).getParent());
+
+            textField = (TextField)((Pane)mouseEvent.getTarget()).getParent();
+        }
+        else if(mouseEvent.getTarget() instanceof Text) {
+            System.out.println("Text");
+            System.out.println(mouseEvent.getTarget());
+
+            System.out.println("Parent of Text:");
+            System.out.println(((Text)mouseEvent.getTarget()).getParent());
+
+            System.out.println("Parent of Parent of Text:");
+            System.out.println(((Pane)((Text)mouseEvent.getTarget()).getParent()).getParent());
+
+            textField = (TextField) ((Pane)((Text)mouseEvent.getTarget()).getParent()).getParent();
+        }
+        else if(mouseEvent.getTarget() instanceof TextField) {
+            System.out.println("TextField");
+            System.out.println(mouseEvent.getTarget());
+            textField = (TextField) mouseEvent.getTarget();
+        }
+        textField.setStyle("-fx-border-color: transparent");
+    }
+
+    public int checkDate(LocalDateTime ldt1, LocalDateTime ldt2) {
+        //Compares two LocalDateTime variables
+        //returns different values depending on which component of LocalDateTime is causing ldt1 to be before ldt2
+        // -1 -> ldt1 is not before ldt2
+        // 1 -> Date of ldt1 is before Date of ldt2
+        // 2 -> Hour of ldt1 is before Hour of ldt2
+        // 3 -> Minute of ldt1 is before Minute of ldt2
+        if(ldt1.isBefore(ldt2)){
+            if (ldt1.getYear() == ldt2.getYear() && ldt1.getMonth() == ldt2.getMonth() && ldt1.getDayOfMonth() == ldt2.getDayOfMonth()) {
+                if(ldt1.getHour() == ldt2.getHour()) {
+                    return(3);
+                } else {
+                    return(2);
+                }
+            } else {
+                return (1);
+            }
+        } else {
+            return(-1);
+        }
     }
 
     public void manageParticipants(MouseEvent mouseEvent) throws IOException {
@@ -111,6 +202,7 @@ public class EventMenuController{
 
     //enter method on save button press
     public void createEvent() throws Exception {
+        ButtonBorderColorReset();
         LocalTime startTime = LocalTime.now();
         LocalTime endTime = LocalTime.now();
         try {
@@ -182,16 +274,11 @@ public class EventMenuController{
         }
         else {
             System.out.println("Enter valid Start and End Times");
-            if(startDateTime.getYear() == LocalDateTime.now().getYear() && startDateTime.getMonth() == LocalDateTime.now().getMonth() && startDateTime.getDayOfMonth() == LocalDateTime.now().getDayOfMonth()) {
-                eventStartHour.setStyle("-fx-border-color: red");
-                eventStartMin.setStyle("-fx-border-color: red");
-                eventEndHour.setStyle("-fx-border-color: red");
-                eventEndMin.setStyle("-fx-border-color: red");
-            }
-            else {
-                eventStartDate.setStyle("-fx-border-color: red");
-                eventEndDate.setStyle("-fx-border-color: red");
-            }
+
+            setBorderColor(checkDate(startDateTime, LocalDateTime.now()), eventStartDate, eventStartHour, eventStartMin, "red");
+            setBorderColor(checkDate(endDateTime, LocalDateTime.now()), eventEndDate, eventEndHour, eventEndMin, "red");
+
+            setBorderColor(checkDate(endDateTime, startDateTime), eventEndDate, eventEndHour, eventEndMin, "orange");
         }
     }
 
