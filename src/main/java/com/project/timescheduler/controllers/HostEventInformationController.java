@@ -1,14 +1,22 @@
 package com.project.timescheduler.controllers;
 
 import com.project.timescheduler.Main;
+import com.project.timescheduler.helpers.DBResults;
 import com.project.timescheduler.services.Event;
+import com.project.timescheduler.services.Mail;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 
 public class HostEventInformationController{
@@ -40,15 +48,22 @@ public class HostEventInformationController{
     @FXML
     private Button bSave;
     @FXML
+    private Button exit;
+    @FXML
     private ChoiceBox<String> cbReminder;
 
     private String currentUser;
+    private ArrayList<String> originalParticipants = new ArrayList<>();
+    private ArrayList<String> selectedParticipants = new ArrayList<>();
+    private ArrayList<String> removedParticipants = new ArrayList<>();
     private Event event;
+    private String attachmentPath = "null"; //Default value in case of not selecting an attachment
 
     @FXML
     public void initialize(Event event, String currentUser){
         this.currentUser = currentUser;
         this.event = event;
+        System.out.println("EventID: " + event.getEventId());
         cbPriority.getItems().addAll(Event.Priority.values());
         cbReminder.getItems().addAll("1 week", "3 days", "1 hour", "10 minutes");
         loadData();
@@ -66,6 +81,52 @@ public class HostEventInformationController{
         cbPriority.setValue(event.getPriority());
         cbReminder.setValue(event.getReminderString());
         System.out.println(event.getStartTime());
+
+        ObservableList<String> participants = FXCollections.observableArrayList(); //Load all participants from this event first
+
+        String participants_sql = String.format("SELECT * FROM SCHED_PARTICIPATES_IN WHERE EVENT_ID = '%s'", event.getEventId());
+        DBResults rs = Main.connection.query(participants_sql);
+        while (rs.next()) {
+            participants.add(rs.get("USERNAME"));
+        } selectedParticipantsList.setItems(participants);
+        originalParticipants.addAll(participants);
+
+        ObservableList<String> users = FXCollections.observableArrayList(); //Load all users
+
+        String user_sql = String.format("SELECT USERNAME FROM SCHED_USER");
+        DBResults useRS = Main.connection.query(user_sql);
+        while (useRS.next()) {
+            users.add(useRS.get("USERNAME"));
+        }   users.remove(TimeSchedulerController.getCurrentUser().getUsername());
+        for(int i=0; i<participants.size(); i++){
+            System.out.println(participants.get(i));
+            users.remove(participants.get(i));
+        }   allParticipantsList.setItems(users);
+    }
+
+    /** Handling the display of the item/participant when selecting to add. **/
+    @FXML
+    private void addNameSelection(MouseEvent mouseEvent){
+        String selectedItem = allParticipantsList.getSelectionModel().getSelectedItem();
+        if(selectedItem != null){
+            if(removedParticipants.contains(selectedItem)){
+                removedParticipants.remove(selectedItem);
+            }
+            selectedParticipantsList.getItems().add(selectedItem);
+            allParticipantsList.getItems().remove(selectedItem);
+            allParticipantsList.getSelectionModel().clearSelection();
+        }
+    }
+    /** Handling the display of the item/participant when selecting to remove. **/
+    @FXML
+    private void removeNameSelection(MouseEvent mouseEvent){
+        String selectedItem = selectedParticipantsList.getSelectionModel().getSelectedItem();
+        if(selectedItem != null){
+            removedParticipants.add(selectedItem);
+            allParticipantsList.getItems().add(selectedItem);
+            selectedParticipantsList.getItems().remove(selectedItem);
+            selectedParticipantsList.getSelectionModel().clearSelection();
+        }
     }
 
     public long retrieveReminderHost() {
@@ -92,7 +153,8 @@ public class HostEventInformationController{
         return remindertime;
     }
 
-    public void updateData(){
+    public void updateData() throws Exception {
+        selectedParticipants.addAll(selectedParticipantsList.getItems());
         LocalTime startTime = LocalTime.now();
         LocalTime endTime = LocalTime.now();
         try {
@@ -108,7 +170,7 @@ public class HostEventInformationController{
                 event.getCreatorName(),
                 event.getName(),
                 tfLocation.getText(),
-                null,
+                selectedParticipants,
                 tfStartDate.getValue(),
                 tfEndDate.getValue(),
                 startTime,
@@ -132,6 +194,83 @@ public class HostEventInformationController{
         String alter_date_format = "ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI'";
         Main.connection.update(alter_date_format);
         Main.connection.update(sql);
+
+        String deleteUser_sql = String.format("DELETE FROM SCHED_PARTICIPATES_IN WHERE EVENT_ID = '%s'", event.getEventId());
+        Main.connection.update(deleteUser_sql);
+
+        for(int x=0; x<selectedParticipants.size(); x++) {
+            String addUser_sql = String.format
+                    ("INSERT INTO SCHED_PARTICIPATES_IN " +
+                                    "(USERNAME, EVENT_ID) " +
+                                    "VALUES ('%s', '%s')",
+                            selectedParticipants.get(x), event.getEventId());
+            Main.connection.update(addUser_sql);
+        }
+
+        Mail mail = new Mail();
+        int l = selectedParticipants.size();
+        int y = 0;
+        while (y != l) {
+            String user = selectedParticipants.get(y);
+
+            String user_sql = String.format("SELECT EMAIL FROM SCHED_USER WHERE USERNAME = '%s'", user);
+            DBResults userDetails = Main.connection.query(user_sql);
+            userDetails.next();
+            System.out.println(userDetails.get("EMAIL"));
+            mail.sendMail(
+                    event.getCreatorName(),
+                    user,
+                    event.getName(),
+                    tfLocation.getText(),
+                    selectedParticipants,
+                    userDetails.get("EMAIL"),
+                    tfStartDate.getValue(),
+                    tfEndDate.getValue(),
+                    startTime,
+                    endTime,
+                    cbPriority.getValue(),
+                    attachmentPath,
+                    Mail.Type.valueOf("update"));
+            System.out.println("EMAIL SEND");
+            y++;
+        }
+
+        for(int z=0; z<removedParticipants.size(); z++){
+                if(originalParticipants.contains(removedParticipants.get(z))){
+                    String xUser_sql = String.format("SELECT EMAIL FROM SCHED_USER WHERE USERNAME = '%s'", removedParticipants.get(z));
+                    DBResults xUserDetails = Main.connection.query(xUser_sql);
+                    xUserDetails.next();
+                    System.out.println(xUserDetails.get("EMAIL"));
+                    mail.sendMail(
+                            event.getCreatorName(),
+                            removedParticipants.get(z),     //Essential
+                            event.getName(),                //Essential
+                            tfLocation.getText(),
+                            removedParticipants,
+                            xUserDetails.get("EMAIL"),      //Essential
+                            tfStartDate.getValue(),
+                            tfEndDate.getValue(),
+                            startTime,
+                            endTime,
+                            cbPriority.getValue(),
+                            attachmentPath,
+                            Mail.Type.valueOf("remove"));   //Essential
+                    System.out.println("EMAIL SEND");
+                }
+        }
+        Stage stage = (Stage) bSave.getScene().getWindow();
+        stage.close();
+    }
+
+    /** Attachment input and getting the path. **/
+    public void attachment(ActionEvent e){
+        FileChooser chooser = new FileChooser();
+        File file = chooser.showOpenDialog(null);
+        attachmentPath = file.getAbsolutePath();
+        System.out.println(attachmentPath);
+    }
+
+    public void exit (ActionEvent actionEvent){
         Stage stage = (Stage) bSave.getScene().getWindow();
         stage.close();
     }

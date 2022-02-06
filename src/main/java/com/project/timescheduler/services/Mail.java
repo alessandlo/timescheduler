@@ -12,6 +12,10 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 public class Mail {
+        public enum Type {
+                create, update, remove, delete
+        }
+
         /** The function will receive every necessary info regarding an event, before creating and sending a mail. **/
         public static void sendMail(String creatorName,
                                     String user,
@@ -24,7 +28,8 @@ public class Mail {
                                     LocalTime startTime,
                                     LocalTime endTime,
                                     Event.Priority priority,
-                                    String attachmentPath)throws Exception{
+                                    String attachmentPath,
+                                    Type type)throws Exception{
 
         System.out.println("Mail is being sent to " + recipient);
 
@@ -47,32 +52,62 @@ public class Mail {
 
         /** The following shows how we create the messages such as the subject and actual content. **/
         Message message = new MimeMessage(session);
-        message.setSubject("New Event Invitation from " + creatorName);
-
+        if (type == Type.valueOf("create")) {
+                System.out.println("Sending creation mail.");
+                message.setSubject("[NEW] Event Invitation!");
+        } else if (type == Type.valueOf("update")){
+                System.out.println("Sending update mail.");
+                message.setSubject("[UPDATE] Event " + name + " got updated!");
+        } else if (type == Type.valueOf("remove")) {
+                System.out.println("Sending removal mail.");
+                message.setSubject("[REMOVAL] You got removed from an Event!");
+        } else if (type == Type.valueOf("delete")) {
+                System.out.println("Sending delete mail.");
+                message.setSubject("[CANCEL] Event " + name + " got cancelled!");
+        }
         /** This is for the String/Text that shows all the participants. **/
-        int l = participants.size();
-        int x = 0;
-        String allParticipants = "";
-        while(x != l){
-                String currentUser = participants.get(x);
-                allParticipants = allParticipants + currentUser + ", ";
-                x++;
-        } allParticipants = allParticipants.substring(0, allParticipants.length() -2);
-
+                String allParticipants = "";
+                if (participants != null) {
+                        int l = participants.size();
+                        int x = 0;
+                        while (x != l) {
+                                String currentUser = participants.get(x);
+                                allParticipants = allParticipants + currentUser + ", ";
+                                x++;
+                }
+                allParticipants = allParticipants.substring(0, allParticipants.length() - 2);
+        }
         /** Since we need to be able to send attachments in our E-Mails and not only text,
          * we need a MimeMultipart in order to include various types of content. **/
         MimeMultipart multipart = new MimeMultipart();
 
         /** HTML-Message, including all the information/parameters this function was given at the start. **/
         MimeBodyPart messagePart = new MimeBodyPart();
-        messagePart.setContent("<h3>Hello </h3>" + user + "<h3> You were included to the event: </h3>" + name + "<p>"
-                                + "<h3>Creator: </h3>" + creatorName + "<p>"
-                                + "<h3>Location: </h3>" + location + "<p>"
-                                + "<h3>Participants: </h3>" + allParticipants + "<p>"
-                                + "<h3>Priority: </h3>" + priority + "<p>"
-                                + "<h3>Start: </h3>" + startDate + " - " + startTime + "<p>"
-                                + "<h3>End: </h3>" + endDate + " - " + endTime + "<p>","text/html");
-
+                if (type == Type.valueOf("create")) {
+                        messagePart.setContent("<h3>Hello " + user + "!<br><br>"
+                                + "You were included to the event: " + name + "<br><br>"
+                                + "Creator: " + creatorName + "<br><br>"
+                                + "Location: " + location + "<br><br>"
+                                + "Participants: " + allParticipants + "<br><br>"
+                                + "Priority: " + priority + "<br><br>"
+                                + "Start: " + startDate + " - " + startTime + "<br><br>"
+                                + "End: " + endDate + " - " + endTime + "<br><br></h3>", "text/html");
+                } else if (type == Type.valueOf("update")){
+                        messagePart.setContent("<h3>Hello " + user + "!<br><br>"
+                                + "The event: " + name + " got updated! Look below for current details.<br><br>"
+                                + "Creator: " + creatorName + "<br><br>"
+                                + "Location: " + location + "<br><br>"
+                                + "Participants: " + allParticipants + "<br><br>"
+                                + "Priority: " + priority + "<br><br>"
+                                + "Start: " + startDate + " - " + startTime + "<br><br>"
+                                + "End: " + endDate + " - " + endTime + "<br><br></h3>", "text/html");
+                } else if (type == Type.valueOf("remove")){
+                        messagePart.setContent("<h3>Hello " + user + "!<br><br>"
+                                + "You were removed from the event: " + name + "!</h3>","text/html");
+                } else if (type == Type.valueOf("delete")){
+                        messagePart.setContent("<h3>Hello " + user + "!<br><br>"
+                                + "The event: " + name + " got fully cancelled!</h3>","text/html");
+                }
         multipart.addBodyPart(messagePart);     //Adding message to a part
 
         /** This is for the optional option of having an attachment. **/
@@ -90,4 +125,6 @@ public class Mail {
         Transport.send(message);
         System.out.println("Mail has been sent.");
     }
+
+
 }

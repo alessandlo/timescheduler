@@ -38,7 +38,7 @@
          </rowConstraints>
          <children>
             <Button fx:id="bSave" mnemonicParsing="false" onAction="#updateData" prefHeight="38.0" prefWidth="65.0" text="Edit" GridPane.columnIndex="5" GridPane.rowIndex="8" />
-            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="35.0" prefWidth="59.0" text="Back" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
+            <Button fx:id="exit" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#exit" prefHeight="35.0" prefWidth="59.0" text="Back" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
             <Label contentDisplay="CENTER" prefHeight="17.0" prefWidth="107.0" text="Start Date:" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label contentDisplay="CENTER" prefHeight="17.0" prefWidth="107.0" text="End Date:" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label contentDisplay="CENTER" prefHeight="20.0" prefWidth="108.0" text="Created by:" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -64,7 +64,7 @@
                </font>
             </Label>
             <Label alignment="TOP_LEFT" prefHeight="257.0" prefWidth="96.0" text="Participants:" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <ListView fx:id="selectedParticipantsList" prefHeight="238.0" prefWidth="152.0" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+            <ListView fx:id="selectedParticipantsList" onMouseClicked="#removeNameSelection" prefHeight="238.0" prefWidth="152.0" GridPane.columnIndex="2" GridPane.rowIndex="7" />
             <ChoiceBox fx:id="cbPriority" prefHeight="25.0" prefWidth="108.0" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="6" />
             <DatePicker fx:id="tfEndDate" GridPane.columnIndex="2" GridPane.rowIndex="4" />
             <DatePicker fx:id="tfStartDate" GridPane.columnIndex="2" GridPane.rowIndex="3" />
@@ -75,8 +75,8 @@
             <TextField fx:id="tfEndHour" layoutX="680.0" layoutY="155.0" maxWidth="33.0" prefHeight="25.0" prefWidth="24.0" text="08" GridPane.columnIndex="3" GridPane.rowIndex="4" />
             <TextField fx:id="tfEndMin" layoutX="730.0" layoutY="155.0" maxWidth="33.0" text="15" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
             <Label layoutX="720.0" layoutY="159.0" prefHeight="17.0" prefWidth="2.0" text=":" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
-            <ListView fx:id="allParticipantsList" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="7" />
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="98.0" text="Attachment" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+            <ListView fx:id="allParticipantsList" onMouseClicked="#addNameSelection" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="7" />
+            <Button mnemonicParsing="false" onAction="#attachment" prefHeight="25.0" prefWidth="98.0" text="Attachment" GridPane.columnIndex="3" GridPane.rowIndex="6" />
             <Label alignment="TOP_CENTER" text="Other Users:" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="TOP" />
             <Label text="Reminder:" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <ChoiceBox fx:id="cbReminder" prefWidth="150.0" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />

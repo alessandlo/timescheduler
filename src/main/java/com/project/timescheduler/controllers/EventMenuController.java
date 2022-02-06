@@ -289,7 +289,8 @@ public class EventMenuController{
                         startTime,
                         endTime,
                         eventPriority.getValue(),
-                        attachmentPath);
+                        attachmentPath,
+                        Mail.Type.valueOf("create"));
                 System.out.println("EMAIL SEND");
                 i++;
             }

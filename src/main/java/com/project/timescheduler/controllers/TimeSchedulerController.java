@@ -154,9 +154,6 @@ public class TimeSchedulerController{
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("eventViewer.fxml"));
         Parent root = loader.load();
 
-        EventViewerContoller controller = loader.getController();
-        controller.initialize(currentUser.getUsername());
-
         Stage listStage = new Stage();
         scene = new Scene(root);
         listStage.setScene(scene);

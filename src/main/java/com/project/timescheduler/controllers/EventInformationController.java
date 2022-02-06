@@ -3,6 +3,8 @@ package com.project.timescheduler.controllers;
 import com.project.timescheduler.Main;
 import com.project.timescheduler.helpers.DBResults;
 import com.project.timescheduler.services.Event;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -31,6 +33,7 @@ public class EventInformationController{
     public void initialize(Event event, String currentUser){
         this.currentUser = currentUser;
         this.event = event;
+        System.out.println("EventID: " + event.getEventId());
         loadData();
     }
     public void loadData(){
@@ -46,6 +49,14 @@ public class EventInformationController{
         lLocation.setText(event.getLocation());
         lPriority.setText(event.getPriority().toString());
 
+        ObservableList<String> users = FXCollections.observableArrayList();
+
+        String participants_sql = String.format("SELECT * FROM SCHED_PARTICIPATES_IN WHERE EVENT_ID = '%s'", event.getEventId());
+        DBResults participants = Main.connection.query(participants_sql);
+
+        while (participants.next()) {
+            users.add(participants.get("USERNAME"));
+        }   selectedParticipantsList.setItems(users);
     }
 
 }

@@ -29,8 +29,9 @@ public class EventViewerContoller {
     private String currentUser;
 
     @FXML
-    public void initialize(String currentUser){
-        this.currentUser = currentUser;
+    public void initialize(){
+        this.currentUser = TimeSchedulerController.getCurrentUser().getUsername();
+        System.out.println(currentUser);
         loadHostedEvents();
         loadAttendingEvents();
     }
