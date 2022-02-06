@@ -332,8 +332,9 @@ public class EventMenuController{
     }
     /** Attachment input and getting the path. **/
     public void attachment(ActionEvent e){
+        Stage stage = (Stage) eventName.getScene().getWindow();
         FileChooser chooser = new FileChooser();
-        File file = chooser.showOpenDialog(null);
+        File file = chooser.showOpenDialog(stage);
         attachmentPath = file.getAbsolutePath();
         System.out.println(attachmentPath);
     }
