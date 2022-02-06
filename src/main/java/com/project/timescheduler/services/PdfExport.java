@@ -17,15 +17,36 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class is responsible for creating and formatting the weekly PDF export
+ *
+ * @author Oliver Zepperitz
+ */
+
 public class PdfExport {
     private String filePath;
 
+    /**
+     * Initialization
+     *
+     * @param path Path where the PDF should be saved
+     * @param firstDay first day of the week (Monday)
+     * @param lastDay last day of the week (Sunday)
+     * @throws IOException Exception in case of error
+     */
     public void initialize(String path, LocalDate firstDay, LocalDate lastDay) throws IOException {
         filePath = path;
         ArrayList<Event> dataList = new ArrayList<>(TimeSchedulerController.getCurrentUser().getAllEvents(firstDay, lastDay));
         createFile(dataList, firstDay, lastDay);
     }
 
+    /**
+     *
+     * @param dataList The list of events in the corresponding week
+     * @param firstDay first day of the week (Monday)
+     * @param lastDay last day of the week (Sunday)
+     * @throws IOException Exception in case of error
+     */
     private void createFile(ArrayList<Event> dataList, LocalDate firstDay, LocalDate lastDay) throws IOException {
         PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
         PDDocument document = new PDDocument();
@@ -61,6 +82,9 @@ public class PdfExport {
             String end_format = end_dt.format(dtf);
 
             String participantsList = Arrays.toString(e.getParticipants().toArray()).replace("[", "").replace("]", "");
+            if (participantsList.equals("null")){
+                participantsList = "No other participants";
+            }
 
             data.add(new ArrayList<>(
                     Arrays.asList(e.getName(), start_format, end_format, e.getLocation(), e.getPriority(), participantsList, e.getCreatorName())));
