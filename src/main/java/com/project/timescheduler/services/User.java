@@ -82,21 +82,21 @@ public class User {
         Main.connection.update("ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI'");
         switch (localDate.length){
             case 0:
-                sql = "SELECT se.EVENT_ID, sp.USERNAME, CREATOR_NAME, EVENT_NAME, START_DATE, END_DATE, LOCATION, PRIORITY " +
+                sql = "SELECT se.EVENT_ID, sp.USERNAME, CREATOR_NAME, EVENT_NAME, START_DATE, END_DATE, LOCATION, PRIORITY, REMINDER " +
                         "FROM SCHED_EVENT se LEFT JOIN SCHED_PARTICIPATES_IN sp on se.EVENT_ID = sp.EVENT_ID ORDER BY se.EVENT_ID";
                 break;
             case 1:
-                sql = String.format("SELECT se.EVENT_ID, sp.USERNAME, CREATOR_NAME, EVENT_NAME, START_DATE, END_DATE, LOCATION, PRIORITY " +
+                sql = String.format("SELECT se.EVENT_ID, sp.USERNAME, CREATOR_NAME, EVENT_NAME, START_DATE, END_DATE, LOCATION, PRIORITY, REMINDER " +
                         "FROM SCHED_EVENT se LEFT JOIN SCHED_PARTICIPATES_IN sp on se.EVENT_ID = sp.EVENT_ID WHERE START_DATE > '%s 00:00'" +
                         "ORDER BY START_DATE", Date.valueOf(localDate[0]));
                 break;
             case 2:
                 if(localDate[0] == null) {
-                    sql = String.format("SELECT se.EVENT_ID, sp.USERNAME, CREATOR_NAME, EVENT_NAME, START_DATE, END_DATE, LOCATION, PRIORITY " +
+                    sql = String.format("SELECT se.EVENT_ID, sp.USERNAME, CREATOR_NAME, EVENT_NAME, START_DATE, END_DATE, LOCATION, PRIORITY, REMINDER " +
                             "FROM SCHED_EVENT se LEFT JOIN SCHED_PARTICIPATES_IN sp on se.EVENT_ID = sp.EVENT_ID WHERE END_DATE < '%s 23:59'" +
                             "ORDER BY START_DATE", Date.valueOf(localDate[1]));
                 }else {
-                    sql = String.format("SELECT se.EVENT_ID, sp.USERNAME, CREATOR_NAME, EVENT_NAME, START_DATE, END_DATE, LOCATION, PRIORITY " +
+                    sql = String.format("SELECT se.EVENT_ID, sp.USERNAME, CREATOR_NAME, EVENT_NAME, START_DATE, END_DATE, LOCATION, PRIORITY, REMINDER " +
                             "FROM SCHED_EVENT se LEFT JOIN SCHED_PARTICIPATES_IN sp on se.EVENT_ID = sp.EVENT_ID " +
                             "WHERE START_DATE BETWEEN '%s 00:00' AND '%s 23:59' ORDER BY START_DATE", Date.valueOf(localDate[0]), Date.valueOf(localDate[1]));
                 }
@@ -143,7 +143,7 @@ public class User {
                         rs.getTime("START_DATE").toLocalTime(),
                         rs.getTime("END_DATE").toLocalTime(),
                         Event.Priority.valueOf(rs.get("PRIORITY")),
-                        100); //Platzhalter muss noch geändert werden!!!
+                        Long.valueOf(rs.get("REMINDER")));
             }
             Objects.requireNonNull(participantsList).add(username);
         }

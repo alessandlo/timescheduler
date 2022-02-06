@@ -129,4 +129,37 @@ public class Event {
     public void setReminder(long reminder) {
         this.reminder = reminder;
     }
+
+    public String getReminderString() {
+        String reminderString;
+        /*switch (reminder) {
+            case 604800000:
+                reminderString = "1 week";
+                break;
+            case 259200000:
+                reminderString = "3 days";
+                break;
+            case 3600000:
+                reminderString = "1 hour";
+                break;
+            case 600000:
+                reminderString = "10 minutes";
+                break;
+            default:
+                reminderString = "fehler";
+                break;
+        }*/
+        if(reminder == 604800000) {
+            reminderString = "1 week";
+        } else if (reminder == 259200000) {
+            reminderString = "3 days";
+        } else if (reminder == 3600000) {
+            reminderString = "1 hour";
+        } else if (reminder == 600000) {
+            reminderString = "10 minutes";
+        } else {
+            reminderString = "fehler";
+        }
+        return reminderString;
+    }
 }

@@ -258,6 +258,7 @@ public class EventMenuController{
 
             uploadEvent();
 
+            //Das muss neu gemacht werden
             String getEvent_sql = "SELECT EVENT_ID FROM SCHED_EVENT where EVENT_NAME = '%s' AND LOCATION = '%s' AND PRIORITY = '%s'";
             getEvent_sql = String.format(getEvent_sql, event.getName(), event.getLocation(), event.getPriority());
             DBResults rsID = Main.connection.query(getEvent_sql);

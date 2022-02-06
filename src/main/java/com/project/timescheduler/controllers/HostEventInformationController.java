@@ -39,6 +39,8 @@ public class HostEventInformationController{
     private ListView<String> selectedParticipantsList;
     @FXML
     private Button bSave;
+    @FXML
+    private ChoiceBox<String> cbReminder;
 
     private String currentUser;
     private Event event;
@@ -48,6 +50,7 @@ public class HostEventInformationController{
         this.currentUser = currentUser;
         this.event = event;
         cbPriority.getItems().addAll(Event.Priority.values());
+        cbReminder.getItems().addAll("1 week", "3 days", "1 hour", "10 minutes");
         loadData();
     }
     public void loadData(){
@@ -61,8 +64,35 @@ public class HostEventInformationController{
         tfEndMin.setText(String.valueOf(event.getEndTime().getMinute()));
         tfLocation.setText(event.getLocation());
         cbPriority.setValue(event.getPriority());
+        cbReminder.setValue(event.getReminderString());
+        //TO DO: gesetzten reminder anzeigen lassen
         System.out.println(event.getStartTime());
     }
+
+    public long retrieveReminderHost() {
+        String reminder = cbReminder.getValue();
+        long remindertime = -1;
+
+        switch (reminder) {
+            case "1 week":
+                remindertime = 7 * 24 * 60 * 60 * 1000;
+                break;
+            case "3 days":
+                remindertime = 3 * 24 * 60 * 60 * 1000;
+                break;
+            case "1 hour":
+                remindertime = 60 * 60 * 1000;
+                break;
+            case "10 minutes":
+                remindertime = 10 * 60 * 1000;
+                break;
+            default:
+                remindertime = -1;
+                break;
+        }
+        return remindertime;
+    }
+
     public void updateData(){
         LocalTime startTime = LocalTime.now();
         LocalTime endTime = LocalTime.now();
@@ -85,8 +115,8 @@ public class HostEventInformationController{
                 startTime,
                 endTime,
                 cbPriority.getValue(),
-                200
-                ); //reminder nur platzhalter, später ändern!!!
+                retrieveReminderHost()
+                );
 
         String startDateTime_temp = "%s %s";
         String startDateTime = String.format(startDateTime_temp, updatedEvent.getStartDate(), updatedEvent.getStartTime());
@@ -97,7 +127,8 @@ public class HostEventInformationController{
                 "', START_DATE = '"+ startDateTime +
                 "', END_DATE = '"+ endDateTime +
                 "', LOCATION = '"+  updatedEvent.getLocation() +
-                "', PRIORITY = '"+ updatedEvent.getPriority().toString() +"'\n" +
+                "', PRIORITY = '"+ updatedEvent.getPriority().toString() +
+                "', REMINDER = '"+ Long.toString(updatedEvent.getReminder()) +"'\n" +
                 "WHERE EVENT_ID = '"+ event.getEventId() + "'";
         String alter_date_format = "ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI'";
         Main.connection.update(alter_date_format);
