@@ -65,7 +65,6 @@ public class HostEventInformationController{
         tfLocation.setText(event.getLocation());
         cbPriority.setValue(event.getPriority());
         cbReminder.setValue(event.getReminderString());
-        //TO DO: gesetzten reminder anzeigen lassen
         System.out.println(event.getStartTime());
     }
 
