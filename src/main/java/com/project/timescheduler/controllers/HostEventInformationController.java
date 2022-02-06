@@ -272,6 +272,12 @@ public class HostEventInformationController{
 
     public void delete(ActionEvent delete) throws Exception {
 
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Event");
+        alert.setHeaderText("You're about to delete your Event: " + event.getName());
+        alert.setContentText("Are you sure?");
+
+        if(alert.showAndWait().get() == ButtonType.OK){
         String deleteParticipants_sql = String.format("DELETE FROM SCHED_PARTICIPATES_IN WHERE EVENT_ID = '%s'", event.getEventId());
         String deleteEvent_sql = String.format("DELETE FROM SCHED_EVENT WHERE EVENT_ID = '%s'", event.getEventId());
 
@@ -302,6 +308,7 @@ public class HostEventInformationController{
         Main.connection.update(deleteEvent_sql);
         Stage stage = (Stage) bSave.getScene().getWindow();
         stage.close();
+    }
     }
 
     public void exit (ActionEvent actionEvent){
