@@ -33,7 +33,6 @@ public class UserSettingsController {
     private String lastname;
     private int hosted;
     private int attended;
-    DatabaseConnection connection = Main.connection;
     Validation validation = new Validation();
     Encryption encryption = new Encryption();
 
@@ -59,7 +58,7 @@ public class UserSettingsController {
     /** Receiving and loading information of logged-in user from database. **/
     private void loadData() {
         String sql_details = String.format("SELECT * FROM SCHED_USER WHERE USERNAME = '%s'", currentUser);
-        DBResults userDetails = connection.query(sql_details);
+        DBResults userDetails = Main.connection.query(sql_details);
 
         while (userDetails.next()) {
             email = userDetails.get("email");
@@ -68,14 +67,14 @@ public class UserSettingsController {
         }
 
         String sql_hosted = String.format("SELECT COUNT(*) AS count FROM SCHED_EVENT WHERE CREATOR_NAME='%s'", currentUser);
-        DBResults hostedNumber = connection.query(sql_hosted);
+        DBResults hostedNumber = Main.connection.query(sql_hosted);
 
         while (hostedNumber.next()) {
             hosted = Integer.parseInt(hostedNumber.get("count"));
         }
 
         String sql_attend = String.format("SELECT COUNT(USERNAME) AS count FROM SCHED_PARTICIPATES_IN WHERE USERNAME='%s'", currentUser);
-        DBResults attendNumber = connection.query(sql_attend);
+        DBResults attendNumber = Main.connection.query(sql_attend);
 
         while (attendNumber.next()) {
             attended = Integer.parseInt(attendNumber.get("count"));
@@ -102,7 +101,7 @@ public class UserSettingsController {
             if (validation.emailValidation(emailField.getText(), true)){
                 String sql_temp = "UPDATE SCHED_USER SET EMAIL='%s' WHERE USERNAME='%s'";
                 String sql = String.format(sql_temp, emailField.getText(), currentUser);
-                connection.update(sql);
+                Main.connection.update(sql);
                 loadData();
                 feedback.setText("E-Mail was changed!");
             }
@@ -112,7 +111,7 @@ public class UserSettingsController {
             if (validation.passwordValidation(passwordField.getText(), true)) {
                     String sql_temp = "UPDATE SCHED_USER SET PASSWORD='%s' WHERE USERNAME='%s'";
                     String sql = String.format(sql_temp, encryption.createHash(passwordField.getText()), currentUser);
-                    connection.update(sql);
+                    Main.connection.update(sql);
                     feedback.setText("Password was changed!");
                 }
         }
@@ -123,7 +122,7 @@ public class UserSettingsController {
                     passwordField.getText().equals(confirmPasswordField.getText())){
                 String sql_temp = "UPDATE SCHED_USER SET EMAIL='%s', PASSWORD='%s' WHERE USERNAME='%s'";
                 String sql = String.format(sql_temp, emailField.getText(), encryption.createHash(passwordField.getText()), currentUser);
-                connection.update(sql);
+                Main.connection.update(sql);
                 loadData();
                 feedback.setText("E-Mail and Password were changed!");
             }

@@ -37,7 +37,7 @@ public class EventViewerContoller {
 
     public void loadAttendingEvents(){
         for (Event e : TimeSchedulerController.getCurrentUser().getAttendedEvents()) {
-                loadEventViewerItem(tilePaneAttended, e.getName(),e);
+                loadEventViewerItem(tilePaneAttended, e.getName(), e);
         }
     }
     public void loadHostedEvents(){

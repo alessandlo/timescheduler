@@ -11,7 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -41,8 +41,6 @@ public class TimeSchedulerController{
     Label currentYearLabel;
     @FXML
     public AnchorPane anchorPaneTimeScheduler;
-    @FXML
-    public Button showListButton;
     @FXML
     private Label currentUserLabel;
 
@@ -127,7 +125,16 @@ public class TimeSchedulerController{
                 .with(WeekFields.ISO.dayOfWeek(), DayOfWeek.MONDAY.getValue()); // day of week
 
         LocalDate lastDay = firstDay.plusDays(6);
-        exportPDF(firstDay, lastDay);
+        if (TimeSchedulerController.getCurrentUser().getAllEvents(firstDay, lastDay).isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information Dialog");
+            alert.setHeaderText("No events in this time period");
+            alert.setContentText("You can't export events because there are no events in the selected week.");
+            alert.showAndWait();
+        }
+        else {
+            exportPDF(firstDay, lastDay);
+        }
     }
 
     @FXML
@@ -153,9 +160,7 @@ public class TimeSchedulerController{
         Stage listStage = new Stage();
         scene = new Scene(root);
         listStage.setScene(scene);
-        listStage.setOnCloseRequest(windowEvent -> {
-            anchorPaneTimeScheduler.setDisable(false);
-        });
+        listStage.setOnCloseRequest(windowEvent -> anchorPaneTimeScheduler.setDisable(false));
         listStage.initModality(Modality.APPLICATION_MODAL);
         listStage.setMinWidth(600);
         listStage.setMinHeight(480);
@@ -191,11 +196,16 @@ public class TimeSchedulerController{
     }
 
     @FXML
+    private void switchToLogin(ActionEvent event){
+        System.out.println("Logout");
+    }
+
+    @FXML
     private void switchView(ActionEvent actionEvent){
         calendar.switchView();
     }
 
-    public void exportPDF(LocalDate firstDay, LocalDate lastDay)  {
+    private void exportPDF(LocalDate firstDay, LocalDate lastDay)  {
         FileChooser fileChooser = new FileChooser();
         PdfExport pdfExport = new PdfExport();
 

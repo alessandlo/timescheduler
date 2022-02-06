@@ -24,13 +24,12 @@ public class Event {
     private Priority priority;
 
     public enum Priority {
-        high, medium, low;
+        high, medium, low
     }
 
     public Event(int event_id, String creatorName, String name, String location, ArrayList<String> participants, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime, Priority priority, long reminder) {
         this.eventId = event_id;
         this.creatorName = creatorName;
-
 
         this.name = name;
         this.location = location;
@@ -130,7 +129,4 @@ public class Event {
     public void setReminder(long reminder) {
         this.reminder = reminder;
     }
-
-
-
 }

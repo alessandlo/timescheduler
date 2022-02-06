@@ -70,11 +70,9 @@ public class LoginController {
 
     @FXML
     private void login() throws IOException {
-        DatabaseConnection connection = Main.connection;
-
         String sql_user = String.format("SELECT * FROM sched_user WHERE username='%s'",
                 usernameField.getText());
-        DBResults checkUser = connection.query(sql_user);
+        DBResults checkUser = Main.connection.query(sql_user);
 
         if (usernameField.getText().equals(DatabaseConnection.adminUserName) &&
                 passwordField.getText().equals(DatabaseConnection.adminPassword)) {

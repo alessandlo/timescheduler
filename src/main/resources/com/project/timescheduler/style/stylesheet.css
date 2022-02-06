@@ -14,7 +14,6 @@
 .calendarItemView2:hover {
     -fx-border-color: black;
     -fx-border-insets: -1 0 0 -1;
-
 }
 
 .calendarButton{
@@ -33,8 +32,8 @@
     -fx-background-position: 15px;
 }
 
-.calendarNextButton:hover {
-
+.calendarButton:hover {
+    -fx-background-color: lightgrey;
 }
 
 .calendarBackButton {
@@ -45,6 +44,14 @@
 .calendarUserIcon {
     -fx-background-image: url('../images/userIcon.png');
     -fx-background-position: center;
+}
+
+.menu-item:focused{
+    -fx-background-color: lightgrey;
+}
+
+.arrow{
+    -fx-background-color: transparent;
 }
 
 .eventViewerItem {

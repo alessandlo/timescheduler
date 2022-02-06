@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="385.0" prefWidth="607.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.timescheduler.controllers.AdminController">
+<AnchorPane fx:id="anchorPaneAdminPanel" prefHeight="385.0" prefWidth="607.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.timescheduler.controllers.AdminController">
    <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <VBox alignment="TOP_CENTER" maxWidth="200.0" spacing="10.0">
          <padding>
@@ -28,7 +28,7 @@
             </VBox.margin>
          </Label>
          <Label text="selected User:" />
-         <Label fx:id="selectedUser">
+         <Label fx:id="selectedUserLabel">
             <font>
                <Font size="18.0" />
             </font>
@@ -42,7 +42,7 @@
          <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteUser" text="Delete User" />
          <Label fx:id="feedback" />
       </VBox>
-      <TableView fx:id="tableview" onMouseClicked="#showUser" prefHeight="243.0" prefWidth="430.0" HBox.hgrow="ALWAYS">
+      <TableView fx:id="tableview" onMouseClicked="#showSelectedUser" prefHeight="243.0" prefWidth="430.0" HBox.hgrow="ALWAYS">
          <columns>
             <TableColumn fx:id="col_username" prefWidth="75.0" text="Username" />
             <TableColumn fx:id="col_firstname" prefWidth="75.0" text="Firstname" />

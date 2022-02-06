@@ -2,20 +2,17 @@ package com.project.timescheduler.controllers;
 
 import com.project.timescheduler.Main;
 import com.project.timescheduler.helpers.DBResults;
-import com.project.timescheduler.services.DatabaseConnection;
 import com.project.timescheduler.services.Event;
 import com.project.timescheduler.services.Mail;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -26,7 +23,6 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -69,8 +65,6 @@ public class EventMenuController{
     private String currentUser; //Current User
 
     private String attachmentPath = "null"; //Default value in case of not selecting an attachment
-
-    DatabaseConnection connection = Main.connection;
 
     @FXML
     public void initialize(OnActionListener listener, String currentUser){
@@ -266,7 +260,7 @@ public class EventMenuController{
 
             String getEvent_sql = "SELECT EVENT_ID FROM SCHED_EVENT where EVENT_NAME = '%s' AND LOCATION = '%s' AND PRIORITY = '%s'";
             getEvent_sql = String.format(getEvent_sql, event.getName(), event.getLocation(), event.getPriority());
-            DBResults rsID = connection.query(getEvent_sql);
+            DBResults rsID = Main.connection.query(getEvent_sql);
             if (rsID.next()) {
                 event.setEventId(Integer.parseInt(rsID.get("Event_ID")));
             }
@@ -279,7 +273,7 @@ public class EventMenuController{
                 String user = participants.get(i);
 
                 String user_sql = String.format("SELECT EMAIL FROM SCHED_USER WHERE USERNAME = '%s'", user);
-                DBResults userDetails = connection.query(user_sql);
+                DBResults userDetails = Main.connection.query(user_sql);
                 userDetails.next();
                 System.out.println(userDetails.get("EMAIL"));
                 mail.sendMail(
@@ -320,8 +314,8 @@ public class EventMenuController{
 
         String alter_date_format = "ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI'";
         System.out.println(startDateTime + " " + endDateTime);
-        connection.update(alter_date_format);
-        connection.update(sql);
+        Main.connection.update(alter_date_format);
+        Main.connection.update(sql);
     }
 
     public void uploadParticipants(ArrayList<String> user){
@@ -331,7 +325,7 @@ public class EventMenuController{
             String sql_user_temp = String.format(sql_user,user_temp);
             System.out.println(sql_user_temp);
 
-            connection.update(sql_user_temp);
+            Main.connection.update(sql_user_temp);
         }
     }
     /** Attachment input and getting the path. **/

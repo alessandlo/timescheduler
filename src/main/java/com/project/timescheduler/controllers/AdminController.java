@@ -1,17 +1,30 @@
 package com.project.timescheduler.controllers;
 
+import com.project.timescheduler.Main;
 import com.project.timescheduler.helpers.DBResults;
 import com.project.timescheduler.services.*;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class AdminController {
 
+    private Stage warningStage;
+
+    @FXML
+    public AnchorPane anchorPaneAdminPanel;
     @FXML
     private TableView<User> tableview;
     @FXML
@@ -29,11 +42,9 @@ public class AdminController {
     @FXML
     private PasswordField passwordEdit;
     @FXML
-    private Label feedback, selectedUser;
+    private Label feedback, selectedUserLabel;
     @FXML
     private Button editButton, deleteButton;
-
-    private DatabaseConnection connection;
 
     @FXML
     private void initialize() {
@@ -47,15 +58,13 @@ public class AdminController {
         col_email.setCellValueFactory(new PropertyValueFactory<>("Email"));
         col_password.setCellValueFactory(new PropertyValueFactory<>("Password"));
 
-        connection = new DatabaseConnection();
-
         loadData();
     }
 
     private void loadData(){
-        ObservableList<User> data = FXCollections.observableArrayList();
+        ObservableList<User> userData = FXCollections.observableArrayList();
         String sql = "SELECT * FROM sched_user";
-        DBResults rs = connection.query(sql);
+        DBResults rs = Main.connection.query(sql);
 
         while (rs.next()){
             User userDetails = new User(
@@ -65,31 +74,51 @@ public class AdminController {
                     rs.get("email"),
                     rs.get("password")
             );
-            data.add(userDetails);
+            userData.add(userDetails);
         }
-        tableview.setItems(data);
+        tableview.setItems(userData);
     }
 
     @FXML
-    private void showUser(MouseEvent mouseEvent){
+    private void showSelectedUser(MouseEvent mouseEvent){
         try {
-            selectedUser.setText(tableview.getSelectionModel().getSelectedItem().getUsername());
+            selectedUserLabel.setText(tableview.getSelectionModel().getSelectedItem().getUsername());
         }
         catch (Exception e){
-            selectedUser.setText("No user selected");
+            selectedUserLabel.setText("No user selected");
         }
     }
 
     @FXML
-    private void deleteUser(){
-        String selectedItem = tableview.getSelectionModel().getSelectedItem().getUsername();
+    private void deleteUser() throws IOException {
+        String selectedUser = tableview.getSelectionModel().getSelectedItem().getUsername();
 
-        String sql_temp = "DELETE FROM sched_user WHERE username='%s'";
-        String sql = String.format(sql_temp, selectedItem);
+        if (new User(selectedUser).getHostedEvents().isEmpty()) {
+            String delete_user = String.format("DELETE FROM sched_user WHERE username='%s'", selectedUser);
+            Main.connection.update(delete_user);
+            feedback.setText("User deleted");
+        }
+        else {
+            anchorPaneAdminPanel.setDisable(true);
 
-        connection.update(sql);
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("eventListWarning.fxml"));
+            Parent root = loader.load();
+            WarningListController warningListController = loader.getController();
 
-        feedback.setText("User deleted");
+            warningListController.initialize(() -> {
+                anchorPaneAdminPanel.setDisable(false);
+                warningStage.close();
+            }, selectedUser);
+
+            warningStage = new Stage();
+            Scene scene = new Scene(root);
+            warningStage.setScene(scene);
+            warningStage.setOnCloseRequest(windowEvent -> anchorPaneAdminPanel.setDisable(false));
+            warningStage.initModality(Modality.APPLICATION_MODAL);
+            warningStage.setMinWidth(300);
+            warningStage.setMinHeight(370);
+            warningStage.showAndWait();
+        }
 
         loadData();
     }
@@ -99,31 +128,31 @@ public class AdminController {
         Validation validation = new Validation();
         Encryption encryption = new Encryption();
 
-        String selectedItem = tableview.getSelectionModel().getSelectedItem().getUsername();
-        String sql_temp, sql;
+        String selectedUser = tableview.getSelectionModel().getSelectedItem().getUsername();
+        String sql;
 
         if (passwordEdit.getText().isEmpty()) {
             if (validation.emailValidation(emailEdit.getText(), true)){
-                sql_temp = "UPDATE sched_user SET email='%s' WHERE username='%s'";
-                sql = String.format(sql_temp, emailEdit.getText(), selectedItem);
-                connection.update(sql);
+                sql = String.format("UPDATE sched_user SET email='%s' WHERE username='%s'",
+                        emailEdit.getText(), selectedUser);
+                Main.connection.update(sql);
                 feedback.setText("Email changed");
             }
         }
         else if (emailEdit.getText().isEmpty()){
             if (validation.passwordValidation(passwordEdit.getText(), true)){
-                sql_temp = "UPDATE sched_user SET password='%s' WHERE username='%s'";
-                sql = String.format(sql_temp, encryption.createHash(passwordEdit.getText()), selectedItem);
-                connection.update(sql);
+                sql = String.format("UPDATE sched_user SET password='%s' WHERE username='%s'",
+                        encryption.createHash(passwordEdit.getText()), selectedUser);
+                Main.connection.update(sql);
                 feedback.setText("Password changed");
             }
         }
         else {
             if (validation.emailValidation(emailEdit.getText(), true) &&
                     validation.passwordValidation(passwordEdit.getText(), true)) {
-                sql_temp = "UPDATE sched_user SET email='%s', password='%s' WHERE username='%s'";
-                sql = String.format(sql_temp, emailEdit.getText(), encryption.createHash(passwordEdit.getText()), selectedItem);
-                connection.update(sql);
+                sql = String.format("UPDATE sched_user SET email='%s', password='%s' WHERE username='%s'",
+                        emailEdit.getText(), encryption.createHash(passwordEdit.getText()), selectedUser);
+                Main.connection.update(sql);
                 feedback.setText("Email and Password changed");
             }
         }

@@ -39,7 +39,7 @@ public class ParticipantsListController {
 
         DBResults rs = Main.connection.query(sql);
         while (rs.next()){
-            if (!participants.contains(rs.get("username"))) {
+            if (!participants.contains(rs.get("username")) && !TimeSchedulerController.getCurrentUser().getUsername().equals(rs.get("username"))) {
                 users.add(rs.get("username"));
             }
         }

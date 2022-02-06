@@ -93,16 +93,14 @@ public class RegisterController {
                 validation.emailValidation(emailField.getText(), true) &&
                 validation.passwordValidation(passwordField.getText(), true)) {
 
-            DatabaseConnection connection = new DatabaseConnection();
-
-            if(!connection.query(String.format("SELECT * FROM sched_user WHERE username='%s'",
+            if(!Main.connection.query(String.format("SELECT * FROM sched_user WHERE username='%s'",
                     usernameField.getText())).next()) {
                 Encryption encryption = new Encryption();
                 String sql = String.format("INSERT INTO sched_user (username, firstname, lastname, email, password) VALUES ('%s','%s','%s','%s','%s')",
                         usernameField.getText(), firstnameField.getText(), lastnameField.getText(),
                         emailField.getText(), encryption.createHash(passwordField.getText()));
 
-                connection.update(sql);
+                Main.connection.update(sql);
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Information Dialog");

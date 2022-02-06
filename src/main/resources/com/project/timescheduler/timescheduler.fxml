@@ -4,8 +4,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -16,25 +15,6 @@
 
 <AnchorPane fx:id="anchorPaneTimeScheduler" prefHeight="584.0" prefWidth="889.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.timescheduler.controllers.TimeSchedulerController">
    <children>
-      <MenuBar style="-fx-background-color: transparent;" useSystemMenuBar="true">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
       <Label fx:id="currentYearLabel" layoutX="14.0" layoutY="26.0" text="Current date" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="26.0" />
       <HBox alignment="CENTER" layoutX="120.0" layoutY="21.0" spacing="10.0" AnchorPane.topAnchor="21.0">
          <children>
@@ -44,24 +24,20 @@
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
-            <Button mnemonicParsing="false" onAction="#switchToUserSettings" pickOnBounds="false" prefWidth="50.0" stylesheets="@style/stylesheet.css">
+            <MenuButton alignment="CENTER" minWidth="50.0" mnemonicParsing="false" stylesheets="@style/stylesheet.css">
+              <items>
+              <MenuItem mnemonicParsing="false" onAction="#switchToUserSettings" text="Account Details" />
+                  <MenuItem mnemonicParsing="false" onAction="#switchToLogin" text="Logout" />
+              </items>
                <styleClass>
-                  <String fx:value="calendarUserIcon" />
                   <String fx:value="calendarButton" />
+                  <String fx:value="calendarUserIcon" />
                </styleClass>
-            </Button>
+            </MenuButton>
          </children>
       </HBox>
+      <Button layoutX="557.0" layoutY="22.0" mnemonicParsing="false" onAction="#switchView" text="Switch View" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="21.0" />
       <Button layoutX="654.0" layoutY="21.0" mnemonicParsing="false" onAction="#switchToEventView" text="List all Events" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="21.0" />
-      <Button layoutX="817.0" layoutY="14.0" mnemonicParsing="false" onAction="#loadNextMonth" pickOnBounds="false" prefHeight="40.0" prefWidth="50.0" stylesheets="@style/stylesheet.css" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="14.0">
-         <styleClass>
-            <String fx:value="calendarButton" />
-            <String fx:value="calendarNextButton" />
-         </styleClass>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-      </Button>
       <Button layoutX="759.0" layoutY="14.0" mnemonicParsing="false" onAction="#loadPreviousMonth" pickOnBounds="false" prefHeight="40.0" prefWidth="50.0" stylesheets="@style/stylesheet.css" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="14.0">
          <opaqueInsets>
             <Insets />
@@ -70,6 +46,15 @@
             <String fx:value="calendarButton" />
             <String fx:value="calendarBackButton" />
          </styleClass>
+      </Button>
+      <Button layoutX="817.0" layoutY="14.0" mnemonicParsing="false" onAction="#loadNextMonth" pickOnBounds="false" prefHeight="40.0" prefWidth="50.0" stylesheets="@style/stylesheet.css" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="14.0">
+         <styleClass>
+            <String fx:value="calendarButton" />
+            <String fx:value="calendarNextButton" />
+         </styleClass>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
       </Button>
       <GridPane fx:id="calendarGridPane" alignment="CENTER" hgap="10.0" prefHeight="467.0" prefWidth="793.0" stylesheets="@style/stylesheet.css" vgap="10.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0">
          <columnConstraints>
@@ -137,6 +122,5 @@
             </Label>
          </children>
       </GridPane>
-      <Button layoutX="557.0" layoutY="22.0" mnemonicParsing="false" onAction="#switchView" text="Switch View" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="21.0" />
    </children>
 </AnchorPane>
