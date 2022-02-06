@@ -270,6 +270,40 @@ public class HostEventInformationController{
         System.out.println(attachmentPath);
     }
 
+    public void delete(ActionEvent delete) throws Exception {
+
+        String deleteParticipants_sql = String.format("DELETE FROM SCHED_PARTICIPATES_IN WHERE EVENT_ID = '%s'", event.getEventId());
+        String deleteEvent_sql = String.format("DELETE FROM SCHED_EVENT WHERE EVENT_ID = '%s'", event.getEventId());
+
+        Mail deleteMail = new Mail();
+
+        for(int d=0; d<originalParticipants.size(); d++){
+            String xUser_sql = String.format("SELECT EMAIL FROM SCHED_USER WHERE USERNAME = '%s'", originalParticipants.get(d));
+            DBResults xxUserDetails = Main.connection.query(xUser_sql);
+            xxUserDetails.next();
+            System.out.println(xxUserDetails.get("EMAIL"));
+            deleteMail.sendMail(
+                event.getCreatorName(),
+                originalParticipants.get(d),     //Essential
+                event.getName(),                //Essential
+                tfLocation.getText(),
+                originalParticipants,
+                xxUserDetails.get("EMAIL"),      //Essential
+                tfStartDate.getValue(),
+                tfEndDate.getValue(),
+                null,
+                null,
+                cbPriority.getValue(),
+                attachmentPath,
+                Mail.Type.valueOf("delete"));   //Essential
+                System.out.println("EMAIL SEND");
+    }
+        Main.connection.update(deleteParticipants_sql);
+        Main.connection.update(deleteEvent_sql);
+        Stage stage = (Stage) bSave.getScene().getWindow();
+        stage.close();
+    }
+
     public void exit (ActionEvent actionEvent){
         Stage stage = (Stage) bSave.getScene().getWindow();
         stage.close();

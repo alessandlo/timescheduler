@@ -80,6 +80,7 @@
             <Label alignment="TOP_CENTER" text="Other Users:" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="TOP" />
             <Label text="Reminder:" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <ChoiceBox fx:id="cbReminder" prefWidth="150.0" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
+            <Button mnemonicParsing="false" onAction="#delete" text="Delete" GridPane.columnIndex="5" GridPane.rowIndex="2" />
          </children>
       </GridPane>
    </items>
