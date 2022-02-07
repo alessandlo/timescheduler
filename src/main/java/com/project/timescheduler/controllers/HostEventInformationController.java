@@ -312,6 +312,7 @@ public class HostEventInformationController{
                 Mail.Type.valueOf("delete"));   //Essential
                 System.out.println("EMAIL SEND");
     }
+
         Main.connection.update(deleteParticipants_sql);
         Main.connection.update(deleteEvent_sql);
         Stage stage = (Stage) bSave.getScene().getWindow();

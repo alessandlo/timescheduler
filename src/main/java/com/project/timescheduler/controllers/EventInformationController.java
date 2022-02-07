@@ -67,5 +67,4 @@ public class EventInformationController{
         Stage stage = (Stage) bBack.getScene().getWindow();
         stage.close();
     }
-
 }
