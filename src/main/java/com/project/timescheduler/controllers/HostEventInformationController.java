@@ -59,10 +59,17 @@ public class HostEventInformationController{
     private Event event;
     private String attachmentPath = "null"; //Default value in case of not selecting an attachment
 
+    interface OnActionListener{
+        void onExit();
+    }
+
+    private OnActionListener listener;
+
     @FXML
-    public void initialize(Event event, String currentUser){
+    public void initialize(Event event, String currentUser, OnActionListener listener){
         this.currentUser = currentUser;
         this.event = event;
+        this.listener = listener;
         System.out.println("EventID: " + event.getEventId());
         cbPriority.getItems().addAll(Event.Priority.values());
         cbReminder.getItems().addAll("1 week", "3 days", "1 hour", "10 minutes");
@@ -309,6 +316,7 @@ public class HostEventInformationController{
         Main.connection.update(deleteEvent_sql);
         Stage stage = (Stage) bSave.getScene().getWindow();
         stage.close();
+        listener.onExit();
     }
     }
 
