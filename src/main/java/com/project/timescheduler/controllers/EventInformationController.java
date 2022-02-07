@@ -5,12 +5,17 @@ import com.project.timescheduler.helpers.DBResults;
 import com.project.timescheduler.services.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.stage.Stage;
 
 
 public class EventInformationController{
+    @FXML
+    private Button bBack;
     @FXML
     private Label lEventName;
     @FXML
@@ -57,6 +62,10 @@ public class EventInformationController{
         while (participants.next()) {
             users.add(participants.get("USERNAME"));
         }   selectedParticipantsList.setItems(users);
+    }
+    public void exit (ActionEvent actionEvent){
+        Stage stage = (Stage) bBack.getScene().getWindow();
+        stage.close();
     }
 
 }
