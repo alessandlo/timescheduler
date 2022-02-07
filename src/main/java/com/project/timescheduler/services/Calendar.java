@@ -13,10 +13,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.WeekFields;
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.*;
 
 public class Calendar {
 
@@ -64,6 +65,10 @@ public class Calendar {
         this.listener = listener;
     }
 
+    private void addEventToCalendarItem(){
+
+    }
+
     public void initializeCalendar() throws IOException {
         int columnCount = calendarGridPane.getColumnCount() - 1;    // - 1, weil man von 0 anfängt
         int rowCount = calendarGridPane.getRowCount() - 1;
@@ -75,6 +80,9 @@ public class Calendar {
         ArrayList<Event> events = temp_user.getAllEvents(currentDate.withDayOfMonth(1),
                 currentDate.withDayOfMonth(currentDate.lengthOfMonth()));
 
+        LinkedList<Event> tempEvent = new LinkedList<>();
+
+
         for (int row = 0; row < rowCount; row++){
             for (int column = 0; column < columnCount; column++) {
                 AnchorPane anchorPane = FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("calendarItem.fxml")));
@@ -84,10 +92,12 @@ public class Calendar {
                 anchorPane.getStyleClass().add(calendarItemStyle);
 
                 if (column == 0 && row > 0){
+                    while (vBox.getChildren().size() != 1) {
+                        vBox.getChildren().remove(1);
+                    }
                     label.setText(String.valueOf(startDate.get(WeekFields.ISO.weekOfYear()))); //KW
                     vBox.setOnMouseClicked(listener::onWeekClicked);
                     calendarGridPane.add(anchorPane, column, row);
-
                 }else if (column > 0 && row > 0){
                     anchorPane.setDisable(startDate.getMonth() != currentDate.getMonth());
 
@@ -96,15 +106,27 @@ public class Calendar {
                     if (todaysDate.equals(startDate)){
                         label.setTextFill(Color.RED);
                     }
+                    /**
+                    for (int i = 0; i < events.size(); i++) {
+                        Event e = events.get(i);
 
-                    for (Event e: events) {
-                        if (e.getStartDate().equals(startDate)){
-                            AnchorPane eventPane = FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("calendarItemEvent.fxml")));
-                            eventPane.setPadding(new Insets(0, 4, 0, 4));
-                            vBox.getChildren().add(eventPane);
-                            break;
+                        boolean startDateCmp = e.getStartDate().equals(startDate);
+                        boolean endDateCmp = e.getEndDate().equals(startDate);
+
+                        //https://stackoverflow.com/questions/883060/how-can-i-determine-if-a-date-is-between-two-dates-in-java
+                        boolean in_between = e.getStartDate().compareTo(startDate) * startDate.compareTo(e.getEndDate()) >= 0;
+
+
+                        for (int j = 1; j < vBox.getChildren().size(); j++) {
+                            Label eventLabel = (Label) vBox.getChildren().get(j);
+
+                            eventLabel.setText("");
+                            VBox.setMargin(eventLabel, new Insets(0, 4, 0, 4));
+
+                            tempEvent.add(e);
                         }
-                    }
+
+                    }**/
 
                     vBox.setOnMouseClicked(listener::onDayClicked);
                     calendarGridPane.add(anchorPane, column, row);
@@ -113,25 +135,32 @@ public class Calendar {
 
             }
         }
+
     }
 
     public void updateCalendar() {
         int columnCount = calendarGridPane.getColumnCount() - 1;    // - 1, weil man von 0 anfängt
         int rowCount = calendarGridPane.getRowCount() - 1;
 
-        int calenderLength = (columnCount * rowCount) - 7 - 1;
+        int calenderLength = (columnCount * rowCount); // - 7 damit man die Wochenbeschriftung nicht drinne hat und - 1 weil man von 0 anfängt
 
         LocalDate startDate = currentDate.withDayOfMonth(1);
         startDate = startDate.minusDays(WEEK_DAY.valueOf(startDate.getDayOfWeek().toString()).getCode());
 
         User temp_user = TimeSchedulerController.getCurrentUser().copy();
-        ArrayList<Event> events = temp_user.getAllEvents(currentDate.withDayOfMonth(1),
-                currentDate.withDayOfMonth(currentDate.lengthOfMonth()));
+        Iterator<Event> events = temp_user.getAllEvents(currentDate.withDayOfMonth(1),
+                currentDate.withDayOfMonth(currentDate.lengthOfMonth())).iterator();
 
-        for (int i = 0; i < calenderLength; i++) {
-            AnchorPane anchorPane = (AnchorPane) calendarGridPane.getChildren().get(i + 7); // +7 wegen der ersten Zeile
+        LinkedList<Event> tempEvent = new LinkedList<>();
+
+        for (int i = 8; i < calenderLength; i++) {
+            AnchorPane anchorPane = (AnchorPane) calendarGridPane.getChildren().get(i);
             VBox vBox = (VBox) anchorPane.getChildren().get(0);
             Label label = (Label) vBox.getChildren().get(0);
+            /**
+            while (vBox.getChildren().size() != 1){
+                vBox.getChildren().remove(1);
+            }**/
 
             anchorPane.getStyleClass().clear();
             anchorPane.getStyleClass().add(calendarItemStyle);
@@ -142,27 +171,56 @@ public class Calendar {
                 anchorPane.setDisable(startDate.getMonth() != currentDate.getMonth());
                 label.setText(String.format("%d", startDate.getDayOfMonth()));
 
+                //Current Day is Red
                 if (todaysDate.equals(startDate)){
                     label.setTextFill(Color.RED);
                 }else {
                     label.setTextFill(Color.BLACK);
                 }
+                /**
+                try {
+                    if(tempEvent.size() < 3) {
+                        while (events.hasNext()) {
+                            Event e = events.next();
 
-                for (Event e: events) {
-                    if (e.getStartDate().equals(startDate)){
-                        try {
-                            if (vBox.getChildren().size() > 1) {
-                                vBox.getChildren().remove(1);
+                            boolean startDateCmp = e.getStartDate().equals(startDate);
+                            boolean endDateCmp = e.getEndDate().equals(startDate);
+
+                            //https://stackoverflow.com/questions/883060/how-can-i-determine-if-a-date-is-between-two-dates-in-java
+                            boolean in_between = e.getStartDate().compareTo(startDate) * startDate.compareTo(e.getEndDate()) >= 0;
+
+                            if (in_between) {
+                                AnchorPane eventPane = FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("calendarItemEvent.fxml")));
+                                Label eventLabel = (Label) eventPane.getChildren().get(0);
+
+                                if (startDateCmp && endDateCmp) {
+                                    eventPane.setPadding(new Insets(0, 4, 0, 4));
+                                } else if (startDateCmp) {
+                                    eventPane.setPadding(new Insets(0, 0, 0, 4));
+                                } else if (endDateCmp) {
+                                    eventPane.setPadding(new Insets(0, 4, 0, 0));
+                                } else {
+                                    eventPane.setPadding(new Insets(0, 0, 0, 0));
+                                }
+
+                                tempEvent.add(e);
+                                eventLabel.setText(e.getName());
+                                vBox.getChildren().add(eventPane);
                             }
-                            AnchorPane eventPane = FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("calendarItemEvent.fxml")));
-                            eventPane.setPadding(new Insets(0, 4, 0, 4));
-                            vBox.getChildren().add(eventPane);
-                        }catch (IOException f){
-                            f.printStackTrace();
                         }
-                        break;
+                    }else{
+                        for (Event e :tempEvent) {
+                            //https://stackoverflow.com/questions/883060/how-can-i-determine-if-a-date-is-between-two-dates-in-java
+                            boolean in_between = e.getStartDate().compareTo(startDate) * startDate.compareTo(e.getEndDate()) >= 0;
+
+                            if (!in_between){
+                                tempEvent.remove(e);
+                            }
+                        }
                     }
-                }
+                }catch (IOException e){
+                    e.printStackTrace();
+                }**/
 
                 startDate = startDate.plusDays(1);
             }

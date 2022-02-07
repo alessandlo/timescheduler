@@ -37,11 +37,13 @@ public class EventViewerContoller {
     }
 
     public void loadAttendingEvents(){
+        tilePaneAttended.getChildren().clear();
         for (Event e : TimeSchedulerController.getCurrentUser().getAttendedEvents()) {
                 loadEventViewerItem(tilePaneAttended, e.getName(), e);
         }
     }
     public void loadHostedEvents(){
+        tilePaneHosted.getChildren().clear();
         for (Event e : TimeSchedulerController.getCurrentUser().getHostedEvents()) {
                 loadEventViewerItem(tilePaneHosted, e.getName(), e);
         }
@@ -73,7 +75,7 @@ public class EventViewerContoller {
                 Parent root = loader.load();
 
                 HostEventInformationController controller = loader.getController();
-                controller.initialize(activeEvent, currentUser);
+                controller.initialize(activeEvent, currentUser, this::loadHostedEvents);
 
                 Stage eventStage = new Stage();
                 eventStage.setScene(new Scene(root));
