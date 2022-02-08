@@ -76,9 +76,8 @@ public class EventMenuController{
         eventParticipantList.getItems().add("Manage participants");
         eventReminder.getItems().addAll("1 week", "3 days", "1 hour", "10 minutes");
     }
-
+    /** resets all Date and time field border colors to transparent **/
     public void ButtonBorderColorReset() {
-        //resets all Date and time field border colors to transparent
         eventStartDate.setStyle("-fx-border-color: transparent");
         eventStartHour.setStyle("-fx-border-color: transparent");
         eventStartMin.setStyle("-fx-border-color: transparent");
@@ -86,9 +85,8 @@ public class EventMenuController{
         eventEndHour.setStyle("-fx-border-color: transparent");
         eventEndMin.setStyle("-fx-border-color: transparent");
     }
-
+    /** sets a group of Date and Time fields to red depending on the value of res **/
     public void setBorderColor(int res, DatePicker datePicker, TextField hour, TextField min, String color) {
-        //sets a group of Date and Time fields to red depending on the value of res
         switch (res) {
             case -1:
                 break;
@@ -106,17 +104,14 @@ public class EventMenuController{
                 break;
         }
     }
-
+    /** resets the bordercolor of Datepickers to transparent when they are clicked on **/
     public void resetBorderColor(MouseEvent mouseEvent) {
-        //resets the bordercolor of Datepickers to transparent when they are clicked on
         System.out.println("reset border color");
-
         DatePicker datePicker = (DatePicker)((StackPane)mouseEvent.getTarget()).getParent();
         datePicker.setStyle("-fx-border-color: transparent");
     }
-
+    /** resets the bordercolor of TextFields to transparent when they are clicked on **/
     public void resetBorderColorT(MouseEvent mouseEvent) {
-        //resets the bordercolor of TextFields to transparent when they are clicked on
         TextField textField = new TextField();
         if(mouseEvent.getTarget() instanceof Pane) {
             System.out.println("Pane");
@@ -147,13 +142,13 @@ public class EventMenuController{
         textField.setStyle("-fx-border-color: transparent");
     }
 
+    /**Compares two LocalDateTime variables
+     returns different values depending on which component of the LocalDateTime ldt1 is causing it to be before ldt2
+     <p>-1 -> ldt1 is not before ldt2 </p>
+     <p>1 -> Date of ldt1 is before Date of ldt2</p>
+     <p>2 -> Hour of ldt1 is before Hour of ldt2</p>
+     <p>3 -> Minute of ldt1 is before Minute of ldt2</p>**/
     public int checkDate(LocalDateTime ldt1, LocalDateTime ldt2) {
-        //Compares two LocalDateTime variables
-        //returns different values depending on which component of LocalDateTime is causing ldt1 to be before ldt2
-        // -1 -> ldt1 is not before ldt2
-        // 1 -> Date of ldt1 is before Date of ldt2
-        // 2 -> Hour of ldt1 is before Hour of ldt2
-        // 3 -> Minute of ldt1 is before Minute of ldt2
         if(ldt1.isBefore(ldt2)){
             if (ldt1.getYear() == ldt2.getYear() && ldt1.getMonth() == ldt2.getMonth() && ldt1.getDayOfMonth() == ldt2.getDayOfMonth()) {
                 if(ldt1.getHour() == ldt2.getHour()) {
@@ -168,7 +163,7 @@ public class EventMenuController{
             return(-1);
         }
     }
-
+    /** converts the remindertime from a String into a long which represents the time in milliseconds **/
     public long retrieveReminder() {
         String reminder = eventReminder.getValue();
         long remindertime = -1;
