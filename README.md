@@ -12,7 +12,7 @@ Java project for the subject Object-oriented Programming in Java of FRA-UAS
 
 ## License
 
-To create the PDF export we use the library Boxable. Boxable is based on the open source library Apache PDFBox® which allows the creation and manipulation of PDF documents. The library is released under the Apache License v2.0.
+To create the PDF export we use the library [Boxable](http://dhorions.github.io/boxable/). Boxable is based on the open source library Apache [PDFBox](https://pdfbox.apache.org/)® which allows the creation and manipulation of PDF documents. The library is released under the Apache License v2.0.
 
 Copyright 2022
 
