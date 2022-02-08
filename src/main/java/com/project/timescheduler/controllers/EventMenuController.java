@@ -320,7 +320,7 @@ public class EventMenuController{
         String startDateTime = String.format(startDateTime_temp, event.getStartDate(), event.getStartTime());
         String endDateTime = String.format(startDateTime_temp, event.getEndDate(), event.getEndTime());
 
-        String sql_temp = "INSERT INTO sched_event (event_name, start_date, end_date, creator_name, location, priority, reminder) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')";
+        String sql_temp = "INSERT INTO sched_event (event_name, start_date, end_date, creator_name, location, priority, reminder, remindersentflag) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', 0)";
         String sql = String.format(sql_temp, event.getName(), startDateTime, endDateTime, event.getCreatorName(), event.getLocation(), event.getPriority(), Long.toString(event.getReminder()));
 
         String alter_date_format = "ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI'";
