@@ -18,7 +18,10 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-
+/**
+ * Displays all information of an Event the logged-in user hosts
+ * as well as offers the editing and deletion of the Event
+ */
 public class HostEventInformationController{
 
     @FXML
@@ -65,6 +68,13 @@ public class HostEventInformationController{
 
     private OnActionListener listener;
 
+    /**
+     * called when opening the scene, initializes the values for selected event, currentUser
+     * calls loadData
+     * @param event the Event the user clicked on in EventViewer
+     * @param currentUser String of username from currently logged-in user
+     * @param listener
+     */
     @FXML
     public void initialize(Event event, String currentUser, OnActionListener listener){
         this.currentUser = currentUser;
@@ -75,6 +85,10 @@ public class HostEventInformationController{
         cbReminder.getItems().addAll("1 week", "3 days", "1 hour", "10 minutes");
         loadData();
     }
+
+    /**
+     * sets text of TextFileds, ChoiceBox and ListViews to Event information
+     */
     public void loadData(){
         tfEventName.setText(event.getName());
         tfCreatorName.setText(event.getCreatorName() + " (You)");
@@ -160,6 +174,12 @@ public class HostEventInformationController{
         return remindertime;
     }
 
+    /**
+     * creates new Event with the information from the ui
+     * updates the event information in the database
+     * sends out Email to all participants
+     * @throws Exception
+     */
     public void updateData() throws Exception {
         selectedParticipants.addAll(selectedParticipantsList.getItems());
         LocalTime startTime = LocalTime.now();
@@ -278,7 +298,14 @@ public class HostEventInformationController{
         System.out.println(attachmentPath);
     }
 
-    public void delete(ActionEvent delete) throws Exception {
+    /**
+     * deletes the Event out of the Database,
+     * sends notification Mail to all former participants,
+     * refreshes EventViewer,
+     * closes Stage
+     * @throws Exception
+     */
+    public void delete() throws Exception {
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete Event");
@@ -312,6 +339,7 @@ public class HostEventInformationController{
                 Mail.Type.valueOf("delete"));   //Essential
                 System.out.println("EMAIL SEND");
     }
+
         Main.connection.update(deleteParticipants_sql);
         Main.connection.update(deleteEvent_sql);
         Stage stage = (Stage) bSave.getScene().getWindow();
@@ -320,7 +348,10 @@ public class HostEventInformationController{
     }
     }
 
-    public void exit (ActionEvent actionEvent){
+    /**
+     * closes Stage
+     */
+    public void exit (){
         Stage stage = (Stage) bSave.getScene().getWindow();
         stage.close();
     }
