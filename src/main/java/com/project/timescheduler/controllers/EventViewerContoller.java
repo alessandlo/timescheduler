@@ -18,6 +18,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * Displays all events the logged-in user host or participates in
+ */
 public class EventViewerContoller {
 
     @FXML
@@ -28,6 +31,10 @@ public class EventViewerContoller {
 
     private String currentUser;
 
+    /**
+     * called when opening the scene
+     * calls loadHostedEvents and loadAttendingEvents
+     */
     @FXML
     public void initialize(){
         this.currentUser = TimeSchedulerController.getCurrentUser().getUsername();
@@ -36,12 +43,21 @@ public class EventViewerContoller {
         loadAttendingEvents();
     }
 
+    /**
+     * loads all events the logged-in user attends
+     * calls loadEventViewerItem
+     */
     public void loadAttendingEvents(){
         tilePaneAttended.getChildren().clear();
         for (Event e : TimeSchedulerController.getCurrentUser().getAttendedEvents()) {
                 loadEventViewerItem(tilePaneAttended, e.getName(), e);
         }
     }
+
+    /**
+     * loads all events the logged-in hosts
+     * calls loadEventViewerItem
+     */
     public void loadHostedEvents(){
         tilePaneHosted.getChildren().clear();
         for (Event e : TimeSchedulerController.getCurrentUser().getHostedEvents()) {
@@ -49,6 +65,12 @@ public class EventViewerContoller {
         }
     }
 
+    /**
+     * Displays event in TilePane
+     * @param rootPane rootPane
+     * @param eventName String of the event name
+     * @param ev Event that is linked to this pane
+     */
     private void loadEventViewerItem(Pane rootPane, String eventName, Event ev){
         try {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(Main.class.getResource("eventViewerItem.fxml")));
@@ -65,6 +87,10 @@ public class EventViewerContoller {
         }
     }
 
+    /**
+     * when clicked on TilePane opens new Stage with EventInformation or HostInformation
+     * @param mouseEvent MouseEvent
+     */
     @FXML
     private void onEventClicked(MouseEvent mouseEvent){
         VBox vBox = (VBox) mouseEvent.getTarget();

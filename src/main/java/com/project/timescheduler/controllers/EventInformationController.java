@@ -12,7 +12,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
-
+/**
+ * Displays all information of an Event the user attends
+ */
 public class EventInformationController{
     @FXML
     private Button bBack;
@@ -34,6 +36,12 @@ public class EventInformationController{
     private String currentUser;
     private Event event;
 
+    /**
+     * called when opening the scene, initializes the values for selected event
+     * calls loadData
+     * @param event the Event the user clicked on in EventViewer
+     * @param currentUser String of username from currently logged-in user
+     */
     @FXML
     public void initialize(Event event, String currentUser){
         this.currentUser = currentUser;
@@ -41,6 +49,10 @@ public class EventInformationController{
         System.out.println("EventID: " + event.getEventId());
         loadData();
     }
+
+    /**
+     * sets text of labels, listView to event information
+     */
     public void loadData(){
 
         String time_sql = String.format("SELECT * FROM SCHED_EVENT WHERE EVENT_ID = '%s'", event.getEventId());
@@ -63,7 +75,11 @@ public class EventInformationController{
             users.add(participants.get("USERNAME"));
         }   selectedParticipantsList.setItems(users);
     }
-    public void exit (ActionEvent actionEvent){
+
+    /**
+     * closes Window
+     */
+    public void exit (){
         Stage stage = (Stage) bBack.getScene().getWindow();
         stage.close();
     }

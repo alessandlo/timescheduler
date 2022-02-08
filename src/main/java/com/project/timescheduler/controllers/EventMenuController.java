@@ -66,6 +66,11 @@ public class EventMenuController{
 
     private String attachmentPath = "null"; //Default value in case of not selecting an attachment
 
+    /**
+     * called when opening the scene, initializes the values for currentUser, priority and participants.
+     * @param listener
+     * @param currentUser String of username from currently logged in user
+     */
     @FXML
     public void initialize(OnActionListener listener, String currentUser){
         this.listener = listener;
@@ -216,7 +221,14 @@ public class EventMenuController{
         }
     }
 
-    //enter method on save button press
+    /**
+     * uses the information entered in the ui to creates an Event
+     * calls method uploadEvent
+     * retrives EventID from the new event out of the database
+     * call uploadParticipants
+     * sends mail to each participant
+     * @throws Exception
+     */
     public void createEvent() throws Exception {
         ButtonBorderColorReset();
         LocalTime startTime = LocalTime.now();
@@ -253,7 +265,6 @@ public class EventMenuController{
 
             uploadEvent();
 
-            //Das muss neu gemacht werden
             String getEvent_sql = "SELECT EVENT_ID FROM SCHED_EVENT where EVENT_NAME = '%s' AND LOCATION = '%s' AND PRIORITY = '%s'";
             getEvent_sql = String.format(getEvent_sql, event.getName(), event.getLocation(), event.getPriority());
             DBResults rsID = Main.connection.query(getEvent_sql);
@@ -301,6 +312,9 @@ public class EventMenuController{
         }
     }
 
+    /**
+     * adds new Event to database
+     */
     public void uploadEvent(){
         String startDateTime_temp = "%s %s";
         String startDateTime = String.format(startDateTime_temp, event.getStartDate(), event.getStartTime());
@@ -315,6 +329,10 @@ public class EventMenuController{
         Main.connection.update(sql);
     }
 
+    /**
+     * adds all participants to database
+     * @param user list of all users attending the Event
+     */
     public void uploadParticipants(ArrayList<String> user){
         String sql_user = "INSERT INTO SCHED_PARTICIPATES_IN (USERNAME, EVENT_ID) VALUES ('%s'," + event.getEventId() + ")";
 
