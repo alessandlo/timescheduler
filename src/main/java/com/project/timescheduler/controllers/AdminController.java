@@ -6,6 +6,7 @@ import com.project.timescheduler.services.*;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,6 +19,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class AdminController {
 
@@ -160,5 +162,18 @@ public class AdminController {
         passwordEdit.clear();
 
         loadData();
+    }
+
+    @FXML
+    private void logout(ActionEvent event) throws IOException{
+        Scene scene = new Scene(FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("login.fxml"))));
+        Main.mainStage.setScene(scene);
+
+        Main.mainStage.setMinWidth(300);
+        Main.mainStage.setMinHeight(300);
+        Main.mainStage.setWidth(300);
+        Main.mainStage.setHeight(300);
+
+        System.out.println(Main.mainStage.getMinWidth());
     }
 }

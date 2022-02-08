@@ -50,7 +50,7 @@ public class User {
         switch (localDate.length){
             case 0:
                 sql = "SELECT se.EVENT_ID, sp.USERNAME, CREATOR_NAME, EVENT_NAME, START_DATE, END_DATE, LOCATION, PRIORITY, REMINDER " +
-                        "FROM SCHED_EVENT se LEFT JOIN SCHED_PARTICIPATES_IN sp on se.EVENT_ID = sp.EVENT_ID ORDER BY se.EVENT_ID";
+                        "FROM SCHED_EVENT se LEFT JOIN SCHED_PARTICIPATES_IN sp on se.EVENT_ID = sp.EVENT_ID ORDER BY START_DATE";
                 break;
             case 1:
                 sql = String.format("SELECT se.EVENT_ID, sp.USERNAME, CREATOR_NAME, EVENT_NAME, START_DATE, END_DATE, LOCATION, PRIORITY, REMINDER " +

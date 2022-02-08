@@ -32,12 +32,9 @@ public class DatabaseConnection {
             alert.setContentText("False Database credentials or Database offline");
 
             alert.showAndWait();
+
+            Main.connection.close();
             Main.connection = new DatabaseConnection();
-            try{
-                this.connection.close();
-            }catch (SQLException f){
-                f.printStackTrace();
-            }
         }
         return connection;
     }

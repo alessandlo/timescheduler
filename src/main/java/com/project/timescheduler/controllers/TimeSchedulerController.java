@@ -27,6 +27,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class TimeSchedulerController{
 
@@ -151,7 +152,7 @@ public class TimeSchedulerController{
     private void switchToEventView(ActionEvent event)throws IOException{
 
         anchorPaneTimeScheduler.setDisable(true);
-        FXMLLoader loader = new FXMLLoader(Main.class.getResource("eventViewer.fxml"));
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("eventViewerHorizontal.fxml"));
         Parent root = loader.load();
 
         Stage listStage = new Stage();
@@ -193,8 +194,16 @@ public class TimeSchedulerController{
     }
 
     @FXML
-    private void switchToLogin(ActionEvent event){
-        System.out.println("Logout");
+    private void logout(ActionEvent event) throws IOException{
+        Scene scene = new Scene(FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("login.fxml"))));
+        Main.mainStage.setScene(scene);
+
+        Main.mainStage.setMinWidth(300);
+        Main.mainStage.setMinHeight(300);
+        Main.mainStage.setWidth(300);
+        Main.mainStage.setHeight(300);
+
+        System.out.println(Main.mainStage.getMinWidth());
     }
 
     @FXML
