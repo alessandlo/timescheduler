@@ -61,7 +61,7 @@ public class ParticipantsListController {
 
     /** Handling the display of the item/participant when selecting to add. **/
     @FXML
-    private void addNameSelection(MouseEvent mouseEvent){
+    private void addNameSelection(){
         String selectedItem = allParticipantsList.getSelectionModel().getSelectedItem();
         if(selectedItem != null){
             selectedParticipantsList.getItems().add(selectedItem);
@@ -71,7 +71,7 @@ public class ParticipantsListController {
     }
     /** Handling the display of the item/participant when selecting to remove. **/
     @FXML
-    private void removeNameSelection(MouseEvent mouseEvent){
+    private void removeNameSelection(){
         String selectedItem = selectedParticipantsList.getSelectionModel().getSelectedItem();
         if(selectedItem != null){
             allParticipantsList.getItems().add(selectedItem);

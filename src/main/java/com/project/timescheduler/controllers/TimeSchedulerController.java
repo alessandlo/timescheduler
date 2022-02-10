@@ -200,7 +200,7 @@ public class TimeSchedulerController{
 
     /** Display Event View. **/
     @FXML
-    private void switchToEventView(ActionEvent event)throws IOException{
+    private void switchToEventView()throws IOException{
 
         anchorPaneTimeScheduler.setDisable(true);
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("eventViewerHorizontal.fxml"));
@@ -224,7 +224,7 @@ public class TimeSchedulerController{
      * Switch to AccountDetails
      */
     @FXML
-    private void switchToUserSettings(ActionEvent event){
+    private void switchToUserSettings(){
         try {
             anchorPaneTimeScheduler.setDisable(true);
 
@@ -257,7 +257,7 @@ public class TimeSchedulerController{
      * @throws IOException Exception if error occurs when loading FXML
      */
     @FXML
-    private void logout(ActionEvent event) throws IOException{
+    private void logout() throws IOException{
         Scene scene = new Scene(FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("login.fxml"))));
         Main.mainStage.setScene(scene);
 
