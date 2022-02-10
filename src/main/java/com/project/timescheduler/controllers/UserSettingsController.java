@@ -39,11 +39,11 @@ public class UserSettingsController {
     Encryption encryption = new Encryption();
 
     private OnActionListener listener;
-
+    /** Interface for refreshing main page on exit. **/
     public interface OnActionListener {
         void onAction();
     }
-
+    /** Initializing current user listener for interface and JavaFX items. **/
     @FXML
     public void initialize(OnActionListener listener, String currentUser) {
         this.listener = listener;
@@ -130,7 +130,7 @@ public class UserSettingsController {
             }
         }
     }
-
+    /** Listener action for interface, refreshing home page on exit. **/
     @FXML
     private void exitDetails(){
         listener.onAction();

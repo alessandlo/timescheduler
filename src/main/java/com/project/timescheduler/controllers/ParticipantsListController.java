@@ -12,7 +12,7 @@ import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
 
-
+/** This controller helps us to manage a separate window for the participant selection when creating a new event. **/
 public class ParticipantsListController {
     @FXML
     private ListView<String> allParticipantsList;
@@ -22,7 +22,7 @@ public class ParticipantsListController {
     private Button searchButton;
     @FXML
     private TextField usernameInput;
-
+    /** Interface to connect/link and refresh the overview list properly. **/
     public interface OnActionListener{
         void onAction(ObservableList<String> list);
     }
@@ -35,14 +35,14 @@ public class ParticipantsListController {
      *
      * @param listener The listener, which is used when submitting the participants selection.
      * @param participants The participants which are already selected.
-     */
+     **/
     @FXML
     public void initialize(OnActionListener listener, ArrayList<String> participants){
         this.listener = listener;
         this.participants = participants;
         loadUsers();
     }
-    /** Loading all users into the selection list that aren't already selected. The creator is not included as well. **/
+
     /** Load all Users into all participants list, except the ones, which are loaded inside the selected participants list **/
     public void loadUsers(){
         ObservableList<String> users = FXCollections.observableArrayList();
