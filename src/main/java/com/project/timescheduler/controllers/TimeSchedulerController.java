@@ -56,11 +56,7 @@ public class TimeSchedulerController{
         currentUserLabel.setText(currentUser.getUsername());
         TimeSchedulerController.currentUser = currentUser;
 
-        ArrayList<Node> list = new ArrayList<>();
-        list.add(calendarGridPane);
-        list.add(currentDateLabel);
-
-        calendar = new Calendar(list, new Calendar.OnMouseClickedListener() {
+        calendar = new Calendar(calendarGridPane, new Calendar.OnMouseClickedListener() {
             @Override
             public void onDayClicked(MouseEvent mouseEvent) {
                 mouseDayClicked(mouseEvent);
@@ -73,16 +69,19 @@ public class TimeSchedulerController{
         }, currentDate, currentUser.getUsername());
         initializeCalendar();
     }
+
     /** Initializing calendar. **/
     private void initializeCalendar() throws IOException {
         calendar.initializeCalendar();
         updateDateLabel();
     }
+
     /** Refreshing currentDate label. **/
     private void updateDateLabel(){
         currentDate = calendar.getCurrentDate();
         currentDateLabel.setText(currentDate.format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale.ENGLISH)));
     }
+
     /**
      * Queries save path and calls PDF export
      * @param firstDay First day of the calendar week
@@ -105,6 +104,7 @@ public class TimeSchedulerController{
             System.out.println("canceled");
         }
     }
+
     /**
      * Triggers event creation or event view depending on whether the day has events
      * @param mouseEvent
@@ -153,6 +153,7 @@ public class TimeSchedulerController{
             e.printStackTrace();
         }
     }
+
     /**
      * Triggers PDF export. Calculates corresponding calendar week
      * @param mouseEvent Mouse target
@@ -182,18 +183,21 @@ public class TimeSchedulerController{
             exportPDF(firstDay, lastDay);
         }
     }
+
     /** Display previous month. **/
     @FXML
     private void loadPreviousMonth() {
         calendar.previousMonth();
         updateDateLabel();
     }
+
     /** Display next month. **/
     @FXML
     private void loadNextMonth() {
         calendar.nextMonth();
         updateDateLabel();
     }
+
     /** Display Event View. **/
     @FXML
     private void switchToEventView(ActionEvent event)throws IOException{
@@ -215,6 +219,7 @@ public class TimeSchedulerController{
         listStage.setMinHeight(480);
         listStage.showAndWait();
     }
+
     /**
      * Switch to AccountDetails
      */
@@ -246,6 +251,7 @@ public class TimeSchedulerController{
             e.printStackTrace();
         }
     }
+
     /**
      * Logout, back to the login screen
      * @throws IOException Exception if error occurs when loading FXML
@@ -262,6 +268,7 @@ public class TimeSchedulerController{
 
         System.out.println(Main.mainStage.getMinWidth());
     }
+
     /**
      * Changes calendar view
      */
@@ -273,6 +280,7 @@ public class TimeSchedulerController{
             calendar.setViewTo(Calendar.CALENDARVIEW.SIMPLE);
         }
     }
+
     /** Global method to spread/transfer the current User to all other functionalities.
      * @return TimeSchedulerController.currenUser **/
     public static User getCurrentUser(){

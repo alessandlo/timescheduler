@@ -17,15 +17,17 @@ import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.*;
 
+/**
+ * This class is responsible for constructing the Calendar View
+ */
 public class Calendar {
 
     private final GridPane calendarGridPane;
-    private final Label currentDateLabel;
     private final OnMouseClickedListener listener;
     private final LocalDate todaysDate;
+    private final String currentUser;
     private LocalDate currentDate;
     private CALENDARVIEW calendarView;
-    private final String currentUser;
     private HashMap<Integer, Event> tempEvents;
 
     private enum WEEK_DAY{
@@ -63,14 +65,23 @@ public class Calendar {
         }
     }
 
+    /**
+     * This interface handles the clicks on the Days and Weeks in the Calendar
+     */
     public interface OnMouseClickedListener{
         void onDayClicked(MouseEvent mouseEvent);
         void onWeekClicked(MouseEvent mouseEvent);
     }
 
-    public Calendar(ArrayList<Node> nodeArrayList, OnMouseClickedListener listener, LocalDate currentDate, String currentUser){
-        this.calendarGridPane = (GridPane) nodeArrayList.get(0);
-        this.currentDateLabel = (Label) nodeArrayList.get(1);
+    /**
+     * Creates a class which is responsible for constructing the Calendar View
+     * @param gridPane The GridPane which should be used, for the Calendar
+     * @param listener The listener for handling clicks on the Days and Weeks in the Calendar
+     * @param currentDate The Date, which the Calendar should be starts at
+     * @param currentUser The User currently logged in
+     */
+    public Calendar(GridPane gridPane, OnMouseClickedListener listener, LocalDate currentDate, String currentUser){
+        this.calendarGridPane = gridPane;
 
         this.currentUser = currentUser;
         this.currentDate = currentDate;
@@ -81,6 +92,12 @@ public class Calendar {
         tempEvents = new HashMap<>();
     }
 
+    /**
+     * Add Events to the Calendar View of the respective Node (VBox), which then is shown in the Calendar
+     * @param iteratedDate The Date for which the Events should be added to the respective Node (VBox)
+     * @param parentNode The Node in which the Events should be added to
+     * @param events A List of events, which should be displayed
+     */
     private void addEventsToCalendar(LocalDate iteratedDate, VBox parentNode, ArrayList<Event> events){
         if (calendarView == CALENDARVIEW.NORMAL) {
 
@@ -167,6 +184,10 @@ public class Calendar {
         }
     }
 
+    /**
+     * This function builds up the Calendar View
+     * @throws IOException
+     */
     public void initializeCalendar() throws IOException {
         int columnCount = calendarGridPane.getColumnCount() - 1;    // - 1, weil man von 0 anfängt
         int rowCount = calendarGridPane.getRowCount() - 1;
@@ -215,6 +236,9 @@ public class Calendar {
         setViewTo(calendarView);
     }
 
+    /**
+     * This function updates the Calendar View
+     */
     public void updateCalendar() {
         int columnCount = calendarGridPane.getColumnCount() - 1;    // - 1, weil man von 0 anfängt
         int rowCount = calendarGridPane.getRowCount() - 1;
@@ -257,6 +281,10 @@ public class Calendar {
         }
     }
 
+    /**
+     * Sets the calendar view to the preferred View
+     * @param calendarview The Calendar View, that should be set to
+     */
     public void setViewTo(CALENDARVIEW calendarview){
         this.calendarView = calendarview;
         switch (calendarview) {
@@ -272,20 +300,34 @@ public class Calendar {
         updateCalendar();
     }
 
+    /**
+     * Sets the current date to the next month and updates the calendar view
+     */
     public void nextMonth() {
         currentDate = currentDate.plusMonths(1);
         updateCalendar();
     }
 
+    /**
+     * Sets the current date to the previous month and updates the calendar view
+     */
     public void previousMonth() {
         currentDate = currentDate.minusMonths(1);
         updateCalendar();
     }
 
+    /**
+     * Return the current date of the Calendar
+     * @return Current date of the Calendar
+     */
     public LocalDate getCurrentDate(){
         return currentDate;
     }
 
+    /**
+     * Return the current view of the Calendar
+     * @return The current view of the Calendar
+     */
     public CALENDARVIEW getView(){
         return calendarView;
     }
