@@ -12,6 +12,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+/** This controller class helps the users navigate their own information and change their important data
+ * such as email and/or password on their very own. **/
 public class UserSettingsController {
 
     @FXML

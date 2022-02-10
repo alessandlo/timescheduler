@@ -11,12 +11,17 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Properties;
 
+/** Mail class that allows us to connect to our mailing service, set specific content fitting the subject
+ * and send mails to notify all relevant users. **/
 public class Mail {
+        /** This is to differentiate the type of mail that has to be sent and depending on the type, the mail structure
+         * is going to be changed accordingly. **/
         public enum Type {
                 create, update, remove, delete
         }
 
-        /** The function will receive every necessary info regarding an event, before creating and sending a mail. **/
+        /** This function will receive every necessary information regarding an event, before creating and sending a mail
+         * including such. **/
         public static void sendMail(String creatorName,
                                     String user,
                                     String name,
