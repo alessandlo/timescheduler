@@ -14,6 +14,7 @@ public class Main extends Application {
     public static Stage mainStage;
     public static DatabaseConnection connection;
 
+    /** starts the GUI */
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login.fxml"));
@@ -28,6 +29,7 @@ public class Main extends Application {
         mainStage.show();
     }
 
+    /** main method, intializes the static DatabaseConnection variable of Main and calls launch() */
     public static void main(String[] args) {
         connection = new DatabaseConnection();
         launch();
