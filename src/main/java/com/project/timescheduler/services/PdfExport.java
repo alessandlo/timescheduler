@@ -90,10 +90,12 @@ public class PdfExport {
                     Arrays.asList(e.getName(), start_format, end_format, e.getLocation(), e.getPriority(), participantsList, e.getCreatorName())));
         }
 
-        BaseTable dataTable = new BaseTable(yStart, yStartNewPage, bottomMargin, tableWidth, margin, document, page, true, true);
-        DataTable t = new DataTable(dataTable, page);
-        t.addListToTable(data, DataTable.HASHEADER);
-        dataTable.draw();
+        //creating Table
+        BaseTable baseTable = new BaseTable(yStart, yStartNewPage, bottomMargin, tableWidth, margin, document, page, true, true);
+        DataTable dataTable = new DataTable(baseTable, page);
+        //adding Data
+        dataTable.addListToTable(data, DataTable.HASHEADER);
+        baseTable.draw();
 
         //Saving the document
         document.save(filePath);

@@ -1,7 +1,6 @@
 package com.project.timescheduler.controllers;
 
 import com.project.timescheduler.Main;
-import com.project.timescheduler.services.DatabaseConnection;
 import com.project.timescheduler.services.Encryption;
 import com.project.timescheduler.services.Validation;
 import javafx.beans.binding.Bindings;
@@ -13,6 +12,9 @@ import javafx.scene.layout.Pane;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * This class is responsible for the registration
+ */
 public class RegisterController {
 
     @FXML
@@ -31,6 +33,10 @@ public class RegisterController {
     Validation validation = new Validation();
     String check = null;
 
+    /**
+     * deactivates register button if fields are empty and
+     * checks if inputs comply with validation and marks text fields accordingly
+     */
     @FXML
     private void initialize() {
         registerButton.disableProperty().bind(usernameField.textProperty().isEmpty().or(
@@ -73,6 +79,10 @@ public class RegisterController {
         userAlreadyExist.visibleProperty().bind(usernameField.textProperty().isEmpty());
     }
 
+    /**
+     * switches to login screen
+     * @throws IOException Exception if error occurs when loading FXML
+     */
     @FXML
     private void switchToLogin() throws IOException {
         registerPane.getChildren().clear();
@@ -81,18 +91,22 @@ public class RegisterController {
         Main.mainStage.setMinHeight(300);
     }
 
+    /**
+     * Checks the user input for validity and creates an account
+     * @throws IOException Exception in case of error
+     */
     @FXML
     private void createAccount() throws IOException{
         passwordLabel.setTooltip(passTooltip);
 
-        Validation validation = new Validation();
-
+        // Checks whether all inputs correspond to the validation
         if (validation.usernameValidation(usernameField.getText(), true) &&
                 validation.nameValidation(firstnameField.getText(), true) &&
                 validation.nameValidation(lastnameField.getText(), true) &&
                 validation.emailValidation(emailField.getText(), true) &&
                 validation.passwordValidation(passwordField.getText(), true)) {
 
+            // If user does not already exist, it will be created in the database
             if(!Main.connection.query(String.format("SELECT * FROM sched_user WHERE username='%s'",
                     usernameField.getText())).next()) {
                 Encryption encryption = new Encryption();
@@ -109,7 +123,8 @@ public class RegisterController {
                 alert.showAndWait();
 
                 switchToLogin();
-            }else {
+            }
+            else {
                 userAlreadyExist.setText("User already exist");
                 usernameField.clear();
                 usernameField.requestFocus();

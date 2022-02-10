@@ -19,10 +19,18 @@ public class WarningListController {
 
     private OnActionListener listener;
 
+    /**
+     * Interface for closing the current stage
+     */
     public interface OnActionListener {
         void onAction();
     }
 
+    /**
+     * Initializes OnActionListener and listview
+     * @param listener OnActionListener
+     * @param selectedUser Selected user to delete
+     */
     public void initialize(OnActionListener listener, String selectedUser) {
         this.listener = listener;
         this.selectedUser = selectedUser;
@@ -36,6 +44,9 @@ public class WarningListController {
         listview.setItems(item);
     }
 
+    /**
+     * Deletes all created events and user
+     */
     @FXML
     private void confirmDelete(){
         String delete_events = String.format("DELETE FROM sched_event WHERE creator_name='%s'", selectedUser);
@@ -46,6 +57,9 @@ public class WarningListController {
         listener.onAction();
     }
 
+    /**
+     * exit Screen
+     */
     @FXML
     private void cancelDelete(){
         listener.onAction();

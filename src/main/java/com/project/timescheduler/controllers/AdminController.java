@@ -21,6 +21,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * This class is responsible for the admin panel
+ */
 public class AdminController {
 
     private Stage warningStage;
@@ -48,6 +51,10 @@ public class AdminController {
     @FXML
     private Button editButton, deleteButton;
 
+    /**
+     * Deactivates buttons when fields are empty
+     * Initializes tableview
+     */
     @FXML
     private void initialize() {
         editButton.disableProperty().bind(Bindings.isEmpty(tableview.getSelectionModel().getSelectedItems()).or(
@@ -63,6 +70,9 @@ public class AdminController {
         loadData();
     }
 
+    /**
+     * Loads all users from the database and adds them to an ObservableList
+     */
     private void loadData(){
         ObservableList<User> userData = FXCollections.observableArrayList();
         String sql = "SELECT * FROM sched_user";
@@ -81,6 +91,9 @@ public class AdminController {
         tableview.setItems(userData);
     }
 
+    /**
+     * Displays the selected user in a label
+     */
     @FXML
     private void showSelectedUser(MouseEvent mouseEvent){
         try {
@@ -91,10 +104,16 @@ public class AdminController {
         }
     }
 
+    /**
+     * Deletes the selected user from the database.
+     * If the user has created events, a warning will indicate this
+     * @throws IOException Exception if error occurs when loading FXML
+     */
     @FXML
     private void deleteUser() throws IOException {
         String selectedUser = tableview.getSelectionModel().getSelectedItem().getUsername();
 
+        // Checks if the user has created events
         if (new User(selectedUser).getHostedEvents().isEmpty()) {
             String delete_user = String.format("DELETE FROM sched_user WHERE username='%s'", selectedUser);
             Main.connection.update(delete_user);
@@ -125,6 +144,9 @@ public class AdminController {
         loadData();
     }
 
+    /**
+     * Edits the modified user data by saving them in the database
+     */
     @FXML
     private void editUser(){
         Validation validation = new Validation();
@@ -164,6 +186,10 @@ public class AdminController {
         loadData();
     }
 
+    /**
+     * Logout, back to the login screen
+     * @throws IOException Exception if error occurs when loading FXML
+     */
     @FXML
     private void logout(ActionEvent event) throws IOException{
         Scene scene = new Scene(FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("login.fxml"))));
@@ -173,7 +199,5 @@ public class AdminController {
         Main.mainStage.setMinHeight(300);
         Main.mainStage.setWidth(300);
         Main.mainStage.setHeight(300);
-
-        System.out.println(Main.mainStage.getMinWidth());
     }
 }

@@ -14,6 +14,9 @@ import javafx.scene.layout.Pane;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * This class is responsible for the login
+ */
 public class LoginController {
 
     @FXML
@@ -27,6 +30,9 @@ public class LoginController {
     @FXML
     private Label userNotExist, passNotExist;
 
+    /**
+     * Disables login button when there is no input and removes warning when there is new input
+     */
     @FXML
     private void initialize() {
         loginButton.disableProperty().bind(
@@ -36,14 +42,22 @@ public class LoginController {
         passNotExist.visibleProperty().bind(passwordField.textProperty().isEmpty());
     }
 
+    /**
+     * switches to registration screen
+     * @throws IOException Exception if error occurs when loading FXML
+     */
     @FXML
     private void switchToRegister() throws IOException {
-        loginPane.getChildren().clear();
-        loginPane.getChildren().add(FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("register.fxml"))));
+        loginPane.getChildren().clear(); //clears Pane
+        loginPane.getChildren().add(FXMLLoader.load((Objects.requireNonNull(Main.class.getResource("register.fxml"))))); //load new fxml-file in Pane
         Main.mainStage.setMinWidth(400);
         Main.mainStage.setMinHeight(350);
     }
 
+    /**
+     * switches to adminpanel
+     * @throws IOException Exception if error occurs when loading FXML
+     */
     @FXML
     private void switchToAdminpanel() throws IOException {
         loginPane.getChildren().clear();
@@ -52,6 +66,10 @@ public class LoginController {
         Main.mainStage.setMinHeight(600);
     }
 
+    /**
+     * switches to timescheduler
+     * @throws IOException Exception if error occurs when loading FXML
+     */
     @FXML
     private void switchToTimescheduler() throws IOException {
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(Main.class.getResource("timescheduler.fxml")));
@@ -68,12 +86,19 @@ public class LoginController {
         Main.mainStage.setMinHeight(600);
     }
 
+    /**
+     * Checks the login entries and calls the corresponding function.
+     * In case of incorrect input, hints are displayed
+     * @throws IOException Exception in case of error
+     */
     @FXML
     private void login() throws IOException {
         String sql_user = String.format("SELECT * FROM sched_user WHERE username='%s'",
                 usernameField.getText());
         DBResults checkUser = Main.connection.query(sql_user);
 
+        /*Checks if input is admin or the entered user exists in the database,
+        otherwise labels with hints are displayed*/
         if (usernameField.getText().equals(DatabaseConnection.adminUserName) &&
                 passwordField.getText().equals(DatabaseConnection.adminPassword)) {
             switchToAdminpanel();

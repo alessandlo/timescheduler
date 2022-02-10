@@ -84,6 +84,11 @@ public class TimeSchedulerController{
         currentDateLabel.setText(currentDate.format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale.ENGLISH)));
     }
 
+    /**
+     * Queries save path and calls PDF export
+     * @param firstDay First day of the calendar week
+     * @param lastDay Last day of the calendar week
+     */
     private void exportPDF(LocalDate firstDay, LocalDate lastDay)  {
         FileChooser fileChooser = new FileChooser();
         PdfExport pdfExport = new PdfExport();
@@ -102,6 +107,10 @@ public class TimeSchedulerController{
         }
     }
 
+    /**
+     * Triggers event creation or event view depending on whether the day has events
+     * @param mouseEvent
+     */
     @FXML
     private void mouseDayClicked(MouseEvent mouseEvent){
         EventTarget target = mouseEvent.getTarget();
@@ -147,6 +156,10 @@ public class TimeSchedulerController{
         }
     }
 
+    /**
+     * Triggers PDF export. Calculates corresponding calendar week
+     * @param mouseEvent Mouse target
+     */
     @FXML
     private void mouseWeekClicked(MouseEvent mouseEvent){
         int year = currentDate.getYear();
@@ -206,6 +219,9 @@ public class TimeSchedulerController{
         listStage.showAndWait();
     }
 
+    /**
+     * Switch to AccountDetails
+     */
     @FXML
     private void switchToUserSettings(ActionEvent event){
         try {
@@ -235,6 +251,10 @@ public class TimeSchedulerController{
         }
     }
 
+    /**
+     * Logout, back to the login screen
+     * @throws IOException Exception if error occurs when loading FXML
+     */
     @FXML
     private void logout(ActionEvent event) throws IOException{
         Scene scene = new Scene(FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("login.fxml"))));
@@ -248,6 +268,9 @@ public class TimeSchedulerController{
         System.out.println(Main.mainStage.getMinWidth());
     }
 
+    /**
+     * Changes calendar view
+     */
     @FXML
     private void switchView(){
         if (calendar.getView() == Calendar.CALENDARVIEW.SIMPLE){
