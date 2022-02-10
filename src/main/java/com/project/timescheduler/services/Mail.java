@@ -15,13 +15,27 @@ import java.util.Properties;
  * and send mails to notify all relevant users. **/
 public class Mail {
         /** This is to differentiate the type of mail that has to be sent and depending on the type, the mail structure
-         * is going to be changed accordingly. **/
+         * is going to be changed accordingly.**/
         public enum Type {
                 create, update, remove, delete
         }
 
         /** This function will receive every necessary information regarding an event, before creating and sending a mail
-         * including such. **/
+         * including such.
+         * @param creatorName Creator of event
+         * @param user The current user (recipient)
+         * @param name Event name
+         * @param location Event location
+         * @param participants All participants
+         * @param recipient Email address of recipient
+         * @param startDate Start date of event
+         * @param endDate End date of event
+         * @param startTime Start time of event
+         * @param endTime End time of event
+         * @param priority Priority of event
+         * @param attachmentPath Attachment path
+         * @param type Type of mail
+         * @throws Exception **/
         public static void sendMail(String creatorName,
                                     String user,
                                     String name,
