@@ -6,6 +6,10 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
 
+/**
+ * This class is used to handle the try and catch
+ * blocks of database queries.
+ */
 public class DBResults {
     ResultSet resultSet;
 
@@ -13,6 +17,10 @@ public class DBResults {
         this.resultSet = resultSet;
     }
 
+    /**
+     * Checks if entry is present in database
+     * @return boolean
+     */
     public boolean next(){
         try {
             return resultSet.next();
@@ -22,6 +30,10 @@ public class DBResults {
         return false;
     }
 
+    /**
+     * Loads string from database
+     * @return string
+     */
     public String get(String s){
         try {
             return resultSet.getString(s);
@@ -31,6 +43,10 @@ public class DBResults {
         return null;
     }
 
+    /**
+     * Loads stringList from database
+     * @return arraylist
+     */
     public ArrayList<String> get(String... args){
         ArrayList<String> arrayList = new ArrayList<>();
         try {
@@ -43,6 +59,10 @@ public class DBResults {
         return arrayList;
     }
 
+    /**
+     * Loads date from database
+     * @return date
+     */
     public Date getDate(String s) {
         try {
             return resultSet.getDate(s);
@@ -52,6 +72,10 @@ public class DBResults {
         return null;
     }
 
+    /**
+     * Loads time from database
+     * @return time
+     */
     public Time getTime(String s) {
         try {
             return resultSet.getTime(s);
@@ -60,5 +84,4 @@ public class DBResults {
         }
         return null;
     }
-
 }
