@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.util.Objects;
+
 /** This controller manages all the functionalities regarding the login-function. **/
 public class LoginController {
 
