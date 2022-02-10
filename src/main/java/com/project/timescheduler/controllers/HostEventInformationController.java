@@ -126,7 +126,7 @@ public class HostEventInformationController{
 
     /** Handling the display of the item/participant when selecting to add. **/
     @FXML
-    private void addNameSelection(MouseEvent mouseEvent){
+    private void addNameSelection(){
         String selectedItem = allParticipantsList.getSelectionModel().getSelectedItem();
         if(selectedItem != null){
             if(removedParticipants.contains(selectedItem)){
@@ -139,7 +139,7 @@ public class HostEventInformationController{
     }
     /** Handling the display of the item/participant when selecting to remove. **/
     @FXML
-    private void removeNameSelection(MouseEvent mouseEvent){
+    private void removeNameSelection(){
         String selectedItem = selectedParticipantsList.getSelectionModel().getSelectedItem();
         if(selectedItem != null){
             removedParticipants.add(selectedItem);
@@ -289,7 +289,7 @@ public class HostEventInformationController{
     }
 
     /** Attachment input and getting the path. **/
-    public void attachment(ActionEvent e){
+    public void attachment(){
         Stage stage = (Stage) bSave.getScene().getWindow();
         FileChooser chooser = new FileChooser();
         File file = chooser.showOpenDialog(stage);

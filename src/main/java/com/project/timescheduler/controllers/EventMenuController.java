@@ -174,7 +174,7 @@ public class EventMenuController{
         }
     }
     /** converts the remindertime from a String into a long which represents the time in milliseconds
-     * @returns a long value representing the reminder of the event in milliseconds**/
+     * @return a long value representing the reminder of the event in milliseconds**/
     public long retrieveReminder() {
         String reminder = eventReminder.getValue();
         long remindertime = -1;

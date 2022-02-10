@@ -95,7 +95,7 @@ public class AdminController {
      * Displays the selected user in a label
      */
     @FXML
-    private void showSelectedUser(MouseEvent mouseEvent){
+    private void showSelectedUser(){
         try {
             selectedUserLabel.setText(tableview.getSelectionModel().getSelectedItem().getUsername());
         }
@@ -191,7 +191,7 @@ public class AdminController {
      * @throws IOException Exception if error occurs when loading FXML
      */
     @FXML
-    private void logout(ActionEvent event) throws IOException{
+    private void logout() throws IOException{
         Scene scene = new Scene(FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("login.fxml"))));
         Main.mainStage.setScene(scene);
 
