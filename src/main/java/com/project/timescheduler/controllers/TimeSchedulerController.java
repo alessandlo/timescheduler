@@ -25,8 +25,10 @@ import java.io.File;
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Objects;
 
 public class TimeSchedulerController{
@@ -39,7 +41,7 @@ public class TimeSchedulerController{
     @FXML
     GridPane calendarGridPane;
     @FXML
-    Label currentYearLabel;
+    Label currentDateLabel;
     @FXML
     public AnchorPane anchorPaneTimeScheduler;
     @FXML
@@ -56,7 +58,7 @@ public class TimeSchedulerController{
 
         ArrayList<Node> list = new ArrayList<>();
         list.add(calendarGridPane);
-        list.add(currentYearLabel);
+        list.add(currentDateLabel);
 
         calendar = new Calendar(list, new Calendar.OnMouseClickedListener() {
             @Override
@@ -74,33 +76,66 @@ public class TimeSchedulerController{
 
     private void initializeCalendar() throws IOException {
         calendar.initializeCalendar();
-        currentYearLabel.setText(currentDate.toString());
+        updateDateLabel();
+    }
+
+    private void updateDateLabel(){
+        currentDate = calendar.getCurrentDate();
+        currentDateLabel.setText(currentDate.format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale.ENGLISH)));
+    }
+
+    private void exportPDF(LocalDate firstDay, LocalDate lastDay)  {
+        FileChooser fileChooser = new FileChooser();
+        PdfExport pdfExport = new PdfExport();
+
+        fileChooser.setInitialFileName("Weekly_" + firstDay + "_to_" + lastDay);
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF file (*.pdf)", "*.pdf");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        File file = fileChooser.showSaveDialog(Main.mainStage);
+        try {
+            String path = file.getAbsolutePath();
+            pdfExport.initialize(path, firstDay, lastDay);
+        }
+        catch (Exception e){
+            System.out.println("canceled");
+        }
     }
 
     @FXML
     private void mouseDayClicked(MouseEvent mouseEvent){
         EventTarget target = mouseEvent.getTarget();
 
-        if (target.getClass() == VBox.class){
-            VBox vBox = (VBox) target;
-            Label label = (Label) vBox.getChildren().get(0);
-            System.out.println(label.getText());
-        }
+        VBox vBox = (VBox) target;
+        Label label = (Label) vBox.getChildren().get(0);
 
+        LocalDate clickedDate = currentDate.withDayOfMonth(Integer.parseInt(label.getText()));
         try {
             anchorPaneTimeScheduler.setDisable(true);
 
-            FXMLLoader loader = new FXMLLoader(Main.class.getResource("eventMenu.fxml"));
-            Parent root = loader.load();
-            EventMenuController eventMenuController = loader.getController();
+            Parent root = null;
 
-            eventMenuController.initialize(() -> {
-                anchorPaneTimeScheduler.setDisable(false);
-                menuStage.close();
-            }, currentUser.getUsername());
+            if (!clickedDate.isBefore(currentDate)){
+                FXMLLoader loader = new FXMLLoader(Main.class.getResource("eventMenu.fxml"));
+                root = loader.load();
+                EventMenuController eventMenuController = loader.getController();
+
+                eventMenuController.initialize(() -> {
+                    anchorPaneTimeScheduler.setDisable(false);
+                    menuStage.close();
+                    calendar.updateCalendar();
+                }, currentUser.getUsername(), clickedDate);
+            }else {
+                FXMLLoader loader = new FXMLLoader(Main.class.getResource("eventViewerVertical.fxml"));
+                root = loader.load();
+                EventViewerController eventViewerController = loader.getController();
+
+                eventViewerController.initialize(calendar::updateCalendar, clickedDate, clickedDate);
+            }
 
             menuStage = new Stage();
             scene = new Scene(root);
+            menuStage.getIcons().add(Main.mainStage.getIcons().get(0));
             menuStage.setScene(scene);
             menuStage.setOnCloseRequest(windowEvent -> anchorPaneTimeScheduler.setDisable(false));
             menuStage.initModality(Modality.APPLICATION_MODAL);
@@ -114,7 +149,7 @@ public class TimeSchedulerController{
 
     @FXML
     private void mouseWeekClicked(MouseEvent mouseEvent){
-        int year = Integer.parseInt(String.format("%.4s", currentYearLabel.getText()));
+        int year = currentDate.getYear();
         EventTarget target = mouseEvent.getTarget();
         VBox vBox = (VBox) target;
         Label label = (Label) vBox.getChildren().get(0);
@@ -141,11 +176,13 @@ public class TimeSchedulerController{
     @FXML
     private void loadPreviousMonth() {
         calendar.previousMonth();
+        updateDateLabel();
     }
 
     @FXML
     private void loadNextMonth() {
         calendar.nextMonth();
+        updateDateLabel();
     }
 
     @FXML
@@ -155,8 +192,12 @@ public class TimeSchedulerController{
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("eventViewerHorizontal.fxml"));
         Parent root = loader.load();
 
+        EventViewerController eventViewerController = loader.getController();
+        eventViewerController.initialize(calendar::updateCalendar);
+
         Stage listStage = new Stage();
         scene = new Scene(root);
+        listStage.getIcons().add(Main.mainStage.getIcons().get(0));
         listStage.setScene(scene);
         listStage.setOnCloseRequest(windowEvent -> anchorPaneTimeScheduler.setDisable(false));
         listStage.initModality(Modality.APPLICATION_MODAL);
@@ -181,6 +222,7 @@ public class TimeSchedulerController{
 
             userSettingStage = new Stage();
             scene = new Scene(root);
+            userSettingStage.getIcons().add(Main.mainStage.getIcons().get(0));
             userSettingStage.setScene(scene);
             userSettingStage.setOnCloseRequest(windowEvent -> anchorPaneTimeScheduler.setDisable(false));
             userSettingStage.initModality(Modality.APPLICATION_MODAL);
@@ -207,25 +249,11 @@ public class TimeSchedulerController{
     }
 
     @FXML
-    private void switchView(ActionEvent actionEvent){
-        calendar.switchView();
-    }
-
-    private void exportPDF(LocalDate firstDay, LocalDate lastDay)  {
-        FileChooser fileChooser = new FileChooser();
-        PdfExport pdfExport = new PdfExport();
-
-        fileChooser.setInitialFileName("Weekly_" + firstDay + "_to_" + lastDay);
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF file (*.pdf)", "*.pdf");
-        fileChooser.getExtensionFilters().add(extFilter);
-
-        File file = fileChooser.showSaveDialog(Main.mainStage);
-        try {
-            String path = file.getAbsolutePath();
-            pdfExport.initialize(path, firstDay, lastDay);
-        }
-        catch (Exception e){
-            System.out.println("canceled");
+    private void switchView(){
+        if (calendar.getView() == Calendar.CALENDARVIEW.SIMPLE){
+            calendar.setViewTo(Calendar.CALENDARVIEW.NORMAL);
+        }else {
+            calendar.setViewTo(Calendar.CALENDARVIEW.SIMPLE);
         }
     }
 

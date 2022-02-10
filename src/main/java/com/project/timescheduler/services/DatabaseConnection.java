@@ -16,6 +16,10 @@ public class DatabaseConnection {
     public static String adminUserName = "admin";
     public static String adminPassword = "admin";
 
+    public DatabaseConnection(){
+        getConnection();
+        update("ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI'");
+    }
 
     public Connection getConnection() {
         final String databaseUser = "S1_student2_19";
@@ -40,10 +44,6 @@ public class DatabaseConnection {
     }
 
     public DBResults query(String sql) {
-        if (connection == null) {
-            getConnection();
-        }
-
         DBResults resultSet = null;
         try {
             Statement statement = connection.createStatement();
@@ -56,10 +56,6 @@ public class DatabaseConnection {
     }
 
     public void update(String sql){
-        if (connection == null){
-            getConnection();
-        }
-
         try{
             Statement statement = connection.createStatement();
             statement.executeUpdate(sql);

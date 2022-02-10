@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -72,7 +73,7 @@ public class EventMenuController{
      * @param currentUser String of username from currently logged in user
      */
     @FXML
-    public void initialize(OnActionListener listener, String currentUser){
+    public void initialize(OnActionListener listener, String currentUser, LocalDate localDate){
         this.listener = listener;
         participants = new ArrayList<>();
         this.currentUser = currentUser;
@@ -80,6 +81,8 @@ public class EventMenuController{
         eventPriority.getItems().addAll(Event.Priority.values());
         eventParticipantList.getItems().add("Manage participants");
         eventReminder.getItems().addAll("1 week", "3 days", "1 hour", "10 minutes");
+
+        eventStartDate.setValue(localDate);
     }
     /** resets all Date and time field border colors to transparent **/
     public void ButtonBorderColorReset() {
@@ -215,6 +218,7 @@ public class EventMenuController{
             loader.setController(controller);
 
             Scene scene = new Scene(root);
+            participantsStage.getIcons().add(Main.mainStage.getIcons().get(0));
             participantsStage.setScene(scene);
             participantsStage.initModality(Modality.APPLICATION_MODAL);
             participantsStage.showAndWait();
@@ -310,6 +314,7 @@ public class EventMenuController{
 
             setBorderColor(checkDate(endDateTime, startDateTime), eventEndDate, eventEndHour, eventEndMin, "orange");
         }
+
     }
 
     /**

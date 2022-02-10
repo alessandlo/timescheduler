@@ -24,7 +24,6 @@ public class User {
         attendedEvents = new ArrayList<>();
         hostedEvents = new ArrayList<>();
         allEvents = new ArrayList<>();
-        loadAllEvents();
     }
 
     //Constructor for Adminview
@@ -45,8 +44,7 @@ public class User {
 
     public void loadAllEvents(LocalDate... localDate){
         String sql;
-        long start = System.currentTimeMillis();
-        Main.connection.update("ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI'");
+
         switch (localDate.length){
             case 0:
                 sql = "SELECT se.EVENT_ID, sp.USERNAME, CREATOR_NAME, EVENT_NAME, START_DATE, END_DATE, LOCATION, PRIORITY, REMINDER " +
@@ -74,10 +72,6 @@ public class User {
         }
 
         DBResults rs = Main.connection.query(sql);
-
-        long end = System.currentTimeMillis();
-
-        System.out.println("Inside: " + (end - start));
 
         attendedEvents.clear();
         hostedEvents.clear();
@@ -132,11 +126,7 @@ public class User {
     }
 
     public ArrayList<Event> getAllEvents(LocalDate... localDate){
-        long start = System.currentTimeMillis();
         loadAllEvents(localDate);
-        long end = System.currentTimeMillis();
-
-        System.out.println("Total: " + (end - start));
 
         return allEvents;
     }

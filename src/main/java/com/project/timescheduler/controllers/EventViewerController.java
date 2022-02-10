@@ -16,12 +16,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
  * Displays all events the logged-in user host or participates in
  */
-public class EventViewerContoller {
+public class EventViewerController {
 
     @FXML
     private TilePane tilePaneHosted;
@@ -31,25 +32,33 @@ public class EventViewerContoller {
 
     private String currentUser;
 
+    interface OnActionListener{
+        void onExit();
+    }
+
+    private OnActionListener listener;
+
     /**
      * called when opening the scene
      * calls loadHostedEvents and loadAttendingEvents
      */
     @FXML
-    public void initialize(){
+    public void initialize(OnActionListener listener, LocalDate... localDate){
         this.currentUser = TimeSchedulerController.getCurrentUser().getUsername();
         System.out.println(currentUser);
-        loadHostedEvents();
-        loadAttendingEvents();
+        loadHostedEvents(localDate);
+        loadAttendingEvents(localDate);
+
+        this.listener = listener;
     }
 
     /**
      * loads all events the logged-in user attends
      * calls loadEventViewerItem
      */
-    public void loadAttendingEvents(){
+    public void loadAttendingEvents(LocalDate... localDate){
         tilePaneAttended.getChildren().clear();
-        for (Event e : TimeSchedulerController.getCurrentUser().getAttendedEvents()) {
+        for (Event e : TimeSchedulerController.getCurrentUser().getAttendedEvents(localDate)) {
                 loadEventViewerItem(tilePaneAttended, e.getName(), e);
         }
     }
@@ -58,9 +67,9 @@ public class EventViewerContoller {
      * loads all events the logged-in hosts
      * calls loadEventViewerItem
      */
-    public void loadHostedEvents(){
+    public void loadHostedEvents(LocalDate... localDate){
         tilePaneHosted.getChildren().clear();
-        for (Event e : TimeSchedulerController.getCurrentUser().getHostedEvents()) {
+        for (Event e : TimeSchedulerController.getCurrentUser().getHostedEvents(localDate)) {
                 loadEventViewerItem(tilePaneHosted, e.getName(), e);
         }
     }
@@ -95,36 +104,34 @@ public class EventViewerContoller {
     private void onEventClicked(MouseEvent mouseEvent){
         VBox vBox = (VBox) mouseEvent.getTarget();
         Event activeEvent = (Event) vBox.getUserData();
-        if (activeEvent.getCreatorName().equals(currentUser)){
-            try {
+        Parent root = null;
+
+        try {
+            if (activeEvent.getCreatorName().equals(currentUser)){
                 FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(Main.class.getResource("HostEventInformation.fxml")));
-                Parent root = loader.load();
+                root = loader.load();
 
                 HostEventInformationController controller = loader.getController();
-                controller.initialize(activeEvent, currentUser, this::loadHostedEvents);
-
-                Stage eventStage = new Stage();
-                eventStage.setScene(new Scene(root));
-                eventStage.initModality(Modality.APPLICATION_MODAL);
-                eventStage.showAndWait();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }else {
-            try {
+                controller.initialize(activeEvent, currentUser, () -> {
+                    loadHostedEvents();
+                    listener.onExit();
+                });
+            }else {
                 FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(Main.class.getResource("EventInformation.fxml")));
-                Parent root = loader.load();
+                root = loader.load();
 
                 EventInformationController controller = loader.getController();
                 controller.initialize(activeEvent, currentUser);
-
-                Stage eventStage = new Stage();
-                eventStage.setScene(new Scene(root));
-                eventStage.initModality(Modality.APPLICATION_MODAL);
-                eventStage.showAndWait();
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        }catch (IOException e){
+            e.printStackTrace();
         }
+        assert root != null;
+
+        Stage eventStage = new Stage();
+        eventStage.getIcons().add(Main.mainStage.getIcons().get(0));
+        eventStage.setScene(new Scene(root));
+        eventStage.initModality(Modality.APPLICATION_MODAL);
+        eventStage.showAndWait();
     }
 }

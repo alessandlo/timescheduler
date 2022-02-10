@@ -4,6 +4,7 @@ import com.project.timescheduler.services.DatabaseConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         mainStage = stage;
-        
+        mainStage.getIcons().add(new Image(String.valueOf(getClass().getResource("images/icon.png"))));
         mainStage.setTitle("TimeScheduler");
         mainStage.setScene(scene);
         mainStage.setMinWidth(300);
@@ -29,7 +30,6 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         connection = new DatabaseConnection();
-
         launch();
     }
 }
