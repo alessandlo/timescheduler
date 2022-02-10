@@ -2,7 +2,6 @@ package com.project.timescheduler.controllers;
 
 import com.project.timescheduler.Main;
 import com.project.timescheduler.helpers.DBResults;
-import com.project.timescheduler.services.DatabaseConnection;
 import com.project.timescheduler.services.Encryption;
 import com.project.timescheduler.services.Validation;
 import javafx.event.ActionEvent;
