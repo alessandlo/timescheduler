@@ -47,7 +47,9 @@ public class DatabaseConnection {
         return connection;
     }
 
-
+    /** executes a sql query and returns an DBResults object
+     * @param sql String variable representing the sql query
+     * @return DBResults object containing the results of the executed query */
     public DBResults query(String sql) {
         DBResults resultSet = null;
         try {
