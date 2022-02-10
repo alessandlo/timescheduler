@@ -42,7 +42,7 @@ public class ParticipantsListController {
         this.participants = participants;
         loadUsers();
     }
-
+    /** Loading all users into the selection list that aren't already selected. The creator is not included as well. **/
     /** Load all Users into all participants list, except the ones, which are loaded inside the selected participants list **/
     public void loadUsers(){
         ObservableList<String> users = FXCollections.observableArrayList();
@@ -80,7 +80,7 @@ public class ParticipantsListController {
         }
         searchUsername();
     }
-    /** Submitting the list with selected participants, **/
+    /** Submitting the list with selected participants. **/
     @FXML
     private void submitParticipants(){
         listener.onAction(selectedParticipantsList.getItems());
