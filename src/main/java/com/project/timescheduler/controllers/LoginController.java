@@ -49,7 +49,7 @@ public class LoginController {
     @FXML
     private void switchToRegister() throws IOException {
         loginPane.getChildren().clear(); //clears Pane
-        loginPane.getChildren().add(FXMLLoader.load((Objects.requireNonNull(Main.class.getResource("register.fxml"))))); //load new fxml-file in Pane
+        loginPane.getChildren().add(FXMLLoader.load(Objects.requireNonNull(Main.class.getResource("register.fxml")))); //load new fxml-file in Pane
         Main.mainStage.setMinWidth(400);
         Main.mainStage.setMinHeight(350);
     }
