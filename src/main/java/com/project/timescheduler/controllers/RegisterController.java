@@ -11,10 +11,7 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.util.Objects;
-
-/**
- * This class is responsible for the registration
- */
+/** This controller manages all the functionalities regarding the registration of a user. **/
 public class RegisterController {
 
     @FXML
@@ -32,7 +29,6 @@ public class RegisterController {
 
     Validation validation = new Validation();
     String check = null;
-
     /**
      * deactivates register button if fields are empty and
      * checks if inputs comply with validation and marks text fields accordingly
@@ -78,7 +74,6 @@ public class RegisterController {
 
         userAlreadyExist.visibleProperty().bind(usernameField.textProperty().isEmpty());
     }
-
     /**
      * switches to login screen
      * @throws IOException Exception if error occurs when loading FXML
@@ -90,7 +85,6 @@ public class RegisterController {
         Main.mainStage.setMinWidth(300);
         Main.mainStage.setMinHeight(300);
     }
-
     /**
      * Checks the user input for validity and creates an account
      * @throws IOException Exception in case of error

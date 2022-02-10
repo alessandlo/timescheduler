@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Objects;
-
+/** This controller manages all the functionalities regarding the creation of a new event. **/
 public class EventMenuController{
     @FXML
     private TextField eventName;
@@ -59,6 +59,7 @@ public class EventMenuController{
 
     private OnActionListener listener;
 
+    /** Interface to refresh main page after closing EventMenu. **/
     public interface OnActionListener {
         void onAction();
     }
@@ -195,7 +196,7 @@ public class EventMenuController{
         }
         return remindertime;
     }
-
+    /** Function to manage a separate window for the participant's selection/removal. **/
     public void manageParticipants(MouseEvent mouseEvent) throws IOException {
         if(Objects.equals(eventParticipantList.getSelectionModel().getSelectedItem(), "Manage participants")){
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("participantsList.fxml"));
@@ -356,7 +357,7 @@ public class EventMenuController{
         attachmentPath = file.getAbsolutePath();
         System.out.println(attachmentPath);
     }
-
+    /** Exit function/button. **/
     @FXML
     private void exitMenu(){
         listener.onAction();

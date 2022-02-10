@@ -9,7 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 
 import java.util.ArrayList;
-
+/** Before deleting a user, an Alert will show up stating all of their events that will be deleted as well. **/
 public class WarningListController {
 
     @FXML
@@ -18,14 +18,12 @@ public class WarningListController {
     String selectedUser;
 
     private OnActionListener listener;
-
     /**
      * Interface for closing the current stage
      */
     public interface OnActionListener {
         void onAction();
     }
-
     /**
      * Initializes OnActionListener and listview
      * @param listener OnActionListener
@@ -43,7 +41,6 @@ public class WarningListController {
 
         listview.setItems(item);
     }
-
     /**
      * Deletes all created events and user
      */
@@ -56,7 +53,6 @@ public class WarningListController {
 
         listener.onAction();
     }
-
     /**
      * exit Screen
      */

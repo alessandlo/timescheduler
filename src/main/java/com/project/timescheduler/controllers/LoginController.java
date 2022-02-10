@@ -13,12 +13,10 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.util.Objects;
-
-/**
- * This class is responsible for the login
- */
+/** This controller manages all the functionalities regarding the login-function. **/
 public class LoginController {
 
+    /** Initializing FXML items such as Labels and buttons. **/
     @FXML
     private Pane loginPane;
     @FXML
@@ -41,7 +39,6 @@ public class LoginController {
         userNotExist.visibleProperty().bind(usernameField.textProperty().isEmpty());
         passNotExist.visibleProperty().bind(passwordField.textProperty().isEmpty());
     }
-
     /**
      * switches to registration screen
      * @throws IOException Exception if error occurs when loading FXML
@@ -53,7 +50,6 @@ public class LoginController {
         Main.mainStage.setMinWidth(400);
         Main.mainStage.setMinHeight(350);
     }
-
     /**
      * switches to adminpanel
      * @throws IOException Exception if error occurs when loading FXML
@@ -65,7 +61,6 @@ public class LoginController {
         Main.mainStage.setMinWidth(800);
         Main.mainStage.setMinHeight(600);
     }
-
     /**
      * switches to timescheduler
      * @throws IOException Exception if error occurs when loading FXML
@@ -85,7 +80,6 @@ public class LoginController {
         Main.mainStage.setMinWidth(800);
         Main.mainStage.setMinHeight(600);
     }
-
     /**
      * Checks the login entries and calls the corresponding function.
      * In case of incorrect input, hints are displayed
