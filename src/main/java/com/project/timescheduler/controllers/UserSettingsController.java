@@ -39,7 +39,7 @@ public class UserSettingsController {
     Encryption encryption = new Encryption();
 
     private OnActionListener listener;
-
+    /** Interface for refreshing main page on exit. **/
     public interface OnActionListener {
         void onAction();
     }
