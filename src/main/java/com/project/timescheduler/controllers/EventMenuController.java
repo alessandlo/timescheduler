@@ -156,7 +156,9 @@ public class EventMenuController{
      <p>-1 -> ldt1 is not before ldt2 </p>
      <p>1 -> Date of ldt1 is before Date of ldt2</p>
      <p>2 -> Hour of ldt1 is before Hour of ldt2</p>
-     <p>3 -> Minute of ldt1 is before Minute of ldt2</p>**/
+     <p>3 -> Minute of ldt1 is before Minute of ldt2</p>
+     @param ldt1 LocalDateTime for which the function checks if and why it is before ldt2
+     @param ldt2 LocalDateTime ldt2**/
     public int checkDate(LocalDateTime ldt1, LocalDateTime ldt2) {
         if(ldt1.isBefore(ldt2)){
             if (ldt1.getYear() == ldt2.getYear() && ldt1.getMonth() == ldt2.getMonth() && ldt1.getDayOfMonth() == ldt2.getDayOfMonth()) {
@@ -172,7 +174,8 @@ public class EventMenuController{
             return(-1);
         }
     }
-    /** converts the remindertime from a String into a long which represents the time in milliseconds **/
+    /** converts the remindertime from a String into a long which represents the time in milliseconds
+     * @returns a long value representing the reminder of the event in milliseconds**/
     public long retrieveReminder() {
         String reminder = eventReminder.getValue();
         long remindertime = -1;
@@ -197,7 +200,7 @@ public class EventMenuController{
         return remindertime;
     }
     /** Function to manage a separate window for the participant's selection/removal. **/
-    public void manageParticipants(MouseEvent mouseEvent) throws IOException {
+    public void manageParticipants() throws IOException {
         if(Objects.equals(eventParticipantList.getSelectionModel().getSelectedItem(), "Manage participants")){
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("participantsList.fxml"));
             Parent root = loader.load();
@@ -350,7 +353,7 @@ public class EventMenuController{
         }
     }
     /** Attachment input and getting the path. **/
-    public void attachment(ActionEvent e){
+    public void attachment(){
         Stage stage = (Stage) eventName.getScene().getWindow();
         FileChooser chooser = new FileChooser();
         File file = chooser.showOpenDialog(stage);
