@@ -20,7 +20,6 @@ import java.util.List;
 /**
  * This class is responsible for creating and formatting the weekly PDF export
  *
- * @author Oliver Zepperitz
  */
 
 public class PdfExport {

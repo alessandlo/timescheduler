@@ -4,7 +4,6 @@ import com.project.timescheduler.services.Calendar;
 import com.project.timescheduler.Main;
 import com.project.timescheduler.services.PdfExport;
 import com.project.timescheduler.services.User;
-import javafx.event.ActionEvent;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
