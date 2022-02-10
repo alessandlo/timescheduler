@@ -19,6 +19,10 @@ public class User {
     private ArrayList<Event> hostedEvents;
     private ArrayList<Event> allEvents;
 
+    /**
+     * Constructor for username and eventlists
+     * @param username username of the selected user
+     */
     public User(String username){
         this.username = username;
         attendedEvents = new ArrayList<>();
@@ -26,7 +30,14 @@ public class User {
         allEvents = new ArrayList<>();
     }
 
-    //Constructor for Adminview
+    /**
+     * Constructer for details of a user (used for Adminpanel)
+     * @param username username of the selected user
+     * @param firstname firstname of the selected user
+     * @param lastname lastname of the selected user
+     * @param email email of the selected user
+     * @param password password of the selected user
+     */
     public User(String username, String firstname, String lastname, String email, String password) {
         this.username = username;
         this.firstname = firstname;
@@ -35,6 +46,13 @@ public class User {
         this.password = password;
     }
 
+    /**
+     * Constructer for events of a user
+     * @param username username of the selected user
+     * @param attendedEvents attendedEvents of the selected user
+     * @param hostedEvents hostedEvents of the selected user
+     * @param allEvents allEvents of the selected user
+     */
     private User(String username, ArrayList<Event> attendedEvents, ArrayList<Event> hostedEvents, ArrayList<Event> allEvents){
         this.username = username;
         this.attendedEvents = new ArrayList<>(attendedEvents);
@@ -42,6 +60,10 @@ public class User {
         this.allEvents = new ArrayList<>(allEvents);
     }
 
+    /**
+     * Loads all events by using database queries
+     * @param localDate To restrict the time period of the events
+     */
     public void loadAllEvents(LocalDate... localDate){
         String sql;
 
@@ -125,17 +147,32 @@ public class User {
         }
     }
 
+    /**
+     * Get all events
+     * @param localDate To restrict the time period of the events
+     * @return all events
+     */
     public ArrayList<Event> getAllEvents(LocalDate... localDate){
         loadAllEvents(localDate);
 
         return allEvents;
     }
 
+    /**
+     * Get all participating events
+     * @param localDate To restrict the time period of the events
+     * @return all participating events
+     */
     public ArrayList<Event> getAttendedEvents(LocalDate... localDate) {
         loadAllEvents(localDate);
         return attendedEvents;
     }
 
+    /**
+     * Get all hosted events
+     * @param localDate To restrict the time period of the events
+     * @return all created events
+     */
     public ArrayList<Event> getHostedEvents(LocalDate... localDate) {
         loadAllEvents(localDate);
         return hostedEvents;
@@ -145,38 +182,70 @@ public class User {
         return new User(username, attendedEvents, hostedEvents, allEvents);
     }
 
+    /**
+     * Get username from user
+     * @return username
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Get firstname from user
+     * @return username
+     */
     public String getFirstname() {
         return firstname;
     }
 
+    /**
+     * Set firstname of user
+     */
     public void setFirstname(String firstname) {
         this.firstname = firstname;
     }
 
+    /**
+     * Get lastname from user
+     * @return lastname
+     */
     public String getLastname() {
         return lastname;
     }
 
+    /**
+     * Set lastname of user
+     */
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
 
+    /**
+     * Get email from user
+     * @return email
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Set email of user
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     * Get password from user
+     * @return password
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     * Set password of user
+     */
     public void setPassword(String password) {
         this.password = password;
     }

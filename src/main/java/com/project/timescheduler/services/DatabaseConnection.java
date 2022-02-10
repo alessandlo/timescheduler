@@ -19,7 +19,7 @@ public class DatabaseConnection {
 
     /** constructs a DatabaseConnection object, calls getConnnection() and alters the session nls_date_format to 'YYYY-MM-DD HH24:MI' */
     public DatabaseConnection(){
-        getConnection();
+        connection = getConnection();
         update("ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI'");
     }
 
