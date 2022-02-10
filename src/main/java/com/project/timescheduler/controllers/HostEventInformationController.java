@@ -73,7 +73,7 @@ public class HostEventInformationController{
      * calls loadData
      * @param event the Event the user clicked on in EventViewer
      * @param currentUser String of username from currently logged-in user
-     * @param listener
+     * @param listener this listener triggers the function called on closing the stage
      */
     @FXML
     public void initialize(Event event, String currentUser, OnActionListener listener){
