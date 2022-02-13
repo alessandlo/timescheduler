@@ -159,7 +159,7 @@ public class EventMenuController{
      @param ldt1 LocalDateTime for which the function checks if and why it is before ldt2
      @param ldt2 LocalDateTime ldt2**/
     public int checkDate(LocalDateTime ldt1, LocalDateTime ldt2) {
-        if(ldt1.isBefore(ldt2)){
+        if(ldt1.isBefore(ldt2) || ldt1.isEqual(ldt2)){
             if (ldt1.getYear() == ldt2.getYear() && ldt1.getMonth() == ldt2.getMonth() && ldt1.getDayOfMonth() == ldt2.getDayOfMonth()) {
                 if(ldt1.getHour() == ldt2.getHour()) {
                     return(3);
