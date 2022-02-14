@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -115,12 +116,13 @@ public class TimeSchedulerController{
         Label label = (Label) vBox.getChildren().get(0);
 
         LocalDate clickedDate = currentDate.withDayOfMonth(Integer.parseInt(label.getText()));
+
         try {
             anchorPaneTimeScheduler.setDisable(true);
 
             Parent root = null;
 
-            if (!clickedDate.isBefore(currentDate)){
+            if (mouseEvent.getButton() == MouseButton.PRIMARY){
                 FXMLLoader loader = new FXMLLoader(Main.class.getResource("eventMenu.fxml"));
                 root = loader.load();
                 EventMenuController eventMenuController = loader.getController();
@@ -130,7 +132,7 @@ public class TimeSchedulerController{
                     menuStage.close();
                     calendar.updateCalendar();
                 }, currentUser.getUsername(), clickedDate);
-            }else {
+            }else if (mouseEvent.getButton() == MouseButton.SECONDARY){
                 FXMLLoader loader = new FXMLLoader(Main.class.getResource("eventViewerVertical.fxml"));
                 root = loader.load();
                 EventViewerController eventViewerController = loader.getController();
