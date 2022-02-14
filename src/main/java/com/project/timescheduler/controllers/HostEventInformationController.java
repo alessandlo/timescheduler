@@ -284,6 +284,7 @@ public class HostEventInformationController{
         }
         Stage stage = (Stage) bSave.getScene().getWindow();
         stage.close();
+        listener.onExit();
     }
 
     /** Attachment input and getting the path. **/
