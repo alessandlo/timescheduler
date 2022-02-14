@@ -20,7 +20,7 @@ public class User {
     private ArrayList<Event> allEvents;
 
     /**
-     * Constructor for username and eventlists
+     * Constructor, when called creates an object of User
      * @param username username of the selected user
      */
     public User(String username){
@@ -31,7 +31,7 @@ public class User {
     }
 
     /**
-     * Constructer for details of a user (used for Adminpanel)
+     * Constructor, when called creates an object of User with details (used for Adminpanel)
      * @param username username of the selected user
      * @param firstname firstname of the selected user
      * @param lastname lastname of the selected user
@@ -47,7 +47,7 @@ public class User {
     }
 
     /**
-     * Constructer for events of a user
+     * Constructor, when called creates an object of User with all events
      * @param username username of the selected user
      * @param attendedEvents attendedEvents of the selected user
      * @param hostedEvents hostedEvents of the selected user
@@ -178,6 +178,10 @@ public class User {
         return hostedEvents;
     }
 
+    /**
+     *
+     * @return
+     */
     public User copy(){
         return new User(username, attendedEvents, hostedEvents, allEvents);
     }
